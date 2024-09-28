@@ -1,0 +1,26 @@
+*.xml
+.deployables
+.git
+target/
+*.class
+
+# Eclipse settings
+.classpath
+.project
+.settings
+
+# Maven/Gradle build artifacts
+/target/
+/build/
+
+# IntelliJ IDEA settings
+*.iml
+.idea
+
+# Logs
+*.logs
+
+# 기타 IDE 또는 개인 설정 파일들
+.DS_Store
+*.swp
+*.jar
