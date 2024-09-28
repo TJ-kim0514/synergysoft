@@ -24,6 +24,9 @@ public class Guide implements java.io.Serializable {
 	private String File8;// FILE8 VARCHAR2(500),
 	private String File9;// FILE9 VARCHAR2(500),
 	private String File10;// FILE10 VARCHAR2(500),
+	private String File11;// FILE10 VARCHAR2(500),
+	private String File12;// FILE10 VARCHAR2(500),
+	private String File13;// FILE10 VARCHAR2(500),
 	
 	public Guide() {
 		super();
