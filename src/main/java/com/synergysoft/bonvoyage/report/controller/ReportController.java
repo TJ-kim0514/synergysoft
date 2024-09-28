@@ -33,7 +33,8 @@ public class ReportController {
 	}
 
 	// 요청 처리
-
+	
+	/*
 	// 신고글 상세 내용 보기 요청 처리
 	@RequestMapping("rdetail.do")
 	public ModelAndView reportDetailMethod(@RequestParam("no") String reportId, ModelAndView mv, HttpSession session) {
@@ -61,7 +62,9 @@ public class ReportController {
 
 		return mv;
 	} // 신고글 상세정보 보기
-
+	*/
+	
+	/*
 	// 신고글 전체 목록 보기
 	@RequestMapping("reportList.do")
 	public ModelAndView reportListMethod(ModelAndView mv, Member member) {
@@ -79,5 +82,6 @@ public class ReportController {
 
 		return mv;
 
-	}
+	} // 신고글 전체 목록 보기
+	*/
 }
