@@ -7,5 +7,6 @@
 </head>
 <body>
 	<h1>테스트</h1>
+	<a href ="sanotice.do">공지사항</a>
 </body>
 </html>
