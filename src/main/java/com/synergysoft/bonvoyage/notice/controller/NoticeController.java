@@ -2,7 +2,6 @@ package com.synergysoft.bonvoyage.notice.controller;
 
 import java.util.ArrayList;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 import com.synergysoft.bonvoyage.notice.model.service.NoticeService;
 
@@ -26,14 +25,44 @@ public class NoticeController {
 	private NoticeService noticeService;
 	
 	@RequestMapping("sanotice.do")
-	public String noticeListMethod(Model model) {
+	public String noticeListMethod(Model model,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String slimit,
+			@RequestParam(name="groupLimit", required=false) String glimit
+			) {
 		
-	    // 서비스를 목록 조회 요청하고 결과 받기
-	    ArrayList<Notice> list = noticeService.selectAllNotice();  // 전체목록 받아오기
+		//paging 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage=1;
+		if(page!=null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 공지글 갯수 (기본값 10개 세팅)
+		int limit =10;
+		if(slimit !=null) {
+			limit= Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit =5;
+		if(glimit!=null) {
+			groupLimit=Integer.parseInt(glimit);
+		}
+		// 총 목록 갯수 조회
+		int listCount = noticeService.selectListCount();
+		logger.info("공지사항 총 갯수 : " +listCount);
+		
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "sanotice.do", groupLimit);
+		paging.calculate();
+		//paging 세팅---------------------------------------------------------------------------
+	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
+	    ArrayList<Notice> list = noticeService.selectAllNotice(paging);  // 전체목록 받아오기
 
 	    logger.info("list : " + list);
 	    if(list != null && list.size() > 0) {
 	        model.addAttribute("list", list);
+			model.addAttribute("paging",paging);
+			model.addAttribute("currentPage",currentPage);
 	        return "notice/noticeListView";  // 뷰의 이름을 반환
 	    } else {
 	        model.addAttribute("message", "목록 조회 실패!");
@@ -43,16 +72,18 @@ public class NoticeController {
 	
 	// 공지사항 작성페이지 이동
 	@RequestMapping("minotice.do")
-	public String moveInsertNotice() {	
+	public String moveInsertNotice() {
+
 		return "notice/insertNoticeView";
 	}
 	
 	// 공지사항 등록
 	@RequestMapping(value="inotice.do", method=RequestMethod.POST)
 	public String insertNotice(Notice notice, Model model
+			
 			) {
 		logger.info("ninsert.do : " + notice);
-		
+
 		if(noticeService.insertNotice(notice)>0) {
 			// 새 공지글 등록 성공시 목록 페이지 내보내기 요청
 			return "redirect:sanotice.do";  // 현재 있는 클래스의 메소드 실행 : redirect:url명

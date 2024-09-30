@@ -190,31 +190,56 @@ public class MemberController {
 
 	// 내 정보 수정 기능
 	@RequestMapping(value="myinfo/update.do", method=RequestMethod.POST)
-	public String myinfoUpdateMethod() {
-		return "member/myinfo/myinfo";
+	public String myinfoUpdateMethod(Member member, Model model, 
+			HttpServletRequest request,
+			@RequestParam("originalMemPw") String originalMemPw) {
+		
+		logger.info("myinfo/update.do : " + member);
+		
+		// 내 정보 수정에서 회원이 비밀번호를 변경한 경우 변경한 요청에 따라 비밀번호를 변경하는 기능
+		if (member.getMemPw() != null && member.getMemPw().length() > 0) {
+			member.setMemPw(bcryptPasswordEncoder.encode(member.getMemPw()));
+			logger.info("after encode : " + member.getMemPw() + ", length : " + member.getMemPw().length());
+		} else {
+			member.setMemPw(originalMemPw);
+		}
+		
+		// 내 정보 수정 요청 성공여부
+		if (memberService.updateMyinfo(member) > 0) {
+			return "redirect:../main.do";
+		} else {
+			model.addAttribute("message", "회원정보 수정에 실패하였습니다.");
+			return "common/error";
+		}
 	} // 내 정보 수정 기능
 	
 	// 회원 탈퇴 기능
-	@RequestMapping(value="myinfo/left.do", method=RequestMethod.POST)
-	public String memberLeftMethod() {
-		return "common/main";
+	@RequestMapping(value="myinfo/left.do")
+	public String memberLeftMethod(@RequestParam("memId") String memId, Model model) {
+		
+		if(memberService.updateLeft(memId) > 0) {			
+			return "redirect:../logout.do";
+		} else {
+			model.addAttribute("message", "회원탈퇴에 실패하였습니다.");
+			return "common/error";
+		}
 	} // 회원 탈퇴 기능
 	
 	// 관리자 : 회원 정보 수정 기능
 	@RequestMapping(value="admin/memberUpdate.do", method=RequestMethod.POST)
 	public String memberUpdateMethod() {
-		return "admin/memberDetail";
+		return "admin/memberDetail.do";
 	} // 관리자 : 회원 정보 수정 기능
 	
 	// 관리자 : 회원 계정 조치 기능
 	@RequestMapping(value="admin/memberAccountUpdate.do", method=RequestMethod.POST)
 	public String memberAccountUpdateMethod() {
-		return "admin/memberDetail";		
+		return "admin/memberDetail.do";		
 	} // 관리자 : 회원 계정 조치 기능
 	
 	// 관리자 : 회원 관리자 부여 기능
 	@RequestMapping(value="admin/memberAdmin.do", method=RequestMethod.POST)
 	public String memberAdminMethod() {
-		return "admin/memberDetail";
+		return "admin/memberDetail.do";
 	} // 관리자 : 회원 관리자 부여 기능
 }

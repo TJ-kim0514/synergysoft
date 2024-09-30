@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.notice.model.dao.NoticeDao;
 import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 
@@ -16,8 +17,8 @@ public class NoticeServiceImpl implements NoticeService{
 	
 	// 공지사항 메인화면 전체화면 출력용 서비스
 	@Override
-	public ArrayList<Notice> selectAllNotice() {
-		return noticeDao.selectAllNotice();
+	public ArrayList<Notice> selectAllNotice(Paging paging) {
+		return noticeDao.selectAllNotice(paging);
 	}
 	
 	// 공지사항 등록
@@ -30,6 +31,12 @@ public class NoticeServiceImpl implements NoticeService{
 	@Override
 	public Notice selectDetailNotice(String noticeId) {
 		return noticeDao.selectDetailNotice(noticeId);
+	}
+	
+	// 페이징용 공지사항 갯수확인
+	@Override
+	public int selectListCount() {
+		return noticeDao.selectListCount();
 	}
 
 }
