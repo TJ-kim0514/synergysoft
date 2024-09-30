@@ -1,5 +1,9 @@
 package com.synergysoft.bonvoyage.route.model.service;
 
-public interface RouteService {
+import java.util.ArrayList;
 
+import com.synergysoft.bonvoyage.route.model.dto.Route;
+
+public interface RouteService {
+	ArrayList<Route> selectAllRoute();
 }
