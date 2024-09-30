@@ -13,6 +13,7 @@ public interface MemberService {
 	Member selectMyinfo(String memId);
 	ArrayList<Member> selectMember();
 	Member selectMemberDetail(String memId);
+	int selectCheckId(String memId);
 	
 	int insertMember(Member member);
 	int insertSocialMember(Member member);
@@ -22,6 +23,5 @@ public interface MemberService {
 	int updateMember(Member member);
 	int updateMemberAccount(String memId);
 	int updateMemberAdmin(String memId);
-	int selectCheckId(String memId);
 	
 }

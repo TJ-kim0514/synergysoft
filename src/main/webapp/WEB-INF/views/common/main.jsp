@@ -13,7 +13,7 @@
 	<a href ="loginPage.do">로그인</a>
 	<a href ="enrollPage.do">회원가입</a>
 	<a href ="sagBlog.do">가이드</a>
-	<a href ="myinfo.do">회원</a>
+	<a href ="myinfo.do?memId=${ sessionScope.loginUser.memId }">회원</a>
 	<a href ="reportList.do">신고</a>
 
 </body>
