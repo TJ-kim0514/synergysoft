@@ -11,7 +11,10 @@
 
 	<h1 align="center">경로 추천 게시판</h1>
 	<br>
-
+	<center>
+	<button onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveWrite.do';">글쓰기</button>
+	</center>
+	<br>
 	<table align="center" width="1000" border="1" cellspacing="0" cellpadding="0">
 		<tr>
 			<th>제 목</th>
