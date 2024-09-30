@@ -19,6 +19,13 @@ public class RouteController {
 	@Autowired
 	private RouteService noticeService;
 	
+	// 뷰 페이지 이동 메소드
+	@RequestMapping("moveWrite.do")
+	public String moveWritePage() {
+		return "route/routeWritePage";
+	}
+	
+	
 	@RequestMapping("routeall.do")
 	public ModelAndView selectAllRouteMethod(ModelAndView mv) {
 		ArrayList<Route> list = noticeService.selectAllRoute();
