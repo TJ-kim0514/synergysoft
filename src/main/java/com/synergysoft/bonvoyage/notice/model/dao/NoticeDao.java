@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 
 @Repository("noticeDao")
@@ -16,8 +17,8 @@ public class NoticeDao {
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	// 공지사항 메인페이지 공지사항 출력
-	public ArrayList<Notice> selectAllNotice(){
-		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectAllNotice");
+	public ArrayList<Notice> selectAllNotice(Paging paging){
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectAllNotice", paging);
 		return (ArrayList<Notice>)list;
 	}
 	// 공지사항 등록
@@ -27,6 +28,11 @@ public class NoticeDao {
 	// 공지사항 상세보기
 	public Notice selectDetailNotice(String noticeId) {
 		return sqlSessionTemplate.selectOne("noticeMapper.selectDetailNotice",noticeId);
+	}
+	
+	// 페이징용 공지사항 리스트 불러오기
+	public int selectListCount() {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectListCount");
 	}
 	
 	
