@@ -30,11 +30,17 @@ public class ReportServiceImpl implements ReportService {
 	public int insertReport(Report report) {
 		return reportDao.insertReport(report);
 	}
-
+	
 	@Override
 	// 관리자 : 신고 처리
-	public int updateReport(Report report) {
-		return reportDao.updateReport(report);
+	public int updateReportProcess(Report report) {
+		return reportDao.updateReportProcess(report);
+	}
+	
+	@Override
+	// 관리자 : 신고 반려
+	public int updateReportReject(Report report) {
+		return reportDao.updateReportReject(report);
 	}
 
 	@Override
@@ -42,7 +48,4 @@ public class ReportServiceImpl implements ReportService {
 	public int deleteReport(String reportId) {
 		return reportDao.deleteReport(reportId);
 	}
-
-	
-
 }

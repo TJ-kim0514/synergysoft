@@ -9,7 +9,8 @@ public interface ReportService {
 	ArrayList<Report> selectReport();
 	Report selectReportDetail(String reportId);
 	int insertReport(Report report);
-	int updateReport(Report report);
+	int updateReportProcess(Report report);
+	int updateReportReject(Report report);
 	int deleteReport(String reportId);
 
 }

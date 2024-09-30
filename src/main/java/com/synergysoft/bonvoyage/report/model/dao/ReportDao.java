@@ -32,8 +32,13 @@ public class ReportDao {
 	}
 	
 	// 관리자 : 신고 처리
-	public int updateReport(Report report) {
-		return sqlSessionTemplate.update("reportMapper.updateReport", report);  
+	public int updateReportProcess(Report report) {
+		return sqlSessionTemplate.update("reportMapper.updateReportProcess", report);
+	}
+	
+	// 관리자 : 신고 반려
+	public int updateReportReject(Report report) {
+		return sqlSessionTemplate.update("reportMapper.updateReportReject", report);
 	}
 	
 	// 관리자 : 신고 삭제
