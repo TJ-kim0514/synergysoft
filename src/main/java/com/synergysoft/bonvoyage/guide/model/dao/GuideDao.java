@@ -11,6 +11,7 @@ import com.synergysoft.bonvoyage.guide.model.dto.Guide;
 
 @Repository("guideDao")
 public class GuideDao {
+	
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
@@ -20,5 +21,24 @@ public class GuideDao {
 		return (ArrayList<Guide>)list;
 		
 	}
+
+
+	public int insertGuide(Guide guide) {
+		return sqlSessionTemplate.insert("guideMapper.insertGuide", guide);
+	}
+
+
+	public Guide selectGuide(Guide guidepostId) {
+		return sqlSessionTemplate.selectOne("guideMapper.selectGuide", guidepostId);
+	}
+
+
+
+
+
+	
+	
+
+
 
 }//EndGuidDao
