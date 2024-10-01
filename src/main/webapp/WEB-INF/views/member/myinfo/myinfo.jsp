@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>first</title>
+<title>bonvoyage</title>
 <style type="text/css">
 	table th{ background-color: #9ff, }
 	table#outer { border: 2px solid navy; }
@@ -36,6 +36,17 @@
 		<input type="hidden" name="originalMemPw" value="${ requestScope.member.memPw }">
 		
 		<table id="outer" align="center" width="700" cellspacing="5px" cellpadding="0">
+			
+			<tr>
+				<c:if test="${ !empty sessionScope.loginUser and sessionScope.loginUser.memType eq 'ADMIN' }">
+					<th colspan="2"><h3><b>[ 관리자 ] ${ loginUser.memNickNm }님 반갑습니다.</b></h3></th>
+				</c:if>
+				
+				<c:if test="${ !empty sessionScope.loginUser and sessionScope.loginUser.memType eq 'USER' }">
+					<th colspan="2"><h3><b>[ 유저 ] ${ loginUser.memNickNm }님 반갑습니다.</b></h3></th>
+				</c:if>
+			</tr>
+			
 			<tr>
 				<th width="120">이메일</th>
 				<td>
@@ -63,13 +74,13 @@
 				</td>
 			</tr>
 			<tr>
-				<th>* 생년월일</th>
+				<th>생년월일</th>
 				<td>
 					<input type="date" name="memBirth" value="${ requestScope.member.memBirth }" readonly>
 				</td>
 			</tr>
 			<tr>
-				<th>* 전화번호</th>
+				<th>전화번호</th>
 				<td>
 					<input type="tel" name="memPhone" value="${ requestScope.member.memPhone }">
 				</td>
@@ -77,6 +88,9 @@
 			<tr>
 				<th colspan="2">
 					<input type="submit" value="수정하기"> &nbsp;
+					<c:if test="${ !empty sessionScope.loginUser and sessionScope.loginUser.memType eq 'ADMIN' }">
+						<a href="admin/memberList.do">관리자페이지</a> &nbsp;
+					</c:if>
 					<c:url var="mdel" value="myinfo/left.do">
 						<c:param name="memId" value="${ requestScope.member.memId }" />
 					</c:url>
