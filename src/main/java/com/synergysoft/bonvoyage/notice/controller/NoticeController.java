@@ -2,6 +2,7 @@ package com.synergysoft.bonvoyage.notice.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 import com.synergysoft.bonvoyage.notice.model.service.NoticeService;
 
@@ -72,8 +75,8 @@ public class NoticeController {
 	
 	// 공지사항 작성페이지 이동
 	@RequestMapping("minotice.do")
-	public String moveInsertNotice() {
-
+	public String moveInsertNotice(
+			) {
 		return "notice/insertNoticeView";
 	}
 	
@@ -95,14 +98,79 @@ public class NoticeController {
 	
 	// 공지사항 상세보기
 	@RequestMapping("msnotice.do")
-	public String selectDetailNotice(Model model,
-			@RequestParam("noticeId") String noticeId 
+	public ModelAndView selectDetailNotice(ModelAndView mv,  	// view 데이터 전송객체
+			@RequestParam("noticeId") String noticeId,			// 검색할 공지글 id불러오기
+			HttpSession session									// 관리자 여부 확인용 객체
 			) {
-		logger.info("noticeId : " + noticeId);
+		logger.info("상세보기 noticeId : " + noticeId);
 		Notice notice = noticeService.selectDetailNotice(noticeId);
-		logger.info("notice : "+notice);
-		model.addAttribute("notice",notice);
-		return "notice/noticeDetail";
+		logger.info("상세보기 notice : "+notice);
+		if(notice != null) {
+			mv.addObject("notice", notice);
+			Member loginUser = (Member)session.getAttribute("loginUser");
+			if(loginUser != null && loginUser.getMemType().equals("ADMIN")) {
+				mv.setViewName("notice/noticeAdminDetailView");
+			} else {
+				mv.setViewName("notice/noticeUserDetailView");
+			}
+			
+		} else {
+			mv.addObject("message", noticeId +"번 공지글 상세보기 요청 실패");
+			mv.setViewName("common/error");
+		}
+		return mv;
+	}
+	
+	// 공지사항 수정페이지 이동
+	@RequestMapping("munotice.do")
+	public ModelAndView noticeMoveUpdate(
+			@RequestParam("noticeId") String noticeId,
+			ModelAndView mv
+			) {
+		Notice notice = noticeService.selectDetailNotice(noticeId);
+		
+		if(notice!=null) {
+			mv.addObject("notice",notice);
+			mv.setViewName("notice/noticeUpdateView");
+		} else {
+			mv.addObject("message",noticeId+ "번 공지글 수정페이지 이동 실패");
+			mv.setViewName("common/error");
+		}
+				
+		return mv;
+	}
+	
+	// 공지사항 수정 처리
+	@RequestMapping(value="unotice.do", method=RequestMethod.POST)
+	public String noticeUpdate(
+			Notice notice,
+			Model model
+			) {
+		logger.info("notice : " + notice);
+		if(noticeService.updateNotice(notice)>0) {
+			return "redirect:sanotice.do";
+		}else {
+			model.addAttribute("message",notice.getNoticeId()+ "번 공지글 수정에 실패하였습니다.");
+			return "common/error";
+		}
+		
+		
 		
 	}
+	
+	
+	// 공지사항 삭제 처리(수정)
+	@RequestMapping("dnotice.do")
+	public String noticeDelete(
+			Notice notice,
+			Model model) {
+		logger.info("noticedelete id: "+notice.getNoticeId());
+		if(noticeService.deleteNotice(notice)>0) {
+			return "redirect:sanotice.do";
+		} else {
+			model.addAttribute("message",notice.getNoticeId()+"번 공지글 삭제 실패");
+			return "common/error";
+		}
+	}
+	
 }	
