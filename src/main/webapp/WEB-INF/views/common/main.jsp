@@ -8,11 +8,13 @@
 </head>
 <body>
 <nav>
+
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
 </nav>
 
 <footer>
 <c:import url="/WEB-INF/views/common/footer.jsp"/>	
+
 </footer>
 </body>
 </html>

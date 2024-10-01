@@ -2,6 +2,7 @@ package com.synergysoft.bonvoyage.notice.controller;
 
 import java.util.ArrayList;
 
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import com.synergysoft.bonvoyage.notice.model.service.NoticeService;
 
 @Controller
 public class NoticeController {
-	// ·Î±× »ı¼º°´Ã¼ »ı¼º
+	// ë¡œê·¸ ìƒì„±ê°ì²´ ìƒì„±
 	private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	
 	@Autowired
@@ -34,53 +35,53 @@ public class NoticeController {
 			@RequestParam(name="groupLimit", required=false) String glimit
 			) {
 		
-		//paging ±âº»¼¼ÆÃ-----------------------------------------------------------------------
-		// Ãâ·ÂÇÒ ÆäÀÌÁö(±âº»°ª 1ÆäÀÌÁö)
+		//paging ê¸°ë³¸ì„¸íŒ…-----------------------------------------------------------------------
+		// ì¶œë ¥í•  í˜ì´ì§€(ê¸°ë³¸ê°’ 1í˜ì´ì§€)
 		int currentPage=1;
 		if(page!=null) {
 			currentPage = Integer.parseInt(page);
 		}
-		// ÇÑÆäÀÌÁö¿¡ Ãâ·ÂÇÒ °øÁö±Û °¹¼ö (±âº»°ª 10°³ ¼¼ÆÃ)
+		// í•œí˜ì´ì§€ì— ì¶œë ¥í•  ê³µì§€ê¸€ ê°¯ìˆ˜ (ê¸°ë³¸ê°’ 10ê°œ ì„¸íŒ…)
 		int limit =10;
 		if(slimit !=null) {
 			limit= Integer.parseInt(slimit);
 		}
-		// ÆäÀÌÂ¡ ±×·ì °¹¼ö (±âº»°ª 5°³ ¼¼ÆÃ)
+		// í˜ì´ì§• ê·¸ë£¹ ê°¯ìˆ˜ (ê¸°ë³¸ê°’ 5ê°œ ì„¸íŒ…)
 		int groupLimit =5;
 		if(glimit!=null) {
 			groupLimit=Integer.parseInt(glimit);
 		}
-		// ÃÑ ¸ñ·Ï °¹¼ö Á¶È¸
+		// ì´ ëª©ë¡ ê°¯ìˆ˜ ì¡°íšŒ
 		int listCount = noticeService.selectListCount();
-		logger.info("°øÁö»çÇ× ÃÑ °¹¼ö : " +listCount);
+		logger.info("ê³µì§€ì‚¬í•­ ì´ ê°¯ìˆ˜ : " +listCount);
 		
-		// ÆäÀÌÂ¡ Ã³¸® °ª»ı¼º
+		// í˜ì´ì§• ì²˜ë¦¬ ê°’ìƒì„±
 		Paging paging = new Paging(listCount, limit, currentPage, "sanotice.do", groupLimit);
 		paging.calculate();
-		//paging ¼¼ÆÃ---------------------------------------------------------------------------
-	    // ¼­ºñ½º¸¦ ¸ñ·Ï Á¶È¸ ¿äÃ»ÇÏ°í °á°ú ¹Ş±â(ÆäÀÌÂ¡ Ã³¸®)
-	    ArrayList<Notice> list = noticeService.selectAllNotice(paging);  // ÀüÃ¼¸ñ·Ï ¹Ş¾Æ¿À±â
+		//paging ì„¸íŒ…---------------------------------------------------------------------------
+	    // ì„œë¹„ìŠ¤ë¥¼ ëª©ë¡ ì¡°íšŒ ìš”ì²­í•˜ê³  ê²°ê³¼ ë°›ê¸°(í˜ì´ì§• ì²˜ë¦¬)
+	    ArrayList<Notice> list = noticeService.selectAllNotice(paging);  // ì „ì²´ëª©ë¡ ë°›ì•„ì˜¤ê¸°
 
 	    logger.info("list : " + list);
 	    if(list != null && list.size() > 0) {
 	        model.addAttribute("list", list);
 			model.addAttribute("paging",paging);
 			model.addAttribute("currentPage",currentPage);
-	        return "notice/noticeListView";  // ºäÀÇ ÀÌ¸§À» ¹İÈ¯
+	        return "notice/noticeListView";  // ë·°ì˜ ì´ë¦„ì„ ë°˜í™˜
 	    } else {
-	        model.addAttribute("message", "¸ñ·Ï Á¶È¸ ½ÇÆĞ!");
-	        return "common/error";  // ¿¡·¯ ÆäÀÌÁö ºäÀÇ ÀÌ¸§ ¹İÈ¯
+	        model.addAttribute("message", "ëª©ë¡ ì¡°íšŒ ì‹¤íŒ¨!");
+	        return "common/error";  // ì—ëŸ¬ í˜ì´ì§€ ë·°ì˜ ì´ë¦„ ë°˜í™˜
 	    }
 	}
 	
-	// °øÁö»çÇ× ÀÛ¼ºÆäÀÌÁö ÀÌµ¿
+	// ê³µì§€ì‚¬í•­ ì‘ì„±í˜ì´ì§€ ì´ë™
 	@RequestMapping("minotice.do")
 	public String moveInsertNotice(
 			) {
 		return "notice/insertNoticeView";
 	}
 	
-	// °øÁö»çÇ× µî·Ï
+	// ê³µì§€ì‚¬í•­ ë“±ë¡
 	@RequestMapping(value="inotice.do", method=RequestMethod.POST)
 	public String insertNotice(Notice notice, Model model
 			
@@ -88,23 +89,23 @@ public class NoticeController {
 		logger.info("ninsert.do : " + notice);
 
 		if(noticeService.insertNotice(notice)>0) {
-			// »õ °øÁö±Û µî·Ï ¼º°ø½Ã ¸ñ·Ï ÆäÀÌÁö ³»º¸³»±â ¿äÃ»
-			return "redirect:sanotice.do";  // ÇöÀç ÀÖ´Â Å¬·¡½ºÀÇ ¸Ş¼Òµå ½ÇÇà : redirect:url¸í
+			// ìƒˆ ê³µì§€ê¸€ ë“±ë¡ ì„±ê³µì‹œ ëª©ë¡ í˜ì´ì§€ ë‚´ë³´ë‚´ê¸° ìš”ì²­
+			return "redirect:sanotice.do";  // í˜„ì¬ ìˆëŠ” í´ë˜ìŠ¤ì˜ ë©”ì†Œë“œ ì‹¤í–‰ : redirect:urlëª…
 		} else {
-			model.addAttribute("message","»õ °øÁö±Û µî·Ï ½ÇÆĞ");
+			model.addAttribute("message","ìƒˆ ê³µì§€ê¸€ ë“±ë¡ ì‹¤íŒ¨");
 			return "common/error";
 		}
 	}
 	
-	// °øÁö»çÇ× »ó¼¼º¸±â
+	// ê³µì§€ì‚¬í•­ ìƒì„¸ë³´ê¸°
 	@RequestMapping("msnotice.do")
-	public ModelAndView selectDetailNotice(ModelAndView mv,  	// view µ¥ÀÌÅÍ Àü¼Û°´Ã¼
-			@RequestParam("noticeId") String noticeId,			// °Ë»öÇÒ °øÁö±Û idºÒ·¯¿À±â
-			HttpSession session									// °ü¸®ÀÚ ¿©ºÎ È®ÀÎ¿ë °´Ã¼
+	public ModelAndView selectDetailNotice(ModelAndView mv,  	// view ë°ì´í„° ì „ì†¡ê°ì²´
+			@RequestParam("noticeId") String noticeId,			// ê²€ìƒ‰í•  ê³µì§€ê¸€ idë¶ˆëŸ¬ì˜¤ê¸°
+			HttpSession session									// ê´€ë¦¬ì ì—¬ë¶€ í™•ì¸ìš© ê°ì²´
 			) {
-		logger.info("»ó¼¼º¸±â noticeId : " + noticeId);
+		logger.info("ìƒì„¸ë³´ê¸° noticeId : " + noticeId);
 		Notice notice = noticeService.selectDetailNotice(noticeId);
-		logger.info("»ó¼¼º¸±â notice : "+notice);
+		logger.info("ìƒì„¸ë³´ê¸° notice : "+notice);
 		if(notice != null) {
 			mv.addObject("notice", notice);
 			Member loginUser = (Member)session.getAttribute("loginUser");
@@ -115,13 +116,13 @@ public class NoticeController {
 			}
 			
 		} else {
-			mv.addObject("message", noticeId +"¹ø °øÁö±Û »ó¼¼º¸±â ¿äÃ» ½ÇÆĞ");
+			mv.addObject("message", noticeId +"ë²ˆ ê³µì§€ê¸€ ìƒì„¸ë³´ê¸° ìš”ì²­ ì‹¤íŒ¨");
 			mv.setViewName("common/error");
 		}
 		return mv;
 	}
 	
-	// °øÁö»çÇ× ¼öÁ¤ÆäÀÌÁö ÀÌµ¿
+	// ê³µì§€ì‚¬í•­ ìˆ˜ì •í˜ì´ì§€ ì´ë™
 	@RequestMapping("munotice.do")
 	public ModelAndView noticeMoveUpdate(
 			@RequestParam("noticeId") String noticeId,
@@ -133,14 +134,14 @@ public class NoticeController {
 			mv.addObject("notice",notice);
 			mv.setViewName("notice/noticeUpdateView");
 		} else {
-			mv.addObject("message",noticeId+ "¹ø °øÁö±Û ¼öÁ¤ÆäÀÌÁö ÀÌµ¿ ½ÇÆĞ");
+			mv.addObject("message",noticeId+ "ë²ˆ ê³µì§€ê¸€ ìˆ˜ì •í˜ì´ì§€ ì´ë™ ì‹¤íŒ¨");
 			mv.setViewName("common/error");
 		}
 				
 		return mv;
 	}
 	
-	// °øÁö»çÇ× ¼öÁ¤ Ã³¸®
+	// ê³µì§€ì‚¬í•­ ìˆ˜ì • ì²˜ë¦¬
 	@RequestMapping(value="unotice.do", method=RequestMethod.POST)
 	public String noticeUpdate(
 			Notice notice,
@@ -150,7 +151,7 @@ public class NoticeController {
 		if(noticeService.updateNotice(notice)>0) {
 			return "redirect:sanotice.do";
 		}else {
-			model.addAttribute("message",notice.getNoticeId()+ "¹ø °øÁö±Û ¼öÁ¤¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+			model.addAttribute("message",notice.getNoticeId()+ "ë²ˆ ê³µì§€ê¸€ ìˆ˜ì •ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
 			return "common/error";
 		}
 		
@@ -159,7 +160,7 @@ public class NoticeController {
 	}
 	
 	
-	// °øÁö»çÇ× »èÁ¦ Ã³¸®(¼öÁ¤)
+	// ê³µì§€ì‚¬í•­ ì‚­ì œ ì²˜ë¦¬(ìˆ˜ì •)
 	@RequestMapping("dnotice.do")
 	public String noticeDelete(
 			Notice notice,
@@ -168,7 +169,7 @@ public class NoticeController {
 		if(noticeService.deleteNotice(notice)>0) {
 			return "redirect:sanotice.do";
 		} else {
-			model.addAttribute("message",notice.getNoticeId()+"¹ø °øÁö±Û »èÁ¦ ½ÇÆĞ");
+			model.addAttribute("message",notice.getNoticeId()+"ë²ˆ ê³µì§€ê¸€ ì‚­ì œ ì‹¤íŒ¨");
 			return "common/error";
 		}
 	}
