@@ -2,6 +2,13 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%-- 현재 페이지 변수 생성 --%>
+<c:set var = "nowpage" value="1"/>
+<c:if test="${ !empty requestScope.currentPage }">
+	<c:set var="nowpage" value="${requestScope.currentPage}"/>
+</c:if>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,6 +34,8 @@
 		</c:forEach>
 	</table>
 	
-	
+<%-- 페이징 출력 뷰 포함 처리 --%>
+<c:import url="/WEB-INF/views/common/pagingView.jsp"/>	
+<c:import url="/WEB-INF/views/common/footer.jsp"/>	
 </body>
 </html>
