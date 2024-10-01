@@ -15,7 +15,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <a href="main.do" style="font-family: Arial, sans-serif; font-size:30px; font-weight: bold; color: #a0c9bb; text-decoration: none; text-shadow:2px 2px 2px #4ba483; margin-left: 20px;">
-   Bon Voyage
+
+	Bon Voyage
+
     </a>
       <ul class="navbar-nav me-auto mx-auto "  >
         <li class="nav-item" style="width:120px;text-align:center;">
@@ -40,12 +42,16 @@
       <div id="islogin">
       </div>
       
+
       <c:if test="${ empty sessionScope.loginUser }">
+
          <button type="button" class="btn btn-outline-success" onclick="location.href='loginPage.do'">로그인</button> &nbsp;
          <button type="button" class="btn btn-outline-success" onclick="location.href='enrollPage.do'">회원가입</button>
       </c:if>
       <c:if test="${ !empty sessionScope.loginUser }">
-      	<button type="button" class="btn btn-outline-success" onclick="location.href='myinfo.do?memId=${loginUser.memId}'">마이페이지</button> &nbsp;
+
+		 <button type="button" class="btn btn-outline-success" onclick="location.href='myinfo.do?memId=${loginUser.memId}'">마이페이지</button> &nbsp;
+
          <button type="button" class="btn btn-outline-success" onclick="location.href='logout.do'">로그아웃</button>
       </c:if>
       

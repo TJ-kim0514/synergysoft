@@ -34,6 +34,14 @@ public class NoticeDao {
 	public int selectListCount() {
 		return sqlSessionTemplate.selectOne("noticeMapper.selectListCount");
 	}
+	// 공지사항 수정
+	public int updateNotice(Notice notice) {
+		return sqlSessionTemplate.update("noticeMapper.updateNotice",notice);
+	}
+	// 공지사항 삭제
+	public int deleteNotice(Notice notice) {
+		return sqlSessionTemplate.update("noticeMapper.deleteNotice",notice);
+	}
 	
 	
 }
