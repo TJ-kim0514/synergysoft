@@ -12,7 +12,7 @@
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 <hr>
-<h1 align="center">회원 리스트</h1>
+<h1 align="center">회원 리스트(작성중)</h1>
 <br>
 <center>
 	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
