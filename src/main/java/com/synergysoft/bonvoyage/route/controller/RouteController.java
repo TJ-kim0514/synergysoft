@@ -20,7 +20,7 @@ public class RouteController {
 	private RouteService noticeService;
 	
 	// 뷰 페이지 이동 메소드
-	@RequestMapping("moveWrite.do")
+	@RequestMapping("moveWriteRoute.do")
 	public String moveWritePage() {
 		return "route/routeWritePage";
 	}
