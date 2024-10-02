@@ -20,6 +20,20 @@ public class GuideServiceImpl implements GuideService{
 	public ArrayList<Guide> selectAllGuide() {
 		return guideDao.selectAllGuide();
 	}
-	
+
+	@Override
+	public int insertGuide(Guide guide) {
+		return guideDao.insertGuide(guide);
+	}
+
+	@Override
+	public Guide selectGuide(Guide guidepostId) {
+		return guideDao.selectGuide(guidepostId);
+	}
+
+
+
+
+
 
 }

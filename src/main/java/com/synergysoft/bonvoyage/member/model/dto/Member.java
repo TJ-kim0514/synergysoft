@@ -154,6 +154,11 @@ public class Member {
 	public void setMemPwUpdate(Date memPwUpdate) {
 		this.memPwUpdate = memPwUpdate;
 	}
+	
+	//가이드부분 mem_id이름 외래키 사용가능
+	public String getUserId() {
+		return memId;
+	}
 
 	@Override
 	public String toString() {

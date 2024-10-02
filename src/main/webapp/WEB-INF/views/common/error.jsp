@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>first : error</title>
+<title>bonvoyage : error</title>
 </head>
 <body>
 <h1>오류 발생 : <%= request.getAttribute("message") %></h1>

@@ -35,46 +35,62 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
 
-	// ·Î±×ÀÎ ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ë¡œê·¸ì¸ í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "loginPage.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveLoginPage() {
+	public String moveLoginPage(Member member, HttpSession session, SessionStatus status, HttpServletRequest request, Model model) {
+		logger.info("ë¡œê·¸ì¸ í˜ì´ì§€ ìš”ì²­");
 		return "member/loginPage";
 	}
 
-	// È¸¿ø°¡ÀÔ ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// íšŒì›ê°€ì… í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping("enrollPage.do")
 	public String moveEnrollPage() {
+		logger.info("íšŒì›ê°€ì… í˜ì´ì§€ ìš”ì²­");
 		return "member/enrollPage";
 	}
 
-	// ¼Ò¼È ·Î±×ÀÎ ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
-	@RequestMapping(value = "socialLoginPage.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveSocialLoginPage() {
-		return "member/socialLoginPage";
-	}
 
-	// ¼Ò¼È È¸¿ø°¡ÀÔ ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
-	@RequestMapping(value = "socialEnrollPage.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveSocialEnrollPage() {
-		return "member/socialEnrollPage";
-	}
+//	// ì¹´ì¹´ì˜¤ ë¡œê·¸ì¸ í˜ì´ì§€ ì¶œë ¥
+//	@RequestMapping(value = "kakaoLogin.do", method = { RequestMethod.GET })
+//	public String moveKakaoLoginPage(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
+//		logger.info("ì¹´ì¹´ì˜¤ ë¡œê·¸ì¸ í˜ì´ì§€ ìš”ì²­");
+//		
+//		System.out.println("#########" + code);
+//		String access_Token = memberService.getAccessToken(code);
+//		Member memberInfo = memberService.getMemberInfo(access_Token);
+//		System.out.println("###access_Token#### : " + access_Token);
+//		System.out.println("###nickname#### : " + memberInfo.getMemNickNm());
+//		System.out.println("###email#### : " + memberInfo.getMemId());
+//		
+//		// ì•„ë˜ ì½”ë“œê°€ ì¶”ê°€ë˜ëŠ” ë‚´ìš©
+//		session.invalidate();
+//		// ìœ„ ì½”ë“œëŠ” sessionê°ì²´ì— ë‹´ê¸´ ì •ë³´ë¥¼ ì´ˆê¸°í™” í•˜ëŠ” ì½”ë“œ.
+//		session.setAttribute("kakaoN", memberInfo.getMemNickNm());
+//		session.setAttribute("kakaoE", memberInfo.getMemId());
+//		
+//		return "member/kakaoLogin";
+//	}
 
-	// ¾ÆÀÌµğ Ã£±â ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ì•„ì´ë”” ì°¾ê¸° í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "idSearchPage.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String moveIDSearchPage() {
+		logger.info("ì•„ì´ë”” ì°¾ê¸° í˜ì´ì§€ ìš”ì²­");
 		return "member/idSearch";
 	}
 
-	// ºñ¹Ğ¹øÈ£ Ã£±â ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸° í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "pwSearchPage.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String movePWSearchPage() {
+		logger.info("ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸° í˜ì´ì§€ ìš”ì²­");
 		return "member/pwSearch";
 	}
 
-	// ³» Á¤º¸ Á¶È¸ ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ë‚´ ì •ë³´ ì¡°íšŒ í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "myinfo.do")
 	public String moveMyInfoPage(@RequestParam("memId") String memId, Model model) {
-		logger.info("myinfo.do : " + memId);
+
+		logger.info("ë‚´ ì •ë³´ ì¡°íšŒ í˜ì´ì§€ ìš”ì²­ : " + memId);
+
 
 		Member member = memberService.selectMyinfo(memId);
 
@@ -82,53 +98,61 @@ public class MemberController {
 			model.addAttribute("member", member);
 			return "member/myinfo/myinfo";
 		} else {
-			model.addAttribute("message", memId + " ´ÔÀÇ Á¤º¸¸¦ Á¶È¸ÇÏ´Âµ¥ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+			model.addAttribute("message", memId + " ë‹˜ì˜ ì •ë³´ë¥¼ ì¡°íšŒí•˜ëŠ”ë° ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
 			return "common/error";
 		}
-	} // ³» Á¤º¸ Á¶È¸ ÆäÀÌÁö Ãâ·Â
+	} // ë‚´ ì •ë³´ ì¡°íšŒ í˜ì´ì§€ ì¶œë ¥
 
-	// ³»°¡ ¾´ ´ñ±Û(°¡ÀÌµå°Ô½ÃÆÇ) ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ë‚´ê°€ ì“´ ëŒ“ê¸€(ê°€ì´ë“œê²Œì‹œíŒ) í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "myinfo/comment/guideBoard.do")
 	public String moveMyinfoCommentGuideBoard() {
+		logger.info("ë‚´ê°€ ì“´ ëŒ“ê¸€(ê°€ì´ë“œê²Œì‹œíŒ) í˜ì´ì§€ ìš”ì²­");
 		return "member/myinfo/comment/guideBoard";
 	}
 
-	// ³»°¡ ¾´ ´ñ±Û(°æ·Î°Ô½ÃÆÇ) ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ë‚´ê°€ ì“´ ëŒ“ê¸€(ê²½ë¡œê²Œì‹œíŒ) í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "myinfo/comment/routeBoard.do")
 	public String moveMyinfoCommentRouteBoard() {
+		logger.info("ë‚´ê°€ ì“´ ëŒ“ê¸€(ê²½ë¡œê²Œì‹œíŒ) í˜ì´ì§€ ìš”ì²­");
 		return "member/myinfo/comment/routeBoard";
 	}
 
-	// °ü¸®ÀÚ : È¸¿ø ¸ñ·Ï Á¶È¸ ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ê´€ë¦¬ì : íšŒì› ëª©ë¡ ì¡°íšŒ í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "admin/memberList.do")
-	public String moveMemberList(ModelAndView mv ) {
+
+	public String moveMemberList() {
+		logger.info("íšŒì› ëª©ë¡ ì¡°íšŒ í˜ì´ì§€ ìš”ì²­");
 		return "admin/memberList";
 	}
 
-	// °ü¸®ÀÚ : È¸¿ø »ó¼¼ Á¶È¸ ÆäÀÌÁö Ãâ·Â | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ê´€ë¦¬ì : íšŒì› ìƒì„¸ ì¡°íšŒ í˜ì´ì§€ ì¶œë ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "admin/memberDetail.do")
 	public String moveMemberDetail() {
+		logger.info("íšŒì› ìƒì„¸ ì¡°íšŒ í˜ì´ì§€ ìš”ì²­");
 		return "admin/memberDetail";
 	}
 
-	// ·Î±×ÀÎ ±â´É | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ë¡œê·¸ì¸ ê¸°ëŠ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "login.do", method = RequestMethod.POST)
 	public String loginMethod(Member member, HttpSession session, SessionStatus status, Model model) {
-		logger.info("login : " + member);
+
+		logger.info("ë¡œê·¸ì¸ ìš”ì²­ : " + member);
 
 		Member loginUser = memberService.selectLogin(member.getMemId());
 
 		if (loginUser != null && this.bcryptPasswordEncoder.matches(member.getMemPw(), loginUser.getMemPw())) {
 			session.setAttribute("loginUser", loginUser);
 			status.setComplete();
-			return "common/main";
+
+			logger.info("ë¡œê·¸ì¸ ìš”ì²­ : " + loginUser.getMemNickNm() + "(" + loginUser.getMemId() + ")" + " ë‹˜ì´ ë¡œê·¸ì¸ í•˜ì˜€ìŠµë‹ˆë‹¤.");
+			return "redirect:main.do";
 		} else {
-			model.addAttribute("message", "·Î±×ÀÎ¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù. ¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£¸¦ È®ÀÎ ÈÄ ´Ù½Ã ½ÃµµÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.");
+			model.addAttribute("message", "ë¡œê·¸ì¸ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤. ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸ë¥¼ í™•ì¸ í›„ ë‹¤ì‹œ ì‹œë„í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.");
 			return "common/error";
 		}
 	}
 
-	// È¸¿ø°¡ÀÔ ±â´É | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// íšŒì›ê°€ì… ê¸°ëŠ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping(value = "enroll.do", method = RequestMethod.POST)
 	public String enrollMethod(Member member, Model model, HttpServletRequest request) {
 		logger.info("enroll.do : " + member);
@@ -137,14 +161,15 @@ public class MemberController {
 		logger.info("after encode : " + member.getMemPw() + ", length : " + member.getMemPw().length());
 
 		if (memberService.insertMember(member) > 0) {
+			logger.info("íšŒì›ê°€ì… ìš”ì²­ : " + member.getMemNickNm() + "(" + member.getMemId() + ")" + "ë‹˜ì´ íšŒì›ê°€ì…ì— ì„±ê³µí•˜ì˜€ìŠµë‹ˆë‹¤.");
 			return "member/loginPage";
 		} else {
-			model.addAttribute("message", "È¸¿ø°¡ÀÔ¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù. ´Ù½Ã ½ÃµµÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.");
+			model.addAttribute("message", "íšŒì›ê°€ì…ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œë„í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.");
 			return "common/error";
 		}
 	}
 
-	// ·Î±×¾Æ¿ô ±â´É | 2024. 09. 28 ÀÛ¼º ¹× Å×½ºÆ® ¼º°ø
+	// ë¡œê·¸ì•„ì›ƒ ê¸°ëŠ¥ | 2024. 09. 28 ì‘ì„± ë° í…ŒìŠ¤íŠ¸ ì„±ê³µ
 	@RequestMapping("logout.do")
 	public String logoutMethod(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
@@ -153,12 +178,12 @@ public class MemberController {
 			session.invalidate();
 			return "common/main";
 		} else {
-			model.addAttribute("message", "¼¼¼ÇÀÌ ¸¸·áµÇ¾î ·Î±×¾Æ¿ô¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù. ¸ŞÀÎÆäÀÌÁö·Î µ¹¾Æ°¡¼¼¿ä.");
+			model.addAttribute("message", "ì„¸ì…˜ì´ ë§Œë£Œë˜ì–´ ë¡œê·¸ì•„ì›ƒì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤. ë©”ì¸í˜ì´ì§€ë¡œ ëŒì•„ê°€ì„¸ìš”.");
 			return "common/error";
 		}
-	} // ·Î±×¾Æ¿ô ±â´É
+	} // ë¡œê·¸ì•„ì›ƒ ê¸°ëŠ¥
 
-	// ¾ÆÀÌµğ Áßº¹ °Ë»ç ±â´É | 2024. 09. 28 ¼öÁ¤ ÇÊ¿ä
+	// ì•„ì´ë”” ì¤‘ë³µ ê²€ì‚¬ ê¸°ëŠ¥ | 2024. 09. 28 ìˆ˜ì • í•„ìš”
 	@RequestMapping(value = "idchk.do", method = RequestMethod.POST)
 	@ResponseBody
 	public void dupCheckIdMethod(@RequestParam("memId") String memId, HttpServletResponse response) throws IOException {
@@ -175,28 +200,30 @@ public class MemberController {
 		out.append(returnStr);
 		out.flush();
 		out.close();
-	} // ¾ÆÀÌµğ Áßº¹ °Ë»ç ±â´É
+	} // ì•„ì´ë”” ì¤‘ë³µ ê²€ì‚¬ ê¸°ëŠ¥
 
-	// ¾ÆÀÌµğ Ã£±â ±â´É
+	// ì•„ì´ë”” ì°¾ê¸° ê¸°ëŠ¥
 	@RequestMapping(value = "idSearch.do", method = RequestMethod.POST)
 	public String idSearchMethod() {
 		return "member/idSearch";
-	} // ¾ÆÀÌµğ Ã£±â ±â´É
+	} // ì•„ì´ë”” ì°¾ê¸° ê¸°ëŠ¥
 
-	// ºñ¹Ğ¹øÈ£ Ã£±â ±â´É
+	// ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸° ê¸°ëŠ¥
 	@RequestMapping(value = "pwSearch.do", method = RequestMethod.POST)
 	public String pwSearchMethod() {
 		return "member/pwSearch";
-	} // ºñ¹Ğ¹øÈ£ Ã£±â ±â´É
+	} // ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸° ê¸°ëŠ¥
 
-	// ³» Á¤º¸ ¼öÁ¤ ±â´É
+	// ë‚´ ì •ë³´ ìˆ˜ì • ê¸°ëŠ¥
 	@RequestMapping(value = "myinfo/update.do", method = RequestMethod.POST)
 	public String myinfoUpdateMethod(Member member, Model model, HttpServletRequest request,
 			@RequestParam("originalMemPw") String originalMemPw) {
 
-		logger.info("myinfo/update.do : " + member);
 
-		// ³» Á¤º¸ ¼öÁ¤¿¡¼­ È¸¿øÀÌ ºñ¹Ğ¹øÈ£¸¦ º¯°æÇÑ °æ¿ì º¯°æÇÑ ¿äÃ»¿¡ µû¶ó ºñ¹Ğ¹øÈ£¸¦ º¯°æÇÏ´Â ±â´É
+		logger.info("ë‚´ ì •ë³´ ìˆ˜ì • ìš”ì²­ : " + member);
+
+
+		// ë‚´ ì •ë³´ ìˆ˜ì •ì—ì„œ íšŒì›ì´ ë¹„ë°€ë²ˆí˜¸ë¥¼ ë³€ê²½í•œ ê²½ìš° ë³€ê²½í•œ ìš”ì²­ì— ë”°ë¼ ë¹„ë°€ë²ˆí˜¸ë¥¼ ë³€ê²½í•˜ëŠ” ê¸°ëŠ¥
 		if (member.getMemPw() != null && member.getMemPw().length() > 0) {
 			member.setMemPw(bcryptPasswordEncoder.encode(member.getMemPw()));
 			logger.info("after encode : " + member.getMemPw() + ", length : " + member.getMemPw().length());
@@ -204,42 +231,48 @@ public class MemberController {
 			member.setMemPw(originalMemPw);
 		}
 
-		// ³» Á¤º¸ ¼öÁ¤ ¿äÃ» ¼º°ø¿©ºÎ
+		// ë‚´ ì •ë³´ ìˆ˜ì • ìš”ì²­ ì„±ê³µì—¬ë¶€
 		if (memberService.updateMyinfo(member) > 0) {
+			logger.info("ë‚´ ì •ë³´ ìˆ˜ì • ìš”ì²­ ì„±ê³µ : " + member);
 			return "redirect:../main.do";
 		} else {
-			model.addAttribute("message", "È¸¿øÁ¤º¸ ¼öÁ¤¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+			model.addAttribute("message", "íšŒì›ì •ë³´ ìˆ˜ì •ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
+			logger.info("ë‚´ ì •ë³´ ìˆ˜ì • ìš”ì²­ ì‹¤íŒ¨ : " + member);
 			return "common/error";
 		}
-	} // ³» Á¤º¸ ¼öÁ¤ ±â´É
+	} // ë‚´ ì •ë³´ ìˆ˜ì • ê¸°ëŠ¥
 
-	// È¸¿ø Å»Åğ ±â´É
+	// íšŒì› íƒˆí‡´ ê¸°ëŠ¥
 	@RequestMapping(value = "myinfo/left.do")
 	public String memberLeftMethod(@RequestParam("memId") String memId, Model model) {
 
 		if (memberService.updateLeft(memId) > 0) {
+
+			logger.info("íšŒì›íƒˆí‡´ ìš”ì²­ ì„±ê³µ : " + memId);
+
 			return "redirect:../logout.do";
 		} else {
-			model.addAttribute("message", "È¸¿øÅ»Åğ¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.");
+			model.addAttribute("message", "íšŒì›íƒˆí‡´ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.");
+			logger.info("íšŒì›íƒˆí‡´ ìš”ì²­ ì‹¤íŒ¨ : " + memId);
 			return "common/error";
 		}
-	} // È¸¿ø Å»Åğ ±â´É
+	} // íšŒì› íƒˆí‡´ ê¸°ëŠ¥
 
-	// °ü¸®ÀÚ : È¸¿ø Á¤º¸ ¼öÁ¤ ±â´É
+	// ê´€ë¦¬ì : íšŒì› ì •ë³´ ìˆ˜ì • ê¸°ëŠ¥
 	@RequestMapping(value = "admin/memberUpdate.do", method = RequestMethod.POST)
 	public String memberUpdateMethod() {
 		return "admin/memberDetail.do";
-	} // °ü¸®ÀÚ : È¸¿ø Á¤º¸ ¼öÁ¤ ±â´É
+	} // ê´€ë¦¬ì : íšŒì› ì •ë³´ ìˆ˜ì • ê¸°ëŠ¥
 
-	// °ü¸®ÀÚ : È¸¿ø °èÁ¤ Á¶Ä¡ ±â´É
+	// ê´€ë¦¬ì : íšŒì› ê³„ì • ì¡°ì¹˜ ê¸°ëŠ¥
 	@RequestMapping(value = "admin/memberAccountUpdate.do", method = RequestMethod.POST)
 	public String memberAccountUpdateMethod() {
 		return "admin/memberDetail.do";
-	} // °ü¸®ÀÚ : È¸¿ø °èÁ¤ Á¶Ä¡ ±â´É
+	} // ê´€ë¦¬ì : íšŒì› ê³„ì • ì¡°ì¹˜ ê¸°ëŠ¥
 
-	// °ü¸®ÀÚ : È¸¿ø °ü¸®ÀÚ ºÎ¿© ±â´É
+	// ê´€ë¦¬ì : íšŒì› ê´€ë¦¬ì ë¶€ì—¬ ê¸°ëŠ¥
 	@RequestMapping(value = "admin/memberAdmin.do", method = RequestMethod.POST)
 	public String memberAdminMethod() {
 		return "admin/memberDetail.do";
-	} // °ü¸®ÀÚ : È¸¿ø °ü¸®ÀÚ ºÎ¿© ±â´É
+	} // ê´€ë¦¬ì : íšŒì› ê´€ë¦¬ì ë¶€ì—¬ ê¸°ëŠ¥
 }
