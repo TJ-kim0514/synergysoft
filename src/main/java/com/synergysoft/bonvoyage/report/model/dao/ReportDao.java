@@ -14,36 +14,36 @@ public class ReportDao {
 
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
-	
-	// °ü¸®ÀÚ : ½Å°í ¸ñ·Ï Á¶È¸
-	public ArrayList<Report> selectReport(){
+
+	// ê´€ë¦¬ì : ì‹ ê³  ëª©ë¡ ì¡°íšŒ
+	public ArrayList<Report> selectReport() {
 		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport");
-		return (ArrayList<Report>)list;
+		return (ArrayList<Report>) list;
 	}
-	
-	// °ü¸®ÀÚ : ½Å°í »ó¼¼ Á¶È¸
+
+	// ê´€ë¦¬ì : ì‹ ê³  ìƒì„¸ ì¡°íšŒ
 	public Report selectReportDetail(String reportId) {
 		return sqlSessionTemplate.selectOne("reportMapper.selectReportDetail", reportId);
 	}
-	
-	// À¯Àú&°ü¸®ÀÚ : ½Å°í µî·Ï
+
+	// ìœ ì €&ê´€ë¦¬ì : ì‹ ê³  ë“±ë¡
 	public int insertReport(Report report) {
 		return sqlSessionTemplate.insert("reportMapper.insertReport", report);
 	}
-	
-	// °ü¸®ÀÚ : ½Å°í Ã³¸®
+
+	// ê´€ë¦¬ì : ì‹ ê³  ì²˜ë¦¬
 	public int updateReportProcess(Report report) {
 		return sqlSessionTemplate.update("reportMapper.updateReportProcess", report);
 	}
-	
-	// °ü¸®ÀÚ : ½Å°í ¹İ·Á
+
+	// ê´€ë¦¬ì : ì‹ ê³  ë°˜ë ¤
 	public int updateReportReject(Report report) {
 		return sqlSessionTemplate.update("reportMapper.updateReportReject", report);
 	}
-	
-	// °ü¸®ÀÚ : ½Å°í »èÁ¦
+
+	// ê´€ë¦¬ì : ì‹ ê³  ì‚­ì œ
 	public int deleteReport(String reportId) {
 		return sqlSessionTemplate.delete("reportMapper.deleteReport", reportId);
 	}
-	
+
 }

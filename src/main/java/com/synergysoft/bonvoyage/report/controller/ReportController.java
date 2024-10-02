@@ -28,31 +28,31 @@ public class ReportController {
 	@Autowired
 	private MemberService memberService;
 
-	// ºä ÆäÀÌÁö ÀÌµ¿ Ã³¸® ¸Ş¼Òµå
+	// ë·° í˜ì´ì§€ ì´ë™ ì²˜ë¦¬ ë©”ì†Œë“œ
 
-	// »õ ½Å°í µî·Ï ÆäÀÌÁö ÀÌµ¿ Ã³¸®
+	// ìƒˆ ì‹ ê³  ë“±ë¡ í˜ì´ì§€ ì´ë™ ì²˜ë¦¬
 	@RequestMapping("reportWrite.do")
 	public ModelAndView moveWritePage(ModelAndView mv, HttpSession session) {
-		
+
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		
-		if(loginUser != null) {
+
+		if (loginUser != null) {
 			mv.setViewName("member/report/reportWriteForm");
 		} else {
-			mv.addObject("message", "¼¼¼ÇÀÌ ¾ø½À´Ï´Ù. ·Î±×ÀÎ ÈÄ ´Ù½Ã ÀÌ¿ëÇØÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.");
+			mv.addObject("message", "ì„¸ì…˜ì´ ì—†ìŠµë‹ˆë‹¤. ë¡œê·¸ì¸ í›„ ë‹¤ì‹œ ì´ìš©í•´ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.");
 			mv.setViewName("common/error");
 		}
 		return mv;
 	}
 
-	// ¿äÃ» Ã³¸®
+	// ìš”ì²­ ì²˜ë¦¬
 
-	// ½Å°í±Û »ó¼¼ ³»¿ë º¸±â ¿äÃ» Ã³¸®
+	// ì‹ ê³ ê¸€ ìƒì„¸ ë‚´ìš© ë³´ê¸° ìš”ì²­ ì²˜ë¦¬
 	@RequestMapping("reportDetail.do")
 	public ModelAndView reportDetailMethod(@RequestParam("no") String reportId, ModelAndView mv, HttpSession session) {
-		// °ü¸®ÀÚ¿ë »ó¼¼º¸±â ÆäÀÌÁö¿Í ÀÏ¹İÈ¸¿ø »ó¼¼º¸±â ÆäÀÌÁö¸¦ ±¸ºĞÇØ¼­ ÀÀ´ä Ã³¸®
+		// ê´€ë¦¬ììš© ìƒì„¸ë³´ê¸° í˜ì´ì§€ì™€ ì¼ë°˜íšŒì› ìƒì„¸ë³´ê¸° í˜ì´ì§€ë¥¼ êµ¬ë¶„í•´ì„œ ì‘ë‹µ ì²˜ë¦¬
 
-		logger.info("rdetail.do : " + reportId); // Àü¼Û¹ŞÀº °ª È®ÀÎ
+		logger.info("rdetail.do : " + reportId); // ì „ì†¡ë°›ì€ ê°’ í™•ì¸
 
 		Report report = reportService.selectReportDetail(reportId);
 
@@ -64,22 +64,22 @@ public class ReportController {
 			if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
 				mv.setViewName("admin/report/reportDetailView");
 			} else {
-				mv.addObject("message", "Àß¸øµÈ Á¢±ÙÀÔ´Ï´Ù.");
+				mv.addObject("message", "ì˜ëª»ëœ ì ‘ê·¼ì…ë‹ˆë‹¤.");
 				mv.setViewName("common/error");
 			}
 		} else {
-			mv.addObject("message", reportId + "¹ø ½Å°í±Û »ó¼¼º¸±â ¿äÃ» ½ÇÆĞ");
+			mv.addObject("message", reportId + "ë²ˆ ì‹ ê³ ê¸€ ìƒì„¸ë³´ê¸° ìš”ì²­ ì‹¤íŒ¨");
 			mv.setViewName("common/error");
 		}
 
 		return mv;
-	} // ½Å°í±Û »ó¼¼Á¤º¸ º¸±â
+	} // ì‹ ê³ ê¸€ ìƒì„¸ì •ë³´ ë³´ê¸°
 
-	// ½Å°í±Û ÀüÃ¼ ¸ñ·Ï º¸±â
+	// ì‹ ê³ ê¸€ ì „ì²´ ëª©ë¡ ë³´ê¸°
 	@RequestMapping("reportList.do")
 	public ModelAndView reportListMethod(ModelAndView mv, HttpSession session) {
 
-		// ¼­ºñ½º·Ñ ¸ñ·Ï Á¶È¸ ¿äÃ»ÇÏ°í °á°ú ¹Ş±â
+		// ì„œë¹„ìŠ¤ë¡¤ ëª©ë¡ ì¡°íšŒ ìš”ì²­í•˜ê³  ê²°ê³¼ ë°›ê¸°
 		ArrayList<Report> reportList = reportService.selectReport();
 		Member loginUser = (Member) session.getAttribute("loginUser");
 
@@ -88,80 +88,80 @@ public class ReportController {
 			mv.addObject("report", reportList);
 			mv.setViewName("admin/report/reportListView");
 		} else {
-			mv.addObject("message", "¸ñ·Ï Á¶È¸ ½ÇÆĞ!");
+			mv.addObject("message", "ëª©ë¡ ì¡°íšŒ ì‹¤íŒ¨!");
 			mv.setViewName("common/error");
 		}
 
 		return mv;
 
-	} // ½Å°í±Û ÀüÃ¼ ¸ñ·Ï º¸±â
+	} // ì‹ ê³ ê¸€ ì „ì²´ ëª©ë¡ ë³´ê¸°
 
-	// ½Å°í±Û µî·Ï ±â´É
+	// ì‹ ê³ ê¸€ ë“±ë¡ ê¸°ëŠ¥
 	@RequestMapping("reportInsert.do")
 	public ModelAndView reportInsertMethod(Report report, ModelAndView mv, HttpSession session) {
 		if (reportService.insertReport(report) > 0) {
 			mv.addObject("report", report);
 			mv.setViewName("common/main");
 		} else {
-			mv.addObject("message", "½Å°í µî·Ï ½ÇÆĞ");
+			mv.addObject("message", "ì‹ ê³  ë“±ë¡ ì‹¤íŒ¨");
 			mv.setViewName("common/error");
 		}
 		return mv;
-	} // ½Å°í±Û µî·Ï ±â´É
+	} // ì‹ ê³ ê¸€ ë“±ë¡ ê¸°ëŠ¥
 
-	// ½Å°í±Û Ã³¸® ±â´É
+	// ì‹ ê³ ê¸€ ì²˜ë¦¬ ê¸°ëŠ¥
 	@RequestMapping("reportUpdateProcess.do")
 	public ModelAndView reportUpdateProcessMethod(Report report, ModelAndView mv, HttpSession session) {
-		
+
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		
-		if(loginUser != null && loginUser.getMemType().equals("ADMIN")) {
+
+		if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
 			if (reportService.updateReportProcess(report) > 0) {
 				mv.addObject("report", report);
 				mv.setViewName("redirect:reportList.do");
 			} else {
-				mv.addObject("message", "½Å°í Ã³¸® ½ÇÆĞ");
+				mv.addObject("message", "ì‹ ê³  ì²˜ë¦¬ ì‹¤íŒ¨");
 				mv.setViewName("common/error");
 			}
 		} else {
-			mv.addObject("message", "±ÇÇÑÀÌ ¾ø½À´Ï´Ù.");
+			mv.addObject("message", "ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤.");
 		}
-		
+
 		return mv;
 	}
 
-	// ½Å°í±Û Ã³¸® ¹İ·Á ±â´É
+	// ì‹ ê³ ê¸€ ì²˜ë¦¬ ë°˜ë ¤ ê¸°ëŠ¥
 	@RequestMapping("reportUpdateReject.do")
 	public ModelAndView reportUpdateRejectMethod(Report report, ModelAndView mv, HttpSession session) {
-		
+
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		
-		if(loginUser != null && loginUser.getMemType().equals("ADMIN")) {
+
+		if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
 			if (reportService.updateReportReject(report) > 0) {
 				mv.addObject("report", report);
 				mv.setViewName("redirect:reportList.do");
 			} else {
-				mv.addObject("message", "½Å°í Ã³¸® ½ÇÆĞ");
+				mv.addObject("message", "ì‹ ê³  ì²˜ë¦¬ ì‹¤íŒ¨");
 				mv.setViewName("common/error");
 			}
 		} else {
-			mv.addObject("message", "±ÇÇÑÀÌ ¾ø½À´Ï´Ù.");
+			mv.addObject("message", "ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤.");
 		}
 		return mv;
-	} // ½Å°í±Û Ã³¸® ¹İ·Á ±â´É
+	} // ì‹ ê³ ê¸€ ì²˜ë¦¬ ë°˜ë ¤ ê¸°ëŠ¥
 
-	// ½Å°í±Û »èÁ¦ ±â´É
+	// ì‹ ê³ ê¸€ ì‚­ì œ ê¸°ëŠ¥
 	@RequestMapping("reportDelete.do")
 	public ModelAndView reportDeleteMethod(String reportId, ModelAndView mv, HttpSession session) {
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		
-		if(reportService.deleteReport(reportId) > 0) {
+
+		if (reportService.deleteReport(reportId) > 0) {
 			mv.addObject(loginUser);
 			mv.setViewName("redirect:reportList.do");
 		} else {
-			mv.addObject("message", "½Å°í »èÁ¦ ½ÇÆĞ");
+			mv.addObject("message", "ì‹ ê³  ì‚­ì œ ì‹¤íŒ¨");
 			mv.setViewName("common/error");
 		}
 		return mv;
-	} // ½Å°í±Û »èÁ¦ ±â´É
+	} // ì‹ ê³ ê¸€ ì‚­ì œ ê¸°ëŠ¥
 }
