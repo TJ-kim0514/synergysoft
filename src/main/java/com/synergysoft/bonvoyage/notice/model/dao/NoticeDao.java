@@ -12,33 +12,33 @@ import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 
 @Repository("noticeDao")
 public class NoticeDao {
-	// sql ÅÛÇÃ¸´ »ı¼º
+	// sql í…œí”Œë¦¿ ìƒì„±
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	// °øÁö»çÇ× ¸ŞÀÎÆäÀÌÁö °øÁö»çÇ× Ãâ·Â
+	// ê³µì§€ì‚¬í•­ ë©”ì¸í˜ì´ì§€ ê³µì§€ì‚¬í•­ ì¶œë ¥
 	public ArrayList<Notice> selectAllNotice(Paging paging){
 		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectAllNotice", paging);
 		return (ArrayList<Notice>)list;
 	}
-	// °øÁö»çÇ× µî·Ï
+	// ê³µì§€ì‚¬í•­ ë“±ë¡
 	public int insertNotice(Notice notice) {
 		return sqlSessionTemplate.insert("noticeMapper.insertNotice",notice);
 	}
-	// °øÁö»çÇ× »ó¼¼º¸±â
+	// ê³µì§€ì‚¬í•­ ìƒì„¸ë³´ê¸°
 	public Notice selectDetailNotice(String noticeId) {
 		return sqlSessionTemplate.selectOne("noticeMapper.selectDetailNotice",noticeId);
 	}
 	
-	// ÆäÀÌÂ¡¿ë °øÁö»çÇ× ¸®½ºÆ® ºÒ·¯¿À±â
+	// í˜ì´ì§•ìš© ê³µì§€ì‚¬í•­ ë¦¬ìŠ¤íŠ¸ ë¶ˆëŸ¬ì˜¤ê¸°
 	public int selectListCount() {
 		return sqlSessionTemplate.selectOne("noticeMapper.selectListCount");
 	}
-	// °øÁö»çÇ× ¼öÁ¤
+	// ê³µì§€ì‚¬í•­ ìˆ˜ì •
 	public int updateNotice(Notice notice) {
 		return sqlSessionTemplate.update("noticeMapper.updateNotice",notice);
 	}
-	// °øÁö»çÇ× »èÁ¦
+	// ê³µì§€ì‚¬í•­ ì‚­ì œ
 	public int deleteNotice(Notice notice) {
 		return sqlSessionTemplate.update("noticeMapper.deleteNotice",notice);
 	}
