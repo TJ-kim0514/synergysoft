@@ -78,15 +78,27 @@ body {
 	<h1 align="center">공지사항</h1></p>
 	<%-- 공지사항 입력페이지 이동 --%>
 	<c:if test="${!empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
-	<button onclick="window.location.href='minotice.do'" style="position:relative;left:60%; ">공지사항 쓰기</button>
+	<button onclick="window.location.href='minotice.do'" style="position:relative;left:80%; ">공지사항 작성</button>
 	<%-- location.href= "/first/moveWriter.do"; --%>
 	</c:if>
-	
+	<%-- 항목별 검색기능 --%>
+
+		
+
+	<form method="get" action="sanotice.do" align="center">
+		<select name="item" id="searchItem">
+			<option value="title">제목</option>
+			<option value="content">내용</option>
+		</select>
+		<input type="search" name="keyword" size="50" placeholder="검색어를 입력해주세요">
+		<input type="submit" value="search">
+	</form>
+	<br>
 	<%-- 공지사항 출력테이블 --%>
 	<div align="center">
 	<table>
 		<tr align="center">
-			<th width="80px" >글번호</th>
+			<th width="80px" >No</th>
 			<th width="500px">제목</th>
 			<th width="200px">등록일</th>
 		</tr>

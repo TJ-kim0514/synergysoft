@@ -48,13 +48,13 @@
          <button type="button" class="btn btn-outline-success" onclick="location.href='loginPage.do'">로그인</button> &nbsp;
          <button type="button" class="btn btn-outline-success" onclick="location.href='enrollPage.do'">회원가입</button>
       </c:if>
-      <c:if test="${ !empty sessionScope.loginUser }">
-
-		 <button type="button" class="btn btn-outline-success" onclick="location.href='myinfo.do?memId=${loginUser.memId}'">마이페이지</button> &nbsp;
-
+	  <c:if test="${ !empty sessionScope.loginUser }">
+      <c:if test="${ sessionScope.loginUser.memType eq 'ADMIN' }">
+         <button type="button" class="btn btn-outline-success" onclick="location.href='memberList.do?page=1'">관리자</button> &nbsp;
+      </c:if>
+         <button type="button" class="btn btn-outline-success" onclick="location.href='myinfo.do?memId=${loginUser.memId}'">마이페이지</button> &nbsp;
          <button type="button" class="btn btn-outline-success" onclick="location.href='logout.do'">로그아웃</button>
       </c:if>
-      
     </div>
   </div>
 </nav>
