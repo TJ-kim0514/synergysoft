@@ -63,6 +63,80 @@ a#kakao-login-btn{
 	left: 120px;
 }
 </style>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script type="text/javascript">
+	window.Kakao.init('bcd1f6d5790735ccc553978585165423');
+	
+	function loginWithKakao(){
+		Kakao.Auth.login({
+			success: function (res){
+				Kakao.API.request({
+					url: '/v2/user/me',
+					data: {
+						property_keys: ['id', 'kakao_account.email', 'properties.nickname'],
+					},
+					success: function (res){
+						kakaoLoginPro(res);
+						console.log(res);
+						
+						var token = Kakao.Auth.getAccessToken();
+						Kakao.Auth.setAccessToken(token);
+						console.log("token: " + token);
+					},
+					
+					fail: function (error){
+						alert('로그인에 실패하였습니다.');
+					},
+				})
+			},
+			fail: function (error) {
+				location.href="${pageContext.servletContext.contextPath}/kakaoLogin.do";
+			},
+		})
+	}
+	
+	function kakaoLoginPro(res){
+		var kakao_kakaoId = res.id;
+		var kakao_email = res.kakao_account.email;
+		var kakao_name = res.properties.nickname;
+		
+		$.ajax({
+			type : 'POST',
+			url : '${pageContext.servletContext.contextPath}/kakaoLogin.do',
+			data : {
+				kakao_kakaoId,
+				kakao_email,
+				kakao_name
+			},
+			dataType : 'text',
+			success : function(result){
+				console.log("result : " + result);
+				console.log("kakaoId : " + kakao_kakaoId);
+				
+				if(result == "Kakao_Login"){
+					$('#kakaoId').val(kakao_kakaoId);
+					$('#kakaoLoginForm').submit();
+					alert("[Bonvoyage] 카카오톡으로 로그인을 시작합니다.");
+				} else if(result == "Kakao_Enroll"){
+					console.log("success : " + result);
+					console.log(kakao_kakaoId);
+					
+					$('#kakao_kakaoId').val(kakao_kakaoId);
+					$('#kakao_email').val(kakao_email);
+					$('#kakao_name').val(kakao_name);
+					$('#kakaoEnrollForm').submit();
+					
+					alert("[Bonvoyage] 카카오톡으로 가입을 시작합니다.");
+				} else {
+					alert("[Bonvoyage] 로그인에 실패했습니다.");
+				}
+			}, // success
+			error: function(xhr, status, error){
+				alert("[Bonvoyage] 로그인에 실패했습니다. " + error);
+			}
+		}); //ajax
+	}; // kakaoLoginPro
+</script>
 </head>
 <body>
 	<h1 align="center">본보야지 로그인 페이지</h1>

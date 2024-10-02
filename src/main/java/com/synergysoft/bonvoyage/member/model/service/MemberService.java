@@ -9,6 +9,7 @@ import com.synergysoft.bonvoyage.member.model.dto.Member;
 public interface MemberService {
 	
 	Member selectLogin(String memId);
+	int selectKakakoEmailCheck(String kakao_email);
 	Member selectSocialLogin(String memId);
 	Member selectIDSearch(String memPhone);
 	Member selectPWSearch(String memId);

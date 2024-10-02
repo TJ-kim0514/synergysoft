@@ -22,7 +22,12 @@ public class MemberDao {
 	public Member selectLogin(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectLogin", memId);
 	}
-
+	
+	// 카카오 로그인
+	public int selectKakakoEmailCheck(String kakao_email) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectKakakoEmailCheck", kakao_email);
+	}
+	
 	// 소셜 로그인
 	public Member selectSocialLogin(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectSocialLogin", memId);
