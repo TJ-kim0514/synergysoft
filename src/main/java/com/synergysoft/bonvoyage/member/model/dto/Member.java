@@ -3,7 +3,7 @@ package com.synergysoft.bonvoyage.member.model.dto;
 import java.sql.Date;
 
 public class Member {
-	
+
 	private String memId;
 	private String memName;
 	private String memType;
@@ -18,7 +18,7 @@ public class Member {
 	private Date memLogoutLog;
 	private Date memStatusDate;
 	private Date memPwUpdate;
-	
+
 	public Member() {
 		super();
 	}
@@ -154,8 +154,8 @@ public class Member {
 	public void setMemPwUpdate(Date memPwUpdate) {
 		this.memPwUpdate = memPwUpdate;
 	}
-	
-	//°¡ÀÌµåºÎºĞ mem_idÀÌ¸§ ¿Ü·¡Å° »ç¿ë°¡´É
+
+	// ê°€ì´ë“œë¶€ë¶„ mem_idì´ë¦„ ì™¸ë˜í‚¤ ì‚¬ìš©ê°€ëŠ¥
 	public String getUserId() {
 		return memId;
 	}
@@ -168,5 +168,5 @@ public class Member {
 				+ ", memLogoutLog=" + memLogoutLog + ", memStatusDate=" + memStatusDate + ", memPwUpdate=" + memPwUpdate
 				+ "]";
 	}
-	
+
 }
