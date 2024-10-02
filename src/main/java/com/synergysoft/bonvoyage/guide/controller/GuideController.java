@@ -29,71 +29,71 @@ public class GuideController {
 	
 	@RequestMapping("sagBlog.do")
 	public String guideListMethod(Model model) {
-	    ArrayList<Guide> list = guideService.selectAllGuide();  // ÀüÃ¼ ¸ñ·Ï ¹Ş±â
+	    ArrayList<Guide> list = guideService.selectAllGuide();  // ì „ì²´ ëª©ë¡ ë°›ê¸°
 
 	    logger.info("guide list : " + list);
 	    if (list != null && list.size() > 0) {
-	        model.addAttribute("guideList", list);  // "guideList"·Î ÀÌ¸§ º¯°æ
-	        return "guide/guideListView";  // ºäÀÇ ÀÌ¸§À» ¹İÈ¯
+	        model.addAttribute("guideList", list);  // "guideList"ë¡œ ì´ë¦„ ë³€ê²½
+	        return "guide/guideListView";  // ë·°ì˜ ì´ë¦„ì„ ë°˜í™˜
 	    } else {
-	        model.addAttribute("message", "¸ñ·Ï Á¶È¸ ½ÇÆĞ!");
-	        return "common/error";  // ¿¡·¯ ÆäÀÌÁö ºäÀÇ ÀÌ¸§ ¹İÈ¯
+	        model.addAttribute("message", "ëª©ë¡ ì¡°íšŒ ì‹¤íŒ¨!");
+	        return "common/error";  // ì—ëŸ¬ í˜ì´ì§€ ë·°ì˜ ì´ë¦„ ë°˜í™˜
 	    }
 	}
 	
 
-	//»õ ºí·Î±× µî·Ï ÆäÀÌÁö·Î ÀÌµ¿ Ã³¸®
+	//ìƒˆ ë¸”ë¡œê·¸ ë“±ë¡ í˜ì´ì§€ë¡œ ì´ë™ ì²˜ë¦¬
 	@RequestMapping("gmoveWrite.do")
 	public String moveWritePage() {
-	    return "guide/guideWriteForm";  // guideWriteForm.jsp·Î ÀÌµ¿
+	    return "guide/guideWriteForm";  // guideWriteForm.jspë¡œ ì´ë™
 	}
 	
-	// »õ °øÁö±Û µî·Ï ¿äÃ» Ã³¸®¿ë 
+	// ìƒˆ ê³µì§€ê¸€ ë“±ë¡ ìš”ì²­ ì²˜ë¦¬ìš© 
 	@RequestMapping(value="ginsert.do", method=RequestMethod.POST)
 	public String guideInsertMethod(Guide guide, Model model, HttpServletRequest request) {
-	    // ¼¼¼Ç¿¡¼­ ·Î±×ÀÎµÈ »ç¿ëÀÚ Á¤º¸ °¡Á®¿À±â
+	    // ì„¸ì…˜ì—ì„œ ë¡œê·¸ì¸ëœ ì‚¬ìš©ì ì •ë³´ ê°€ì ¸ì˜¤ê¸°
 	    HttpSession session = request.getSession();
 	    Member loginUser = (Member) session.getAttribute("loginUser");
 	    
-	    // loginUser°¡ nullÀÌ ¾Æ´Ñ °æ¿ì¿¡ guideUserId¸¦ ¼³Á¤
+	    // loginUserê°€ nullì´ ì•„ë‹Œ ê²½ìš°ì— guideUserIdë¥¼ ì„¤ì •
 	    if (loginUser != null) {
-	        guide.setGuideUserId(loginUser.getMemId());  // guideUserId¿¡ ·Î±×ÀÎÇÑ »ç¿ëÀÚ ID ¼³Á¤
+	        guide.setGuideUserId(loginUser.getMemId());  // guideUserIdì— ë¡œê·¸ì¸í•œ ì‚¬ìš©ì ID ì„¤ì •
 	    } else {
-	        model.addAttribute("message", "·Î±×ÀÎ Á¤º¸°¡ ¾ø½À´Ï´Ù.");
+	        model.addAttribute("message", "ë¡œê·¸ì¸ ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.");
 	        return "common/error";
 	    }
 	    
 	    logger.info("ginsert.do : " + guide);
 	    
 	    if (guideService.insertGuide(guide) > 0) {
-	        // ºí·Î±× µî·Ï ¼º°ø½Ã ¸ñ·Ï ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®
+	        // ë¸”ë¡œê·¸ ë“±ë¡ ì„±ê³µì‹œ ëª©ë¡ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
 	        return "redirect:sagBlog.do";
 	    } else {
-	        model.addAttribute("message", "»õ °øÁö±Û µî·Ï ½ÇÆĞ!");
+	        model.addAttribute("message", "ìƒˆ ê³µì§€ê¸€ ë“±ë¡ ì‹¤íŒ¨!");
 	        return "common/error";
 	    }
 	}
 	
-	//ºí·Î±× »ó¼¼³»¿ë º¸±â ¿äÃ» Ã³¸® ¸Ş¼Òµå(ºä¿Í ¸ğµ¨ ÇÔ²² °¡Á®¿À´Â ¹æ¹ı)
+	//ë¸”ë¡œê·¸ ìƒì„¸ë‚´ìš© ë³´ê¸° ìš”ì²­ ì²˜ë¦¬ ë©”ì†Œë“œ(ë·°ì™€ ëª¨ë¸ í•¨ê»˜ ê°€ì ¸ì˜¤ëŠ” ë°©ë²•)
 	@RequestMapping("gdetail.do")
 	public ModelAndView guideDetailMethod(
 	        @RequestParam("postno") Guide guidepostId,
 	        ModelAndView mv, HttpSession session) {
 
-	    // ºí·Î±× µ¥ÀÌÅÍ¸¦ guidepostId¸¦ ÀÌ¿ëÇØ °¡Á®¿È
+	    // ë¸”ë¡œê·¸ ë°ì´í„°ë¥¼ guidepostIdë¥¼ ì´ìš©í•´ ê°€ì ¸ì˜´
 	    Guide guide = guideService.selectGuide(guidepostId);
 
 	    if (guide != null) {
-	        // ºí·Î±× µ¥ÀÌÅÍ°¡ ÀÖÀ» °æ¿ì »ó¼¼º¸±â ÆäÀÌÁö·Î ÀÌµ¿
-	        mv.addObject("guide", guide);  // guide °´Ã¼¸¦ ºä¿¡ Àü´Ş
-	        mv.setViewName("guide/guideDetailView");  // guideDetailView·Î ÀÌµ¿
+	        // ë¸”ë¡œê·¸ ë°ì´í„°ê°€ ìˆì„ ê²½ìš° ìƒì„¸ë³´ê¸° í˜ì´ì§€ë¡œ ì´ë™
+	        mv.addObject("guide", guide);  // guide ê°ì²´ë¥¼ ë·°ì— ì „ë‹¬
+	        mv.setViewName("guide/guideDetailView");  // guideDetailViewë¡œ ì´ë™
 	    } else {
-	        // ºí·Î±× µ¥ÀÌÅÍ°¡ ¾øÀ» °æ¿ì ¿¡·¯ ÆäÀÌÁö·Î ÀÌµ¿
-	        mv.addObject("message", guidepostId + "¹ø ºí·Î±× »ó¼¼º¸±â ¿äÃ» ½ÇÆĞ!");
-	        mv.setViewName("common/error");  // ¿¡·¯ ÆäÀÌÁö·Î ÀÌµ¿
+	        // ë¸”ë¡œê·¸ ë°ì´í„°ê°€ ì—†ì„ ê²½ìš° ì—ëŸ¬ í˜ì´ì§€ë¡œ ì´ë™
+	        mv.addObject("message", guidepostId + "ë²ˆ ë¸”ë¡œê·¸ ìƒì„¸ë³´ê¸° ìš”ì²­ ì‹¤íŒ¨!");
+	        mv.setViewName("common/error");  // ì—ëŸ¬ í˜ì´ì§€ë¡œ ì´ë™
 	    }
 
-	    return mv;  // ModelAndView ¹İÈ¯
+	    return mv;  // ModelAndView ë°˜í™˜
 	}
 		
 		
@@ -106,9 +106,9 @@ public class GuideController {
 			
 			
 
-	//¼öÁ¤ÇÏ±â
+	//ìˆ˜ì •í•˜ê¸°
 	
-	//»èÁ¦ÇÏ±â
+	//ì‚­ì œí•˜ê¸°
 	
 
 
