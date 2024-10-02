@@ -3,6 +3,7 @@ package com.synergysoft.bonvoyage.guide.model.dto;
 import java.sql.Date;
 
 public class Guide implements java.io.Serializable {
+	
 
 	private static final long serialVersionUID = -3148970657314738393L;
 
