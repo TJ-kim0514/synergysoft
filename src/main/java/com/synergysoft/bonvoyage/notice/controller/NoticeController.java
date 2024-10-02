@@ -1,5 +1,6 @@
 package com.synergysoft.bonvoyage.notice.controller;
 
+
 import java.util.ArrayList;
 
 
@@ -22,7 +23,7 @@ import com.synergysoft.bonvoyage.notice.model.service.NoticeService;
 
 @Controller
 public class NoticeController {
-	// 로그 생성객체 생성
+	// 로그 생성객체 생성 
 	private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 	
 	@Autowired
