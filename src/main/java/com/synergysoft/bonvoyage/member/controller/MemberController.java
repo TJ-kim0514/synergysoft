@@ -68,7 +68,7 @@ public class MemberController {
 //		session.setAttribute("kakaoN", memberInfo.getMemNickNm());
 //		session.setAttribute("kakaoE", memberInfo.getMemId());
 //		
-//		return "member/kakaoLogin";
+//		return "member/kakaoLogin"; 
 //	}
 
 	// 아이디 찾기 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
