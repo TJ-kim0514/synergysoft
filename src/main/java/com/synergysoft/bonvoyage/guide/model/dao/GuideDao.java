@@ -28,9 +28,10 @@ public class GuideDao {
 	}
 
 
-	public Guide selectGuide(Guide guidepostId) {
+	public Guide selectGuide(String guidepostId) {
 		return sqlSessionTemplate.selectOne("guideMapper.selectGuide", guidepostId);
 	}
+
 
 
 

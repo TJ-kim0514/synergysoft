@@ -10,8 +10,7 @@ public interface GuideService {
 
 	int insertGuide(Guide guide);
 
-	Guide selectGuide(Guide guidepostId);
-
+	Guide selectGuide(String guidepostId);
 
 
 	
