@@ -15,7 +15,7 @@ h1 {
 div {
 	margin: auto;
 	width: 500px;
-	height: 200px;
+	height: 400px;
 	border: 2px solid navy;
 	position: relative;
 }
@@ -46,21 +46,43 @@ div#loginForm form input[type=submit] {
 	font-size: 16pt;
 	font-weight: bold;
 }
+
+div#loginForm label#forgotForm{
+	margin: 10px;
+	height: 40px;
+	position: absolute;
+	right: 0px;
+	font-size: 11pt;
+}
+
+a#kakao-login-btn{
+	margin: 10px;
+	width: 250px;
+	height: 20px;
+	position: absolute;
+	left: 120px;
+}
 </style>
 </head>
 <body>
 	<h1 align="center">본보야지 로그인 페이지</h1>
 	<div id="loginForm">
 		<form action="login.do" method="post">
-			<label>아이디 : <input type="text" name="memId" id="memid"
-				class="pos"></label> <br> <label>비밀번호 : <input
-				type="password" name="memPw" id="memPw" class="pos"></label> <br>
-			<input type="submit" value="로그인">
+			<label>아이디 : <input type="text" name="memId" id="memid" class="pos"></label>
+			<br>
+			<label>비밀번호 : <input type="password" name="memPw" id="memPw" class="pos"></label>
+			<br>
+			<label id="forgotForm"><a>Forgot ID</a> | <a>Forgot Password</a></label>
+			<center>
+				<input type="submit" value="로그인">
+			</center>
+			<br>
 		</form>
-		<a id="kakao-login-btn" href="javascript:loginWithKakao()"> <img
-			src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg"
-			width="222" alt="카카오 로그인 버튼" />
-		</a>
+		<br>
+		<!-- 소셜로그인 -->
+		<center>
+			<a id="kakao-login-btn" href="javascript:loginWithKakao()"> <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222" alt="카카오 로그인 버튼" /> </a>
+		</center>
 	</div>
 </body>
 </html>

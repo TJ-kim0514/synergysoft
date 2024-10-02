@@ -2,17 +2,19 @@ package com.synergysoft.bonvoyage.member.model.service;
 
 import java.util.ArrayList;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 
+// jmoh03 (오정민)
 public interface MemberService {
 	
 	Member selectLogin(String memId);
-//	Member selectKakaoLogin(String access_Token);
 	Member selectSocialLogin(String memId);
 	Member selectIDSearch(String memPhone);
 	Member selectPWSearch(String memId);
 	Member selectMyinfo(String memId);
-	ArrayList<Member> selectMember();
+	ArrayList<Member> selectMember(Paging paging);
+	int selectMemberListCount();
 	Member selectMemberDetail(String memId);
 	int selectCheckId(String memId);
 	

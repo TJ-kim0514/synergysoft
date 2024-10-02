@@ -8,96 +8,93 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 
+//jmoh03 (ì˜¤ì •ë¯¼)
 @Repository("memberDao")
 public class MemberDao {
-	
+
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
-	
-	// ÀÏ¹İ ·Î±×ÀÎ
+
+	// ì¼ë°˜ ë¡œê·¸ì¸
 	public Member selectLogin(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectLogin", memId);
 	}
-	
-//	// Ä«Ä«¿À ·Î±×ÀÎ
-//	public Member selectKakaoLogin(HashMap<String, Object> memberInfo) {
-//		return sqlSessionTemplate.selectOne("memberMapper.selectKakaoLogin", memberInfo);
-//	}
-	
-	// Ä«Ä«¿À È¸¿ø°¡ÀÔ
-	public int insertKakao(HashMap<String, Object> memberInfo) {
-		return sqlSessionTemplate.insert("memberMapper.insertKakao", memberInfo);
-	}
-	
-	// ¼Ò¼È ·Î±×ÀÎ
+
+	// ì†Œì…œ ë¡œê·¸ì¸
 	public Member selectSocialLogin(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectSocialLogin", memId);
 	}
-	
-	// ¾ÆÀÌµğ Áßº¹ °Ë»ç
+
+	// ì•„ì´ë”” ì¤‘ë³µ ê²€ì‚¬
 	public int selectCheckId(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectCheckId", memId);
 	}
-	
-	// ¾ÆÀÌµğ Ã£±â
+
+	// ì•„ì´ë”” ì°¾ê¸°
 	public Member selectIDSearch(String memPhone) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectIDSearch", memPhone);
 	}
-	
-	// ºñ¹Ğ¹øÈ£ Ã£±â
+
+	// ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸°
 	public Member selectPWSearch(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectPWSearch", memId);
 	}
-	
-	// ³» Á¤º¸ Á¶È¸
+
+	// ë‚´ ì •ë³´ ì¡°íšŒ
 	public Member selectMyinfo(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectMyinfo", memId);
 	}
-	
-	// °ü¸®ÀÚ : È¸¿ø ¸ñ·Ï Á¶È¸
-	public ArrayList<Member> selectMember(){
-		List<Member> list = sqlSessionTemplate.selectList("memberMapper.selectMember");
+
+	// ê´€ë¦¬ì : íšŒì› ëª©ë¡ ì¡°íšŒ
+	public ArrayList<Member> selectMember(Paging paging) {
+		List<Member> list = sqlSessionTemplate.selectList("memberMapper.selectMember", paging);
 		return (ArrayList<Member>) list;
 	}
-	
-	// °ü¸®ÀÚ : È¸¿ø »ó¼¼ Á¶È¸
+
+	// ê´€ë¦¬ì : íšŒì› ëª©ë¡ ì¹´ìš´íŠ¸ ì¡°íšŒ
+	public int selectMemberListCount() {
+		return sqlSessionTemplate.selectOne("memberMapper.selectMemberListCount");
+	}
+
+	// ê´€ë¦¬ì : íšŒì› ìƒì„¸ ì¡°íšŒ
 	public Member selectMemberDetail(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectMemberDetail", memId);
 	}
-	
-	// ÀÏ¹İ È¸¿ø°¡ÀÔ
+
+	// ì¼ë°˜ íšŒì›ê°€ì…
 	public int insertMember(Member member) {
 		return sqlSessionTemplate.insert("memberMapper.insertMember", member);
 	}
-	
-	// ¼Ò¼È È¸¿ø°¡ÀÔ
+
+	// ì†Œì…œ íšŒì›ê°€ì…
 	public int insertSocialMember(Member member) {
 		return sqlSessionTemplate.insert("memberMapper.insertSocialMember", member);
 	}
-	
-	// ³» Á¤º¸ º¯°æ
+
+	// ë‚´ ì •ë³´ ë³€ê²½
 	public int updateMyinfo(Member member) {
 		return sqlSessionTemplate.update("memberMapper.updateMyinfo", member);
 	}
-	
-	// È¸¿ø Å»Åğ
+
+	// íšŒì› íƒˆí‡´
 	public int updateLeft(String memId) {
 		return sqlSessionTemplate.update("memberMapper.updateLeft", memId);
 	}
-	
-	// °ü¸®ÀÚ : È¸¿ø Á¤º¸ ¼öÁ¤
+
+	// ê´€ë¦¬ì : íšŒì› ì •ë³´ ìˆ˜ì •
 	public int updateMember(Member member) {
 		return sqlSessionTemplate.update("memberMapper.updateMember", member);
 	}
-	
-	// °ü¸®ÀÚ : È¸¿ø °èÁ¤ Á¶Ä¡
+
+	// ê´€ë¦¬ì : íšŒì› ê³„ì • ì¡°ì¹˜
 	public int updateMemberAccount(String memId) {
 		return sqlSessionTemplate.update("memberMapper.updateMemberAccount", memId);
 	}
-	
-	// °ü¸®ÀÚ : È¸¿ø °ü¸®ÀÚ ºÎ¿©
+
+	// ê´€ë¦¬ì : íšŒì› ê´€ë¦¬ì ë¶€ì—¬
 	public int updateMemberAdmin(String memId) {
 		return sqlSessionTemplate.update("memberMapper.updateMemberAdmin", memId);
 	}

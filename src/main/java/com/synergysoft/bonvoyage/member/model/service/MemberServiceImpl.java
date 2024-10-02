@@ -11,148 +11,109 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dao.MemberDao;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 
+//jmoh03 (ì˜¤ì •ë¯¼)
 @Service("memberService")
 public class MemberServiceImpl implements MemberService {
-	
+
 	@Autowired
 	private MemberDao memberDao;
-	
+
 	@Override
-	// ÀÏ¹İ ·Î±×ÀÎ
+	// ì¼ë°˜ ë¡œê·¸ì¸
 	public Member selectLogin(String memId) {
 		return memberDao.selectLogin(memId);
 	}
-	
-//	@Override
-//	// Ä«Ä«¿À ·Î±×ÀÎ
-//	public int selectKakaoLogin(String access_Token) {
-//		HashMap<String, Object> memberInfo = new HashMap<String, Object>();
-//		String reqURL = "https://kapi.kakao.com/v2/user/me";
-//		
-//		try {
-//			URL url = new URL(reqURL);
-//			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//			conn.setRequestMethod("GET");
-//			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
-//			int responseCode = conn.getResponseCode();
-//			System.out.println("responseCode : " + responseCode);
-//			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//			String line = "";
-//			String result = "";
-//			while ((line = br.readLine()) != null) {
-//				result += line;
-//			}
-//			System.out.println("response body : " + result);
-//			JsonParser parser = new JsonParser();
-//			JsonElement element = parser.parse(result);
-//			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
-//			JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
-//			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
-//			String email = kakao_account.getAsJsonObject().get("email").getAsString();
-//			userInfo.put("nickname", nickname);
-//			userInfo.put("email", email);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		Member result = memberDao.selectKakaoLogin(memberInfo);
-//		// À§ ÄÚµå´Â ¸ÕÀú Á¤º¸°¡ ÀúÀåµÇÀÖ´ÂÁö È®ÀÎÇÏ´Â ÄÚµå.
-//		System.out.println("S:" + result);
-//		if(result==null) {
-//		// result°¡ nullÀÌ¸é Á¤º¸°¡ ÀúÀåÀÌ ¾ÈµÇÀÖ´Â°Å¹Ç·Î Á¤º¸¸¦ ÀúÀå.
-//			memberDao.insertKakao(memberInfo);
-//			// À§ ÄÚµå°¡ Á¤º¸¸¦ ÀúÀåÇÏ±â À§ÇØ Repository·Î º¸³»´Â ÄÚµåÀÓ.
-//			return memberDao.insertKakao(memberInfo);
-//			// À§ ÄÚµå´Â Á¤º¸ ÀúÀå ÈÄ ÄÁÆ®·Ñ·¯¿¡ Á¤º¸¸¦ º¸³»´Â ÄÚµåÀÓ.
-//			//  result¸¦ ¸®ÅÏÀ¸·Î º¸³»¸é nullÀÌ ¸®ÅÏµÇ¹Ç·Î À§ ÄÚµå¸¦ »ç¿ë.
-//		} else {
-//			return result;
-//			// Á¤º¸°¡ ÀÌ¹Ì ÀÖ±â ¶§¹®¿¡ result¸¦ ¸®ÅÏÇÔ.
-//		}
-//	}
-	
+
 	@Override
-	// ¼Ò¼È ·Î±×ÀÎ
+	// ì†Œì…œ ë¡œê·¸ì¸
 	public Member selectSocialLogin(String memId) {
 		return memberDao.selectSocialLogin(memId);
 	}
-	
+
 	@Override
-	// ¾ÆÀÌµğ Áßº¹ °Ë»ç
+	// ì•„ì´ë”” ì¤‘ë³µ ê²€ì‚¬
 	public int selectCheckId(String memId) {
 		return memberDao.selectCheckId(memId);
 	}
 
 	@Override
-	// ¾ÆÀÌµğ Ã£±â
+	// ì•„ì´ë”” ì°¾ê¸°
 	public Member selectIDSearch(String memPhone) {
 		return memberDao.selectIDSearch(memPhone);
 	}
 
 	@Override
-	// ºñ¹Ğ¹øÈ£ Ã£±â
+	// ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸°
 	public Member selectPWSearch(String memId) {
 		return memberDao.selectPWSearch(memId);
 	}
 
 	@Override
-	// ³» Á¤º¸ Á¶È¸
+	// ë‚´ ì •ë³´ ì¡°íšŒ
 	public Member selectMyinfo(String memId) {
 		return memberDao.selectMyinfo(memId);
 	}
 
 	@Override
-	// °ü¸®ÀÚ : È¸¿ø ¸ñ·Ï Á¶È¸
-	public ArrayList<Member> selectMember() {
-		return memberDao.selectMember();
+	// ê´€ë¦¬ì : íšŒì› ëª©ë¡ ì¡°íšŒ
+	public ArrayList<Member> selectMember(Paging paging) {
+		return memberDao.selectMember(paging);
 	}
 
 	@Override
-	// °ü¸®ÀÚ : È¸¿ø »ó¼¼ Á¶È¸
+	// ê´€ë¦¬ì : íšŒì› ëª©ë¡ ì¹´ìš´íŠ¸ ì¡°íšŒ
+	public int selectMemberListCount() {
+		return memberDao.selectMemberListCount();
+	}
+
+	@Override
+	// ê´€ë¦¬ì : íšŒì› ìƒì„¸ ì¡°íšŒ
 	public Member selectMemberDetail(String memId) {
 		return memberDao.selectMemberDetail(memId);
 	}
 
 	@Override
-	// ÀÏ¹İ È¸¿ø°¡ÀÔ
+	// ì¼ë°˜ íšŒì›ê°€ì…
 	public int insertMember(Member member) {
 		return memberDao.insertMember(member);
 	}
 
 	@Override
-	// ¼Ò¼È È¸¿ø°¡ÀÔ
+	// ì†Œì…œ íšŒì›ê°€ì…
 	public int insertSocialMember(Member member) {
 		return memberDao.insertSocialMember(member);
 	}
 
 	@Override
-	// ³» Á¤º¸ ¼öÁ¤
+	// ë‚´ ì •ë³´ ìˆ˜ì •
 	public int updateMyinfo(Member member) {
 		return memberDao.updateMyinfo(member);
 	}
 
 	@Override
-	// È¸¿ø Å»Åğ
+	// íšŒì› íƒˆí‡´
 	public int updateLeft(String memId) {
 		return memberDao.updateLeft(memId);
 	}
 
 	@Override
-	// °ü¸®ÀÚ : È¸¿ø Á¤º¸ ¼öÁ¤
+	// ê´€ë¦¬ì : íšŒì› ì •ë³´ ìˆ˜ì •
 	public int updateMember(Member member) {
 		return memberDao.updateMember(member);
 	}
 
 	@Override
-	// °ü¸®ÀÚ : È¸¿ø °èÁ¤ Á¶Ä¡
+	// ê´€ë¦¬ì : íšŒì› ê³„ì • ì¡°ì¹˜
 	public int updateMemberAccount(String memId) {
 		return memberDao.updateMemberAccount(memId);
 	}
 
 	@Override
-	// °ü¸®ÀÚ : È¸¿ø °ü¸®ÀÚ ºÎ¿©
+	// ê´€ë¦¬ì : íšŒì› ê´€ë¦¬ì ë¶€ì—¬
 	public int updateMemberAdmin(String memId) {
 		return memberDao.updateMemberAdmin(memId);
 	}

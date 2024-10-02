@@ -2,6 +2,7 @@ package com.synergysoft.bonvoyage.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,42 +37,45 @@ public class MemberController {
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
 
 	// 로그인 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping(value = "loginPage.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveLoginPage(Member member, HttpSession session, SessionStatus status, HttpServletRequest request, Model model) {
+	public String moveLoginPage(Member member, HttpSession session, SessionStatus status, HttpServletRequest request,
+			Model model) {
 		logger.info("로그인 페이지 요청");
 		return "member/loginPage";
 	}
 
+	// 소셜 로그인 구현(카카오) | 2024. 10. 02 작성
+	// jmoh03 (오정민)
+	@RequestMapping(value = "kakaoLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String moveKakaoLoginPage() {
+		return "";
+	}
+
+	// 소셜 로그인 구현(네이버) | 2024. 10. 02 작성
+	// jmoh03 (오정민)
+	@RequestMapping(value = "naverLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String moveNaverLoginPage() {
+		return "";
+	}
+
+	// 소셜 로그인 구현(구글) | 2024. 10. 02 작성
+	// jmoh03 (오정민)
+	@RequestMapping(value = "googleLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String moveGoogleLoginPage() {
+		return "";
+	}
+
 	// 회원가입 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping("enrollPage.do")
 	public String moveEnrollPage() {
 		logger.info("회원가입 페이지 요청");
 		return "member/enrollPage";
 	}
 
-
-//	// 카카오 로그인 페이지 출력
-//	@RequestMapping(value = "kakaoLogin.do", method = { RequestMethod.GET })
-//	public String moveKakaoLoginPage(@RequestParam(value = "code", required = false) String code, HttpSession session) throws Exception {
-//		logger.info("카카오 로그인 페이지 요청");
-//		
-//		System.out.println("#########" + code);
-//		String access_Token = memberService.getAccessToken(code);
-//		Member memberInfo = memberService.getMemberInfo(access_Token);
-//		System.out.println("###access_Token#### : " + access_Token);
-//		System.out.println("###nickname#### : " + memberInfo.getMemNickNm());
-//		System.out.println("###email#### : " + memberInfo.getMemId());
-//		
-//		// 아래 코드가 추가되는 내용
-//		session.invalidate();
-//		// 위 코드는 session객체에 담긴 정보를 초기화 하는 코드.
-//		session.setAttribute("kakaoN", memberInfo.getMemNickNm());
-//		session.setAttribute("kakaoE", memberInfo.getMemId());
-//		
-//		return "member/kakaoLogin"; 
-//	}
-
 	// 아이디 찾기 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping(value = "idSearchPage.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String moveIDSearchPage() {
 		logger.info("아이디 찾기 페이지 요청");
@@ -79,6 +83,7 @@ public class MemberController {
 	}
 
 	// 비밀번호 찾기 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping(value = "pwSearchPage.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String movePWSearchPage() {
 		logger.info("비밀번호 찾기 페이지 요청");
@@ -86,11 +91,11 @@ public class MemberController {
 	}
 
 	// 내 정보 조회 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping(value = "myinfo.do")
 	public String moveMyInfoPage(@RequestParam("memId") String memId, Model model) {
 
 		logger.info("내 정보 조회 페이지 요청 : " + memId);
-
 
 		Member member = memberService.selectMyinfo(memId);
 
@@ -104,35 +109,78 @@ public class MemberController {
 	} // 내 정보 조회 페이지 출력
 
 	// 내가 쓴 댓글(가이드게시판) 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
-	@RequestMapping(value = "myinfo/comment/guideBoard.do")
+	// jmoh03 (오정민)
+	@RequestMapping(value = "myGuideBoardComment.do")
 	public String moveMyinfoCommentGuideBoard() {
 		logger.info("내가 쓴 댓글(가이드게시판) 페이지 요청");
 		return "member/myinfo/comment/guideBoard";
 	}
 
 	// 내가 쓴 댓글(경로게시판) 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
-	@RequestMapping(value = "myinfo/comment/routeBoard.do")
+	// jmoh03 (오정민)
+	@RequestMapping(value = "myRouteBoardComment.do")
 	public String moveMyinfoCommentRouteBoard() {
 		logger.info("내가 쓴 댓글(경로게시판) 페이지 요청");
 		return "member/myinfo/comment/routeBoard";
 	}
 
-	// 관리자 : 회원 목록 조회 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
-	@RequestMapping(value = "admin/memberList.do")
-
-	public String moveMemberList() {
+	// 관리자 : 회원 목록 조회 페이지 출력 | 2024. 10. 02 수정
+	// ejjung02 (정은지)
+	@RequestMapping(value = "memberList.do")
+	public String moveMemberList(Model model, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String slimit,
+			@RequestParam(name = "groupLimit", required = false) String mlimit) {
 		logger.info("회원 목록 조회 페이지 요청");
-		return "admin/memberList";
+
+		// paging
+		// 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 회운 수 (20명)
+		int limit = 20;
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit = 5;
+		if (mlimit != null) {
+			groupLimit = Integer.parseInt(mlimit);
+		}
+		// 총 회원 수 조회
+		int listCount = memberService.selectMemberListCount();
+		logger.info("회원 수 : " + listCount);
+
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "sanotice.do", groupLimit);
+		paging.calculate();
+
+		ArrayList<Member> memberList = memberService.selectMember(paging);
+
+		logger.info("list : " + memberList);
+		if (memberList != null && memberList.size() > 0) {
+			model.addAttribute("list", memberList);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			return "admin/memberList"; // 뷰의 이름을 반환
+		} else {
+			model.addAttribute("message", "목록 조회 실패!");
+			return "common/error"; // 에러 페이지 뷰의 이름 반환
+		}
 	}
 
-	// 관리자 : 회원 상세 조회 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
-	@RequestMapping(value = "admin/memberDetail.do")
+	// 관리자 : 회원 상세 조회 페이지 출력 (정은지) | 2024. 10. 02 수정
+	// ejjung02 (정은지)
+	@RequestMapping(value = "memberDetail.do")
 	public String moveMemberDetail() {
 		logger.info("회원 상세 조회 페이지 요청");
 		return "admin/memberDetail";
 	}
 
 	// 로그인 기능 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping(value = "login.do", method = RequestMethod.POST)
 	public String loginMethod(Member member, HttpSession session, SessionStatus status, Model model) {
 
@@ -153,6 +201,7 @@ public class MemberController {
 	}
 
 	// 회원가입 기능 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping(value = "enroll.do", method = RequestMethod.POST)
 	public String enrollMethod(Member member, Model model, HttpServletRequest request) {
 		logger.info("enroll.do : " + member);
@@ -170,6 +219,7 @@ public class MemberController {
 	}
 
 	// 로그아웃 기능 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
 	@RequestMapping("logout.do")
 	public String logoutMethod(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
@@ -184,6 +234,7 @@ public class MemberController {
 	} // 로그아웃 기능
 
 	// 아이디 중복 검사 기능 | 2024. 09. 28 수정 필요
+	// jmoh03 (오정민)
 	@RequestMapping(value = "idchk.do", method = RequestMethod.POST)
 	@ResponseBody
 	public void dupCheckIdMethod(@RequestParam("memId") String memId, HttpServletResponse response) throws IOException {
@@ -203,25 +254,26 @@ public class MemberController {
 	} // 아이디 중복 검사 기능
 
 	// 아이디 찾기 기능
+	// jmoh03 (오정민)
 	@RequestMapping(value = "idSearch.do", method = RequestMethod.POST)
 	public String idSearchMethod() {
 		return "member/idSearch";
 	} // 아이디 찾기 기능
 
 	// 비밀번호 찾기 기능
+	// jmoh03 (오정민)
 	@RequestMapping(value = "pwSearch.do", method = RequestMethod.POST)
 	public String pwSearchMethod() {
 		return "member/pwSearch";
 	} // 비밀번호 찾기 기능
 
 	// 내 정보 수정 기능
+	// jmoh03 (오정민)
 	@RequestMapping(value = "myinfo/update.do", method = RequestMethod.POST)
 	public String myinfoUpdateMethod(Member member, Model model, HttpServletRequest request,
 			@RequestParam("originalMemPw") String originalMemPw) {
 
-
 		logger.info("내 정보 수정 요청 : " + member);
-
 
 		// 내 정보 수정에서 회원이 비밀번호를 변경한 경우 변경한 요청에 따라 비밀번호를 변경하는 기능
 		if (member.getMemPw() != null && member.getMemPw().length() > 0) {
@@ -243,6 +295,7 @@ public class MemberController {
 	} // 내 정보 수정 기능
 
 	// 회원 탈퇴 기능
+	// jmoh03 (오정민)
 	@RequestMapping(value = "myinfo/left.do")
 	public String memberLeftMethod(@RequestParam("memId") String memId, Model model) {
 
@@ -259,20 +312,23 @@ public class MemberController {
 	} // 회원 탈퇴 기능
 
 	// 관리자 : 회원 정보 수정 기능
-	@RequestMapping(value = "admin/memberUpdate.do", method = RequestMethod.POST)
+	// ejjung02 (정은지)
+	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.POST)
 	public String memberUpdateMethod() {
-		return "admin/memberDetail.do";
+		return "memberDetail.do";
 	} // 관리자 : 회원 정보 수정 기능
 
 	// 관리자 : 회원 계정 조치 기능
-	@RequestMapping(value = "admin/memberAccountUpdate.do", method = RequestMethod.POST)
+	// ejjung02 (정은지)
+	@RequestMapping(value = "memberAccountUpdate.do", method = RequestMethod.POST)
 	public String memberAccountUpdateMethod() {
-		return "admin/memberDetail.do";
+		return "memberDetail.do";
 	} // 관리자 : 회원 계정 조치 기능
 
 	// 관리자 : 회원 관리자 부여 기능
-	@RequestMapping(value = "admin/memberAdmin.do", method = RequestMethod.POST)
+	// ejjung02 (정은지)
+	@RequestMapping(value = "memberAdmin.do", method = RequestMethod.POST)
 	public String memberAdminMethod() {
-		return "admin/memberDetail.do";
+		return "memberDetail.do";
 	} // 관리자 : 회원 관리자 부여 기능
 }
