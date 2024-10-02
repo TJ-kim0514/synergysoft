@@ -14,37 +14,37 @@ public class ReportServiceImpl implements ReportService {
 	private ReportDao reportDao;
 
 	@Override
-	// °ü¸®ÀÚ : ½Å°í ¸ñ·Ï Á¶È¸
+	// ê´€ë¦¬ì : ì‹ ê³  ëª©ë¡ ì¡°íšŒ
 	public ArrayList<Report> selectReport() {
 		return reportDao.selectReport();
 	}
 
 	@Override
-	// °ü¸®ÀÚ : ½Å°í »ó¼¼ Á¶È¸
+	// ê´€ë¦¬ì : ì‹ ê³  ìƒì„¸ ì¡°íšŒ
 	public Report selectReportDetail(String reportId) {
 		return reportDao.selectReportDetail(reportId);
 	}
 
 	@Override
-	// À¯Àú&°ü¸®ÀÚ : ½Å°í µî·Ï
+	// ìœ ì €&ê´€ë¦¬ì : ì‹ ê³  ë“±ë¡
 	public int insertReport(Report report) {
 		return reportDao.insertReport(report);
 	}
-	
+
 	@Override
-	// °ü¸®ÀÚ : ½Å°í Ã³¸®
+	// ê´€ë¦¬ì : ì‹ ê³  ì²˜ë¦¬
 	public int updateReportProcess(Report report) {
 		return reportDao.updateReportProcess(report);
 	}
-	
+
 	@Override
-	// °ü¸®ÀÚ : ½Å°í ¹İ·Á
+	// ê´€ë¦¬ì : ì‹ ê³  ë°˜ë ¤
 	public int updateReportReject(Report report) {
 		return reportDao.updateReportReject(report);
 	}
 
 	@Override
-	// °ü¸®ÀÚ : ½Å°í »èÁ¦
+	// ê´€ë¦¬ì : ì‹ ê³  ì‚­ì œ
 	public int deleteReport(String reportId) {
 		return reportDao.deleteReport(reportId);
 	}
