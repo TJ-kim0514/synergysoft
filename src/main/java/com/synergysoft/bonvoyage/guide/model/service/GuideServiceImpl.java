@@ -12,7 +12,7 @@ import com.synergysoft.bonvoyage.guide.model.dto.Guide;
 @Service("guideService")
 public class GuideServiceImpl implements GuideService{
 	
-	// °¡ÀÌºê ºí·Î±× ¸ŞÀÎÈ­¸é ÀüÃ¼È­¸é Ãâ·Â¿ë ¼­ºñ½º
+	// ê°€ì´ë¸Œ ë¸”ë¡œê·¸ ë©”ì¸í™”ë©´ ì „ì²´í™”ë©´ ì¶œë ¥ìš© ì„œë¹„ìŠ¤
 	@Autowired
 	private GuideDao guideDao;
 
