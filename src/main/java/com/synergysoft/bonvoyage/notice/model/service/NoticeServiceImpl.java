@@ -11,29 +11,29 @@ import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 
 @Service("noticeService")
 public class NoticeServiceImpl implements NoticeService{
-	// dao »ı¼º 
+	// dao ìƒì„± 
 	@Autowired
 	private NoticeDao noticeDao;
 	
-	// °øÁö»çÇ× ¸ŞÀÎÈ­¸é ÀüÃ¼È­¸é Ãâ·Â¿ë ¼­ºñ½º
+	// ê³µì§€ì‚¬í•­ ë©”ì¸í™”ë©´ ì „ì²´í™”ë©´ ì¶œë ¥ìš© ì„œë¹„ìŠ¤
 	@Override
 	public ArrayList<Notice> selectAllNotice(Paging paging) {
 		return noticeDao.selectAllNotice(paging);
 	}
 	
-	// °øÁö»çÇ× µî·Ï
+	// ê³µì§€ì‚¬í•­ ë“±ë¡
 	@Override
 	public int insertNotice(Notice notice) {
 		return noticeDao.insertNotice(notice);
 	}
 	
-	// °øÁö»çÇ× »ó¼¼º¸±â
+	// ê³µì§€ì‚¬í•­ ìƒì„¸ë³´ê¸°
 	@Override
 	public Notice selectDetailNotice(String noticeId) {
 		return noticeDao.selectDetailNotice(noticeId);
 	}
 	
-	// ÆäÀÌÂ¡¿ë °øÁö»çÇ× °¹¼öÈ®ÀÎ
+	// í˜ì´ì§•ìš© ê³µì§€ì‚¬í•­ ê°¯ìˆ˜í™•ì¸
 	@Override
 	public int selectListCount() {
 		return noticeDao.selectListCount();

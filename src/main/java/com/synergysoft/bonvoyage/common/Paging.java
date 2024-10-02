@@ -4,21 +4,21 @@ public class Paging implements java.io.Serializable{
 
 	private static final long serialVersionUID = -152292818359704529L;
 	
-	private int startRow;		// ÇØ´ç ÆäÀÌÁö¿¡ Ãâ·ÂÇÒ ½ÃÀÛÇà (Äõ¸®¹®¿¡ Àû¿ë)
-	private int endRow;			// ÇØ´ç ÆäÀÌÁö¿¡ Ãâ·ÂÇÒ ³¡Çà (Äõ¸®¹®¿¡ Àû¿ë)
-	private int listCount;		// ÃÑ ¸ñ·Ï °¹¼ö (ºäÆäÀÌÁö¿¡¼­ »ç¿ë)
-	private int limit;			// ÇÑ ÆäÀÌÁö¿¡ Ãâ·ÂÇÒ °¹¼ö(ºäÆäÀÌÁö¿¡¼­ »ç¿ë)
-	private int currentPage;	// Ãâ·ÂÇÒ ÇöÀç ÆäÀÌÁö(ºäÆäÀÌÁö¿¡¼­ »ç¿ë)
-	private int maxPage;		// ÃÑ ÆäÀÌÁö ¼ö (¸¶Áö¸· ÆäÀÌÁö) (ºäÆäÀÌÁö¿¡¼­ »ç¿ë)
-	private int startPage;		// ÇåÀç ÆäÀÌÁö°¡ ¼ÓÇÑ ÆäÀÌÁö ±×·ìÀÇ ½ÃÀÛ°ª (ºäÆäÀÌÁö¿¡¼­ »ç¿ë)
-	private int endPage;		// ÇöÀç ÆäÀÌÁö°¡ ¼ÓÇÑ ÆäÀÌÁö ±¸·ìÀÇ ³¡°ª (ºäÆäÀÌÁö¿¡¼­ »ç¿ë)
-	private String urlMapping;	// ÆäÀÌÁö ¼ıÀÚ Å¬¸¯½Ã ¿äÃ»ÇÒ url ÀúÀå¿ë(°Ë»ö±â´É »ç¿ë½Ã ¿äÃ»ÇÒ url ÀÌ ´Ş¶ó¼­ ÇÊ¿äÇÔ) (ºäÆäÀÌÁö¿¡¼­ »ç¿ë)
-	private int groupLimit;		// ÆäÀÌÂ¡ ±×·ì °¹¼ö ( ºäÆäÀÌÁö¿¡¼­ »ç¿ë )
+	private int startRow;		// í•´ë‹¹ í˜ì´ì§€ì— ì¶œë ¥í•  ì‹œì‘í–‰ (ì¿¼ë¦¬ë¬¸ì— ì ìš©)
+	private int endRow;			// í•´ë‹¹ í˜ì´ì§€ì— ì¶œë ¥í•  ëí–‰ (ì¿¼ë¦¬ë¬¸ì— ì ìš©)
+	private int listCount;		// ì´ ëª©ë¡ ê°¯ìˆ˜ (ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+	private int limit;			// í•œ í˜ì´ì§€ì— ì¶œë ¥í•  ê°¯ìˆ˜(ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+	private int currentPage;	// ì¶œë ¥í•  í˜„ì¬ í˜ì´ì§€(ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+	private int maxPage;		// ì´ í˜ì´ì§€ ìˆ˜ (ë§ˆì§€ë§‰ í˜ì´ì§€) (ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+	private int startPage;		// í—Œì¬ í˜ì´ì§€ê°€ ì†í•œ í˜ì´ì§€ ê·¸ë£¹ì˜ ì‹œì‘ê°’ (ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+	private int endPage;		// í˜„ì¬ í˜ì´ì§€ê°€ ì†í•œ í˜ì´ì§€ êµ¬ë£¹ì˜ ëê°’ (ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+	private String urlMapping;	// í˜ì´ì§€ ìˆ«ì í´ë¦­ì‹œ ìš”ì²­í•  url ì €ì¥ìš©(ê²€ìƒ‰ê¸°ëŠ¥ ì‚¬ìš©ì‹œ ìš”ì²­í•  url ì´ ë‹¬ë¼ì„œ í•„ìš”í•¨) (ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš©)
+	private int groupLimit;		// í˜ì´ì§• ê·¸ë£¹ ê°¯ìˆ˜ ( ë·°í˜ì´ì§€ì—ì„œ ì‚¬ìš© )
 
 	
-	// ±âº»»ı¼ºÀÚ ºÒÇÊ¿ä
+	// ê¸°ë³¸ìƒì„±ì ë¶ˆí•„ìš”
 	
-	// ¸Å°³º¯¼ö 4°³ ÀÖ´Â »ı¼ºÀÚ
+	// ë§¤ê°œë³€ìˆ˜ 4ê°œ ìˆëŠ” ìƒì„±ì
 	
 	public Paging(int listCount, int limit, int currentPage, String urlMapping, int groupLimit) {
 		super();
@@ -29,26 +29,26 @@ public class Paging implements java.io.Serializable{
 		this.groupLimit = groupLimit;
 	}
 	
-	// ÆäÀÌÁö °è»ê ¸Ş¼Òµå
+	// í˜ì´ì§€ ê³„ì‚° ë©”ì†Œë“œ
 	public void calculate() {
-		// ÃÑ ÆäÀÌÁö ¼ö °è»ê : 
+		// ì´ í˜ì´ì§€ ìˆ˜ ê³„ì‚° : 
 		this.maxPage = (int)((double)listCount / limit + 0.9); 
 		
-		// ºä ÆäÀÌÁö Ãâ·Â¿¡ »ç¿ëÇÒ ÆäÀÌÁö ±×¸¨ÀÇ ½ÃÀÛ°ª ÁöÁ¤
-		// ºä ½ÃÀÛÆäÀÌÁö
+		// ë·° í˜ì´ì§€ ì¶œë ¥ì— ì‚¬ìš©í•  í˜ì´ì§€ ê·¸ë¦…ì˜ ì‹œì‘ê°’ ì§€ì •
+		// ë·° ì‹œì‘í˜ì´ì§€
 		this.startPage = (int)(((double)currentPage / groupLimit + 0.9)-1 ) * groupLimit + 1;
-		// ºä Á¾·áÆäÀÌÁö
+		// ë·° ì¢…ë£Œí˜ì´ì§€
 		this.endPage = startPage + groupLimit - 1;
 		
-		// ¸¶Áö¸· ±×·ìÀÇ ³¡°ªÀ» ¸¶Áö¸· ÆäÀÌÁö¿Í ¸ÂÃã
+		// ë§ˆì§€ë§‰ ê·¸ë£¹ì˜ ëê°’ì„ ë§ˆì§€ë§‰ í˜ì´ì§€ì™€ ë§ì¶¤
 		if(maxPage < endPage) {
 			endPage = maxPage;
 		}
 		
-		// ¿äÃ»ÇÑ ÇöÀç ÆäÀÌÁö¿¡ Ãâ·ÂµÉ ¸ñ·ÏÀÇ Çà ¹øÈ£¸¦ °è»ê
-		// ½ÃÀÛ °Ô½Ã¹°
+		// ìš”ì²­í•œ í˜„ì¬ í˜ì´ì§€ì— ì¶œë ¥ë  ëª©ë¡ì˜ í–‰ ë²ˆí˜¸ë¥¼ ê³„ì‚°
+		// ì‹œì‘ ê²Œì‹œë¬¼
 		this.startRow = (currentPage-1) * limit + 1;
-		// Á¾·á °Ô½Ã¹°
+		// ì¢…ë£Œ ê²Œì‹œë¬¼
 		this.endRow = startRow + limit - 1;		
 	}
 	
