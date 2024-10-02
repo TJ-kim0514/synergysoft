@@ -19,7 +19,7 @@ public class RouteController {
 	@Autowired
 	private RouteService noticeService;
 	
-	// ºä ÆäÀÌÁö ÀÌµ¿ ¸Ş¼Òµå
+	// ë·° í˜ì´ì§€ ì´ë™ ë©”ì†Œë“œ
 	@RequestMapping("moveWriteRoute.do")
 	public String moveWritePage() {
 		return "route/routeWritePage";

@@ -5,16 +5,16 @@ import java.sql.Date;
 public class Route implements java.io.Serializable {
 	private static final long serialVersionUID = -1477524178816632376L;
 	
-	private String routeBoardId;		// °Ô½Ã±Û ½Äº°ÄÚµå
-	private String userId;			// ÀÛ¼ºÀÚ ID
-	private String title;				// Á¦¸ñ
-	private String content;			// ³»¿ë
-	private String transport;			// ±³Åë¼ö´Ü ½Äº°ÄÚµå
-	private java.sql.Date createdAt;	// ÀÛ¼ºÀÏÀÚ
-	private java.sql.Date updatedAt;	// ¼öÁ¤ÀÏÀÚ
-	private int likeCount;			// ÁÁ¾Æ¿ä ¼ö
-	private int totalDuration;		// ÃÑ ¼Ò¿ä½Ã°£
-	private String routeName;		// ÃßÃµ °æ·Î ÀÌ¸§
+	private String routeBoardId;		// ê²Œì‹œê¸€ ì‹ë³„ì½”ë“œ
+	private String userId;			// ì‘ì„±ì ID
+	private String title;				// ì œëª©
+	private String content;			// ë‚´ìš©
+	private String transport;			// êµí†µìˆ˜ë‹¨ ì‹ë³„ì½”ë“œ
+	private java.sql.Date createdAt;	// ì‘ì„±ì¼ì
+	private java.sql.Date updatedAt;	// ìˆ˜ì •ì¼ì
+	private int likeCount;			// ì¢‹ì•„ìš” ìˆ˜
+	private int totalDuration;		// ì´ ì†Œìš”ì‹œê°„
+	private String routeName;		// ì¶”ì²œ ê²½ë¡œ ì´ë¦„
 	
 	public Route() {
 		super();
