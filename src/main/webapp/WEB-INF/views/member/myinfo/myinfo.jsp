@@ -88,9 +88,6 @@
 			<tr>
 				<th colspan="2">
 					<input type="submit" value="수정하기"> &nbsp;
-					<c:if test="${ !empty sessionScope.loginUser and sessionScope.loginUser.memType eq 'ADMIN' }">
-						<a href="memberList.do?page=1">관리자페이지</a> &nbsp;
-					</c:if>
 					<c:url var="mdel" value="myinfo/left.do">
 						<c:param name="memId" value="${ requestScope.member.memId }" />
 					</c:url>

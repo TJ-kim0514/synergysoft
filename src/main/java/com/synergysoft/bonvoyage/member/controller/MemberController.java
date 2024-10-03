@@ -48,8 +48,20 @@ public class MemberController {
 	// 소셜 로그인 구현(카카오) | 2024. 10. 02 작성
 	// jmoh03 (오정민)
 	@RequestMapping(value = "kakaoLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveKakaoLoginPage() {
-		return "";
+	public String moveKakaoLoginPage(HttpSession session,
+			@RequestParam String kakao_kakaoId,
+			@RequestParam String kakao_email,
+			@RequestParam String kakao_name) {
+		
+		logger.info("카카오 로그인 페이지 요청");
+		
+		int result = memberService.selectKakakoEmailCheck(kakao_email);
+		
+		if(result != 0) {
+			return "Kakao_Login";
+		} else {
+			return "Kakao_Enroll";			
+		}
 	}
 
 	// 소셜 로그인 구현(네이버) | 2024. 10. 02 작성
@@ -127,9 +139,10 @@ public class MemberController {
 	// 관리자 : 회원 목록 조회 페이지 출력 | 2024. 10. 02 수정
 	// ejjung02 (정은지)
 	@RequestMapping(value = "memberList.do")
-	public String moveMemberList(Model model, @RequestParam(name = "page", required = false) String page,
+	public String moveMemberList(Model model,
+			@RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String slimit,
-			@RequestParam(name = "groupLimit", required = false) String mlimit) {
+			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("회원 목록 조회 페이지 요청");
 
 		// paging
@@ -146,22 +159,22 @@ public class MemberController {
 		}
 		// 페이징 그룹 갯수 (기본값 5개 세팅)
 		int groupLimit = 5;
-		if (mlimit != null) {
-			groupLimit = Integer.parseInt(mlimit);
+		if (glimit != null) {
+			groupLimit = Integer.parseInt(glimit);
 		}
 		// 총 회원 수 조회
 		int listCount = memberService.selectMemberListCount();
 		logger.info("회원 수 : " + listCount);
 
 		// 페이징 처리 값생성
-		Paging paging = new Paging(listCount, limit, currentPage, "sanotice.do", groupLimit);
+		Paging paging = new Paging(listCount, limit, currentPage, "memberList.do", groupLimit);
 		paging.calculate();
 
 		ArrayList<Member> memberList = memberService.selectMember(paging);
 
-		logger.info("list : " + memberList);
+		logger.info("memberList : " + memberList);
 		if (memberList != null && memberList.size() > 0) {
-			model.addAttribute("list", memberList);
+			model.addAttribute("memberList", memberList);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			return "admin/memberList"; // 뷰의 이름을 반환

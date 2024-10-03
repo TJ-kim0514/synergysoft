@@ -27,6 +27,12 @@ public class MemberServiceImpl implements MemberService {
 	public Member selectLogin(String memId) {
 		return memberDao.selectLogin(memId);
 	}
+	
+	// 카카오 로그인
+	@Override
+	public int selectKakakoEmailCheck(String kakao_email) {
+		return memberDao.selectKakakoEmailCheck(kakao_email);
+	}
 
 	@Override
 	// 소셜 로그인
