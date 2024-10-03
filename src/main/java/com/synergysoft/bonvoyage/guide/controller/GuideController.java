@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.guide.model.dto.Guide;
 import com.synergysoft.bonvoyage.guide.model.service.GuideService;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
+import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 
 
 @Controller
@@ -27,19 +29,56 @@ public class GuideController {
 	@Autowired
 	private GuideService guideService;
 	
+	
+	
+	//가이드 게시판 페이징 처리
 	@RequestMapping("sagBlog.do")
-	public String guideListMethod(Model model) {
-	    ArrayList<Guide> list = guideService.selectAllGuide();  // 전체 목록 받기
+	public String guideListMethod(Model model,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String slimit,
+			@RequestParam(name="groupLimit", required=false) String glimit
+			) {
+		
+		//paging 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage=1;
+		if(page!=null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 공지글 갯수 (기본값 10개 세팅)
+		int limit =10;
+		if(slimit !=null) {
+			limit= Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit =5;
+		if(glimit!=null) {
+			groupLimit=Integer.parseInt(glimit);
+		}
+		// 총 목록 갯수 조회
+		int listCount = guideService.selectListCount();
+		logger.info("블로그 총 갯수 : " +listCount);
+		
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "sagBlog.do", groupLimit);
+		paging.calculate();
+		//paging 세팅---------------------------------------------------------------------------
+	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
+		ArrayList<Guide> list = guideService.selectAllGuide(paging);  // 전체 목록 받기
 
-	    logger.info("guide list : " + list);
-	    if (list != null && list.size() > 0) {
-	        model.addAttribute("guideList", list);  // "guideList"로 이름 변경
-	        return "guide/guideListView";  // 뷰의 이름을 반환
+	    logger.info("list : " + list);
+	    if(list != null && list.size() > 0) {
+	        model.addAttribute("list", list);
+			model.addAttribute("paging",paging);
+			model.addAttribute("currentPage",currentPage);
+			return "guide/guideListView";  // 뷰의 이름을 반환
 	    } else {
 	        model.addAttribute("message", "목록 조회 실패!");
 	        return "common/error";  // 에러 페이지 뷰의 이름 반환
 	    }
 	}
+	
+	
 	
 
 	//새 블로그 등록 페이지로 이동 처리
@@ -83,6 +122,9 @@ public class GuideController {
 		
 		//회원인지 확인하기 위해 session 매개변수 추가함
 		logger.info("gdetail.do : " + guidepostId);
+		
+		//조회수 1증가처리용 
+		guideService.likeCount(guidepostId);
 
 	    // 블로그 데이터를 guidepostId를 이용해 가져옴
 	    Guide guide = guideService.selectGuide(guidepostId);
@@ -133,10 +175,41 @@ public class GuideController {
 	}//gmoveUpdatePage() end
 
 
+	// 공지글 수정 요청 처리용 (파일 업로드 기능 제거)
+	@RequestMapping(value = "gupdate.do", method = RequestMethod.POST)
+	public String guideUpdate(Guide guide, Model model, HttpServletRequest request, 
+	        @RequestParam(name = "deleteFlag", required = false) String delFlag) {
+	    
+	    logger.info("gupdate.do : " + guide); // 전송된 값 확인
+	    
+	  
+
+	    if (guideService.updateGuide(guide) > 0) { // 공지글 수정 성공 시
+	        return "redirect:gdetail.do?guidepostId=" + guide.getGuidepostId();
+	    } else {
+	        model.addAttribute("message", guide.getGuidepostId() + "번 공지글 수정 실패!");
+	        return "common/error";
+	    }
+	}
+
 
 	
 	//삭제하기
-	
+
+	// 공지글 삭제 요청 처리용
+	@RequestMapping("gdelete.do")
+	public String guideDelete(
+	        @RequestParam("guidepostId") String guidepostId,
+	        HttpServletRequest request, Model model) {
+	    
+	    if (guideService.deleteGuide(guidepostId) > 0) { // 공지글 삭제 성공 시
+	        return "redirect:sagBlog.do";  // 목록 페이지로 리다이렉트
+	    } else {
+	        model.addAttribute("message", guidepostId + "번 공지글 삭제 실패!");
+	        return "common/error";  // 에러 페이지로 이동
+	    }
+	}
+
 
 
 	
