@@ -27,9 +27,10 @@ public class GuideServiceImpl implements GuideService{
 	}
 
 	@Override
-	public Guide selectGuide(Guide guidepostId) {
+	public Guide selectGuide(String guidepostId) {
 		return guideDao.selectGuide(guidepostId);
 	}
+
 
 
 

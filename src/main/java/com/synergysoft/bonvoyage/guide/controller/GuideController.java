@@ -77,17 +77,30 @@ public class GuideController {
 	//블로그 상세내용 보기 요청 처리 메소드(뷰와 모델 함께 가져오는 방법)
 	@RequestMapping("gdetail.do")
 	public ModelAndView guideDetailMethod(
-	        @RequestParam("postno") Guide guidepostId,
+	        @RequestParam("guidepostId") String guidepostId,
 	        ModelAndView mv, HttpSession session) {
+		
+		
+		//회원인지 확인하기 위해 session 매개변수 추가함
+		logger.info("gdetail.do : " + guidepostId);
 
 	    // 블로그 데이터를 guidepostId를 이용해 가져옴
 	    Guide guide = guideService.selectGuide(guidepostId);
 
 	    if (guide != null) {
+	    	//세션에서 로그인한 사람정보 가져오기
+	    	Member loginUser = (Member)session.getAttribute("loginUser");
+			if(loginUser != null && loginUser.getUserId().equals(guide.getGuideUserId())) {
+				mv.setViewName("guide/guideDetail");
 	        // 블로그 데이터가 있을 경우 상세보기 페이지로 이동
 	        mv.addObject("guide", guide);  // guide 객체를 뷰에 전달
-	        mv.setViewName("guide/guideDetailView");  // guideDetailView로 이동
+	        mv.setViewName("guide/guideDetail");  // guideDetailView로 이동
 	    } else {
+	    	// 작성자가 아니면 수정할 수 없는 페이지로 이동
+	    	 mv.addObject("guide", guide);
+            mv.setViewName("guide/guideDetailView"); 
+	    }}
+			else {
 	        // 블로그 데이터가 없을 경우 에러 페이지로 이동
 	        mv.addObject("message", guidepostId + "번 블로그 상세보기 요청 실패!");
 	        mv.setViewName("common/error");  // 에러 페이지로 이동
@@ -98,15 +111,29 @@ public class GuideController {
 		
 		
 		
-}
-		
-		
-		
-	
-			
-			
 
-	//수정하기
+
+
+//공지글 수정 페이지로 이동 처리용
+	@RequestMapping("gmoveup.do")
+	public ModelAndView moveUpdatePage(
+			@RequestParam("guidepostId") String guidepostId, ModelAndView mv) {
+		//수정페이지에 출력할 공지글 조회해 봄
+		Guide guide = guideService.selectGuide(guidepostId);
+		
+		if(guide != null) {
+			mv.addObject("guide", guide);
+			mv.setViewName("guide/guideUpdateView");
+		}else {
+			mv.addObject("message", guidepostId + "번 공지글 수정페이지로 이동 실패!");
+			mv.setViewName("common/error");
+		}
+		
+		return mv;
+	}//gmoveUpdatePage() end
+
+
+
 	
 	//삭제하기
 	
@@ -117,7 +144,7 @@ public class GuideController {
 
 	
 	
-
+}
 	
 
 
