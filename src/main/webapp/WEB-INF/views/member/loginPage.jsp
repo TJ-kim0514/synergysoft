@@ -6,13 +6,32 @@
 <head>
 <meta charset="UTF-8">
 <title>bonvoyage</title>
+<!-- 카카오 로그인 -->
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+        Kakao.init('bcd1f6d5790735ccc553978585165423');
+        Kakao.isInitialized();
+    });
+    function loginWithKakao() {
+    	
+        Kakao.Auth.authorize({ 
+        redirectUri: 'http://localhost:8080/bonvoyage/kakaoLogin.do' 
+        }); // 등록한 리다이렉트uri 입력
+    }
+</script>
 <style type="text/css">
 h1 {
 	font-size: 48pt;
 	color: navy;
 }
 
-div {
+div#loginForm {
 	margin: auto;
 	width: 500px;
 	height: 400px;
@@ -20,7 +39,7 @@ div {
 	position: relative;
 }
 
-div form {
+div#loginForm form {
 	font-size: 16pt;
 	color: navy;
 	font-weight: bold;
@@ -64,79 +83,6 @@ a#kakao-login-btn{
 }
 </style>
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-<script type="text/javascript">
-	window.Kakao.init('bcd1f6d5790735ccc553978585165423');
-	
-	function loginWithKakao(){
-		Kakao.Auth.login({
-			success: function (res){
-				Kakao.API.request({
-					url: '/v2/user/me',
-					data: {
-						property_keys: ['id', 'kakao_account.email', 'properties.nickname'],
-					},
-					success: function (res){
-						kakaoLoginPro(res);
-						console.log(res);
-						
-						var token = Kakao.Auth.getAccessToken();
-						Kakao.Auth.setAccessToken(token);
-						console.log("token: " + token);
-					},
-					
-					fail: function (error){
-						alert('로그인에 실패하였습니다.');
-					},
-				})
-			},
-			fail: function (error) {
-				location.href="${pageContext.servletContext.contextPath}/kakaoLogin.do";
-			},
-		})
-	}
-	
-	function kakaoLoginPro(res){
-		var kakao_kakaoId = res.id;
-		var kakao_email = res.kakao_account.email;
-		var kakao_name = res.properties.nickname;
-		
-		$.ajax({
-			type : 'POST',
-			url : '${pageContext.servletContext.contextPath}/kakaoLogin.do',
-			data : {
-				kakao_kakaoId,
-				kakao_email,
-				kakao_name
-			},
-			dataType : 'text',
-			success : function(result){
-				console.log("result : " + result);
-				console.log("kakaoId : " + kakao_kakaoId);
-				
-				if(result == "Kakao_Login"){
-					$('#kakaoId').val(kakao_kakaoId);
-					$('#kakaoLoginForm').submit();
-					alert("[Bonvoyage] 카카오톡으로 로그인을 시작합니다.");
-				} else if(result == "Kakao_Enroll"){
-					console.log("success : " + result);
-					console.log(kakao_kakaoId);
-					
-					$('#kakao_kakaoId').val(kakao_kakaoId);
-					$('#kakao_email').val(kakao_email);
-					$('#kakao_name').val(kakao_name);
-					$('#kakaoEnrollForm').submit();
-					
-					alert("[Bonvoyage] 카카오톡으로 가입을 시작합니다.");
-				} else {
-					alert("[Bonvoyage] 로그인에 실패했습니다.");
-				}
-			}, // success
-			error: function(xhr, status, error){
-				alert("[Bonvoyage] 로그인에 실패했습니다. " + error);
-			}
-		}); //ajax
-	}; // kakaoLoginPro
-</script>
 </head>
 <body>
 	<h1 align="center">본보야지 로그인 페이지</h1>
@@ -155,7 +101,19 @@ a#kakao-login-btn{
 		<br>
 		<!-- 소셜로그인 -->
 		<center>
-			<a id="kakao-login-btn" href="javascript:loginWithKakao()"> <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222" alt="카카오 로그인 버튼" /> </a>
+			<a href="javascript:loginWithKakao();">
+				<img alt="카카오로그인" src="${pageContext.request.contextPath}/resources/assets/img/kakao_login_medium_narrow.png">
+			</a>
+			<div id="naver_id_login"></div>
+			<script type="text/javascript">
+			  	var naver_id_login = new naver_id_login("GcBRifOkv0F3VVJTZbQd", "http://localhost:8080/bonvoyage/naverLogin.do");
+			  	var state = naver_id_login.getUniqState();
+			  	naver_id_login.setButton("green", 3,50);
+			  	naver_id_login.setDomain("http://localhost:8080/");
+			  	naver_id_login.setState(state);
+			  	naver_id_login.setPopup();
+			  	naver_id_login.init_naver_id_login();
+			</script>
 		</center>
 	</div>
 </body>

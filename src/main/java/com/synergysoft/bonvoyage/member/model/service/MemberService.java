@@ -1,6 +1,9 @@
 package com.synergysoft.bonvoyage.member.model.service;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
@@ -9,8 +12,10 @@ import com.synergysoft.bonvoyage.member.model.dto.Member;
 public interface MemberService {
 	
 	Member selectLogin(String memId);
-	int selectKakakoEmailCheck(String kakao_email);
+	String getReturnAccessToken(String code); // 2024. 10. 04 작성 및 테스트 성공
+	Map<String, Object> getMemberInfo(String kakaoToken); // 2024. 10. 04 작성 및 테스트 성공
 	Member selectSocialLogin(String memId);
+	Member selectSocialLogin(Member member);
 	Member selectIDSearch(String memPhone);
 	Member selectPWSearch(String memId);
 	Member selectMyinfo(String memId);
@@ -20,6 +25,7 @@ public interface MemberService {
 	int selectCheckId(String memId);
 	
 	int insertMember(Member member);
+	int insertKakaoEnroll(Member member);
 	int insertSocialMember(Member member);
 	
 	int updateMyinfo(Member member);
