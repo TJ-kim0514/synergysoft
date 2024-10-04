@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="nowpage" value="1" />
+<c:if test="${ !empty requestScope.currentPage }">
+	<c:set var="nowpage" value="${ requestScope.currentPage }" />
+</c:if>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,7 +26,7 @@
     <!-- 블로그 카드 목록 -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <!-- 블로그 정보를 반복문으로 출력 -->
-        <c:forEach items="${guideList}" var="g">
+        <c:forEach items="${list}" var="g">
         <div class="col">
             <div class="card h-100">
                 <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="블로그 이미지">
@@ -42,6 +47,12 @@
 <!-- Bootstrap 5 JS and dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-
+<%-- 페이징 출력 뷰 포함 처리 --%>
+	<c:import url="/WEB-INF/views/common/pagingView.jsp" />
+	
+	<hr>
+	<c:import url="/WEB-INF/views/common/footer.jsp" />
+	
+	
 </body>
 </html>
