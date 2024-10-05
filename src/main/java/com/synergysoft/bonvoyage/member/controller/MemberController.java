@@ -2,7 +2,13 @@ package com.synergysoft.bonvoyage.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +17,10 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
@@ -45,30 +54,51 @@ public class MemberController {
 		return "member/loginPage";
 	}
 
-	// 소셜 로그인 구현(카카오) | 2024. 10. 02 작성
+	// 소셜 로그인 구현(카카오) | 2024. 10. 04 수정 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping(value = "kakaoLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveKakaoLoginPage(HttpSession session,
-			@RequestParam String kakao_kakaoId,
-			@RequestParam String kakao_email,
-			@RequestParam String kakao_name) {
-		
-		logger.info("카카오 로그인 페이지 요청");
-		
-		int result = memberService.selectKakakoEmailCheck(kakao_email);
-		
-		if(result != 0) {
-			return "Kakao_Login";
-		} else {
-			return "Kakao_Enroll";			
+	public String moveKakaoLoginPage(@RequestParam String code, HttpSession session, SessionStatus status) throws IOException {
+		System.out.println("code:: " + code);
+
+		// 접속토큰 get
+		String kakaoToken = memberService.getReturnAccessToken(code);
+
+		// 접속자 정보 get
+		Map<String, Object> result = memberService.getMemberInfo(kakaoToken);
+		logger.info("result:: " + result);
+		String memId = (String) result.get("email");
+		String memName = (String) result.get("nickname");
+		String memNickNm = (String) result.get("nickname");
+
+		// 분기
+		Member loginUser = new Member();
+		// 일치하는 snsId 없을 시 회원가입
+		if (memberService.selectSocialLogin(memId) == null) {
+			logger.warn("카카오로 회원가입");
+			loginUser.setMemId(memId);
+			loginUser.setMemName(memName);
+			loginUser.setMemNickNm(memNickNm);
+			memberService.insertKakaoEnroll(loginUser);
 		}
+		
+		loginUser = memberService.selectSocialLogin(memId);
+		
+		logger.info("loginUser : " + loginUser);
+		session.setAttribute("loginUser", loginUser);
+		status.setComplete();
+		
+		return "redirect:main.do";
 	}
 
-	// 소셜 로그인 구현(네이버) | 2024. 10. 02 작성
+	// 소셜 로그인 구현(네이버) | 2024. 10. 04 작성
 	// jmoh03 (오정민)
 	@RequestMapping(value = "naverLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveNaverLoginPage() {
-		return "";
+	public String moveNaverLoginPage(Model model, HttpSession session,
+			@RequestParam String email,
+			@RequestParam String name,
+			@RequestParam String nickname) {
+	    
+		return "redirect:main.do";
 	}
 
 	// 소셜 로그인 구현(구글) | 2024. 10. 02 작성
@@ -139,8 +169,7 @@ public class MemberController {
 	// 관리자 : 회원 목록 조회 페이지 출력 | 2024. 10. 02 수정
 	// ejjung02 (정은지)
 	@RequestMapping(value = "memberList.do")
-	public String moveMemberList(Model model,
-			@RequestParam(name = "page", required = false) String page,
+	public String moveMemberList(Model model, @RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("회원 목록 조회 페이지 요청");

@@ -1,7 +1,6 @@
 package com.synergysoft.bonvoyage.member.model.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,9 +22,8 @@ public class MemberDao {
 		return sqlSessionTemplate.selectOne("memberMapper.selectLogin", memId);
 	}
 	
-	// 카카오 로그인
-	public int selectKakakoEmailCheck(String kakao_email) {
-		return sqlSessionTemplate.selectOne("memberMapper.selectKakakoEmailCheck", kakao_email);
+	public Member selectSocialLogin(Member member) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectSocialLogin", member.getMemId());
 	}
 	
 	// 소셜 로그인
@@ -72,6 +70,11 @@ public class MemberDao {
 	// 일반 회원가입
 	public int insertMember(Member member) {
 		return sqlSessionTemplate.insert("memberMapper.insertMember", member);
+	}
+	
+	// 카카오 회원가입
+	public int insertKakaoEnroll(Member member) {
+		return sqlSessionTemplate.insert("memberMapper.insertKakaoEnroll", member);
 	}
 
 	// 소셜 회원가입
