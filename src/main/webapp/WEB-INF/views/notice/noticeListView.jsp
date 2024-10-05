@@ -68,6 +68,9 @@ body {
     text-decoration: underline; /* 호버 시 링크에 밑줄 추가 */
 }
 </style>
+
+<script type="text/javascript" src="/first/resources/js/jquery-3.7.1.min.js"></script>
+
 </head>
 <body>
 <nav>
@@ -81,14 +84,12 @@ body {
 	<button onclick="window.location.href='minotice.do'" style="position:relative;left:80%; ">공지사항 작성</button>
 	<%-- location.href= "/first/moveWriter.do"; --%>
 	</c:if>
+	
 	<%-- 항목별 검색기능 --%>
-
-		
-
-	<form method="get" action="sanotice.do" align="center">
-		<select name="item" id="searchItem">
-			<option value="title">제목</option>
-			<option value="content">내용</option>
+	<form method="get" action="ssnotice.do" align="center" id="ss">
+		<select name="action" id="search">
+			<option value="title" id="title">제목</option>
+			<option value="content" id="content">내용</option>
 		</select>
 		<input type="search" name="keyword" size="50" placeholder="검색어를 입력해주세요">
 		<input type="submit" value="search">

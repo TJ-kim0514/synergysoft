@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.notice.model.dao.NoticeDao;
 import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 
@@ -47,6 +48,26 @@ public class NoticeServiceImpl implements NoticeService{
 	@Override
 	public int deleteNotice(Notice notice) {
 		return noticeDao.deleteNotice(notice);
+	}
+
+	@Override
+	public int selectSearchTitleListCount(String keyword) {
+		return noticeDao.selectSearchTitleListCount(keyword);
+	}
+
+	@Override
+	public ArrayList<Notice> selectSearchTitleNotice(Search search) {
+		return noticeDao.selectSearchTitleNotice(search);
+	}
+
+	@Override
+	public int selectSearchContentListCount(String keyword) {
+		return noticeDao.selectSearchContentListCount(keyword);
+	}
+
+	@Override
+	public ArrayList<Notice> selectSearchContentNotice(Search search) {
+		return noticeDao.selectSearchContentNotice(search);
 	}
 
 }

@@ -74,6 +74,20 @@ input[type="submit"]:hover {
     background-color: #0056b3; /* 호버 시 더 어두운 색상 */
 }
 
+input[type="button"] {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="button"]:hover {
+    background-color: #0056b3; /* 호버 시 더 어두운 색상 */
+}
+
 textarea {
     resize: vertical; /* 세로로만 크기 조정 가능 */
 }
@@ -98,7 +112,7 @@ textarea {
 <br>
 	<h1 align="center">공지사항 등록 페이지</h1>
 	<br>
-	<form action="inotice.do" method="post">
+	<form action="inotice.do" method="post" enctype="multipart/form-data">
 		<table border="1" align="center">
 			<tr>
 			<td class="insert" >제목</td>
@@ -114,19 +128,22 @@ textarea {
 			</tr>
 			<tr>
 			<td class="insert">첨부파일1</td>
-			<td><input type="file" name="file1"></td>
+			<td><input type="file" name="insertFile1"></td>
 			</tr>
 			</tr>
 			<tr>
 			<td class="insert">첨부파일2</td>
-			<td><input type="file" name="file2"></td>
+			<td><input type="file" name="insertFile2"></td>
 			</tr>
 			</tr>
 			<tr>
 			<td class="insert">첨부파일3</td>
-			<td><input type="file" name="file3"></td>
+			<td><input type="file" name="insertFile3"></td>
 			</tr>
-			<tr><td colspan="2" align="center"><input type="submit" value="입력"></td></tr>
+			<tr><td colspan="2" align="center">
+				<input type="submit" value="입력"> &nbsp;
+				<input type="button" value="목록" onclick="javascript:history.go(-1);return false;">
+			</td></tr>
 		</table>
 	</form>
 <footer>

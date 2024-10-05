@@ -14,14 +14,18 @@ public class Notice implements java.io.Serializable{
 	private String updateCheck;				// UPDATE_CHECK	CHAR(1 BYTE)
 	private Date deletedAt;					// DELETED_AT	DATE
 	private String deleteCheck;				// DELETE_CHECK	CHAR(1 BYTE)
-	private String file1;						// FILE1	VARCHAR2(500 BYTE)
-	private String file2;						// FILE2	VARCHAR2(500 BYTE)
-	private String file3;						// FILE3	VARCHAR2(500 BYTE)
+	private String oFile1;						// OFILE1	VARCHAR2(500 BYTE)
+	private String oFile2;						// OFILE2	VARCHAR2(500 BYTE)
+	private String oFile3;						// OFILE3	VARCHAR2(500 BYTE)
+	private String rFile1;						// RFILE1	VARCHAR2(500 BYTE)
+	private String rFile2;						// RFILE2	VARCHAR2(500 BYTE)
+	private String rFile3;						// RFILE3	VARCHAR2(500 BYTE)
 	
 	public Notice() {}
 
 	public Notice(String noticeId, String title, String content, String adminId, Date createdAt, Date updatedAt,
-			String updateCheck, Date deletedAt, String deleteCheck, String file1, String file2, String file3) {
+			String updateCheck, Date deletedAt, String deleteCheck, String oFile1, String oFile2, String oFile3,
+			String rFile1, String rFile2, String rFile3) {
 		super();
 		this.noticeId = noticeId;
 		this.title = title;
@@ -32,9 +36,12 @@ public class Notice implements java.io.Serializable{
 		this.updateCheck = updateCheck;
 		this.deletedAt = deletedAt;
 		this.deleteCheck = deleteCheck;
-		this.file1 = file1;
-		this.file2 = file2;
-		this.file3 = file3;
+		this.oFile1 = oFile1;
+		this.oFile2 = oFile2;
+		this.oFile3 = oFile3;
+		this.rFile1 = rFile1;
+		this.rFile2 = rFile2;
+		this.rFile3 = rFile3;
 	}
 
 	public String getNoticeId() {
@@ -109,46 +116,68 @@ public class Notice implements java.io.Serializable{
 		this.deleteCheck = deleteCheck;
 	}
 
-	public String getFile1() {
-		return file1;
-	}
-
-	public void setFile1(String file1) {
-		this.file1 = file1;
-	}
-
-	public String getFile2() {
-		return file2;
-	}
-
-	public void setFile2(String file2) {
-		this.file2 = file2;
-	}
-
-	public String getFile3() {
-		return file3;
-	}
-
-	public void setFile3(String file3) {
-		this.file3 = file3;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getoFile1() {
+		return oFile1;
+	}
+
+	public void setoFile1(String oFile1) {
+		this.oFile1 = oFile1;
+	}
+
+	public String getoFile2() {
+		return oFile2;
+	}
+
+	public void setoFile2(String oFile2) {
+		this.oFile2 = oFile2;
+	}
+
+	public String getoFile3() {
+		return oFile3;
+	}
+
+	public void setoFile3(String oFile3) {
+		this.oFile3 = oFile3;
+	}
+
+	public String getrFile1() {
+		return rFile1;
+	}
+
+	public void setrFile1(String rFile1) {
+		this.rFile1 = rFile1;
+	}
+
+	public String getrFile2() {
+		return rFile2;
+	}
+
+	public void setrFile2(String rFile2) {
+		this.rFile2 = rFile2;
+	}
+
+	public String getrFile3() {
+		return rFile3;
+	}
+
+	public void setrFile3(String rFile3) {
+		this.rFile3 = rFile3;
 	}
 
 	@Override
 	public String toString() {
 		return "Notice [noticeId=" + noticeId + ", title=" + title + ", content=" + content + ", adminId=" + adminId
 				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", updateCheck=" + updateCheck
-				+ ", deletedAt=" + deletedAt + ", deleteCheck=" + deleteCheck + ", file1=" + file1 + ", file2=" + file2
-				+ ", file3=" + file3 + ", getNoticeId()=" + getNoticeId() + ", getTitle()=" + getTitle()
-				+ ", getContent()=" + getContent() + ", getAdminId()=" + getAdminId() + ", getCreatedAt()="
-				+ getCreatedAt() + ", getUpdatedAt()=" + getUpdatedAt() + ", getUpdateCheck()=" + getUpdateCheck()
-				+ ", getDeletedAt()=" + getDeletedAt() + ", getDeleteCheck()=" + getDeleteCheck() + ", getFile1()="
-				+ getFile1() + ", getFile2()=" + getFile2() + ", getFile3()=" + getFile3() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", deletedAt=" + deletedAt + ", deleteCheck=" + deleteCheck + ", oFile1=" + oFile1 + ", oFile2="
+				+ oFile2 + ", oFile3=" + oFile3 + ", rFile1=" + rFile1 + ", rFile2=" + rFile2 + ", rFile3=" + rFile3
+				+ "]";
 	}
+
+
 
 	
 
