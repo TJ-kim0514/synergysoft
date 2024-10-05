@@ -2,12 +2,8 @@ package com.synergysoft.bonvoyage.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.net.URLEncoder;
-import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +13,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,8 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.synergysoft.bonvoyage.common.NaverLoginBO;
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.member.model.service.MemberService;
@@ -41,6 +38,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
+
+	@Autowired
+	private NaverLoginBO naverloginbo;
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
@@ -57,8 +57,9 @@ public class MemberController {
 	// 소셜 로그인 구현(카카오) | 2024. 10. 04 수정 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping(value = "kakaoLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveKakaoLoginPage(@RequestParam String code, HttpSession session, SessionStatus status) throws IOException {
-		System.out.println("code:: " + code);
+	public String moveKakaoLoginPage(@RequestParam String code, HttpSession session, SessionStatus status)
+			throws IOException {
+		logger.info("code:: " + code);
 
 		// 접속토큰 get
 		String kakaoToken = memberService.getReturnAccessToken(code);
@@ -78,29 +79,80 @@ public class MemberController {
 			loginUser.setMemId(memId);
 			loginUser.setMemName(memName);
 			loginUser.setMemNickNm(memNickNm);
-			memberService.insertKakaoEnroll(loginUser);
+			loginUser.setMemSocial("KAKAO");
+			if(memberService.insertSocialMember(loginUser) > 0) {
+				memberService.updateLoginLog(loginUser.getMemId());
+				return "redirect:main.do";
+			} else {
+				return "common/error";
+			}
 		}
-		
+
 		loginUser = memberService.selectSocialLogin(memId);
-		
+		memberService.updateLoginLog(loginUser.getMemId());
 		logger.info("loginUser : " + loginUser);
 		session.setAttribute("loginUser", loginUser);
 		status.setComplete();
-		
+
 		return "redirect:main.do";
 	}
-
-	// 소셜 로그인 구현(네이버) | 2024. 10. 04 작성
+	
+	// 소셜 로그인 페이지(네이버) | 2024. 10. 05 작성
+	// jmoh03 (오정민)
+	@RequestMapping(value = "naverLoginPage.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String moveNaverLoginPage(Model model, HttpSession session) {
+		
+		String naverAuthUrl = naverloginbo.getAuthorizationUrl(session);
+		
+		model.addAttribute("urlNaver", naverAuthUrl);
+		
+		return "member/loginPage";
+	}
+	
+	// 소셜 로그인 구현(네이버 Callback) | 2024. 10. 05 작성
 	// jmoh03 (오정민)
 	@RequestMapping(value = "naverLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String moveNaverLoginPage(Model model, HttpSession session,
-			@RequestParam String email,
-			@RequestParam String name,
-			@RequestParam String nickname) {
-	    
-		return "redirect:main.do";
-	}
+	public String moveNaverLoginMethod(Model model,
+			@RequestParam Map<String, Object> paramMap,
+			@RequestParam String code,
+			@RequestParam String state,
+			HttpSession session) throws Exception {
+		logger.info("paramMap:" + paramMap);
+		Member loginUser = new Member();
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 
+		OAuth2AccessToken oauthToken;
+		oauthToken = naverloginbo.getAccessToken(session, code, state);
+		// 로그인 사용자 정보를 읽어온다.
+		String apiResult = naverloginbo.getUserProfile(oauthToken);
+		logger.info("apiResult =>" + apiResult);
+		ObjectMapper objectMapper = new ObjectMapper();
+		Map<String, Object> apiJson = (Map<String, Object>) objectMapper.readValue(apiResult, Map.class).get("response");
+		Map<String, Object> naverConnectionCheck = memberService.naverConnectionCheck(apiJson);
+
+		if (naverConnectionCheck == null) { // 일치하는 이메일 없으면 가입
+			
+			String memId = (String) apiJson.get("email");
+			String memName = (String) apiJson.get("name");
+			String memNickNm = (String) apiJson.get("nickname");
+			
+			loginUser.setMemId(memId);
+			loginUser.setMemName(memName);
+			loginUser.setMemNickNm(memNickNm);
+			loginUser.setMemSocial("NAVER");
+			
+			if(memberService.insertSocialMember(loginUser) > 0) {
+				return "redirect:main.do";
+			} else {
+				return "common/error";
+			}
+		} else { // 모두 연동 되어있을시
+			loginUser = memberService.userNaverLoginPro(apiJson);
+			session.setAttribute("loginUser", loginUser);
+		}
+		return "member/naverCallback";
+	}
+	
 	// 소셜 로그인 구현(구글) | 2024. 10. 02 작성
 	// jmoh03 (오정민)
 	@RequestMapping(value = "googleLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
@@ -216,9 +268,26 @@ public class MemberController {
 	// 관리자 : 회원 상세 조회 페이지 출력 (정은지) | 2024. 10. 02 수정
 	// ejjung02 (정은지)
 	@RequestMapping(value = "memberDetail.do")
-	public String moveMemberDetail() {
+	public ModelAndView moveMemberDetail(ModelAndView mv,
+			@RequestParam("memId") String memId,
+			HttpSession session) {
 		logger.info("회원 상세 조회 페이지 요청");
-		return "admin/memberDetail";
+		
+		Member member = memberService.selectMemberDetail(memId);
+		if(member != null) {
+			mv.addObject("member", member);
+			Member loginUser = (Member)session.getAttribute("loginUser");
+			if(loginUser != null && loginUser.getMemType().equals("ADMIN")) {
+				mv.setViewName("admin/memberDetail");
+			} else {
+				mv.setViewName("admin/memberDetail");
+			}
+			
+		} else {
+			mv.addObject("권한이 없습니다.");
+			mv.setViewName("common/error");
+		}
+		return mv;
 	}
 
 	// 로그인 기능 | 2024. 09. 28 작성 및 테스트 성공
@@ -231,6 +300,7 @@ public class MemberController {
 		Member loginUser = memberService.selectLogin(member.getMemId());
 
 		if (loginUser != null && this.bcryptPasswordEncoder.matches(member.getMemPw(), loginUser.getMemPw())) {
+			memberService.updateLoginLog(loginUser.getMemId());
 			session.setAttribute("loginUser", loginUser);
 			status.setComplete();
 
@@ -241,6 +311,25 @@ public class MemberController {
 			return "common/error";
 		}
 	}
+	
+	// 로그아웃 기능 | 2024. 09. 28 작성 및 테스트 성공
+	// jmoh03 (오정민)
+	@RequestMapping("logout.do")
+	public String logoutMethod(Member member, HttpSession session, HttpServletRequest request, Model model) {
+		
+		member = (Member) session.getAttribute("loginUser");
+		memberService.updateLogoutLog(member.getMemId());
+		
+		session = request.getSession(false);
+		
+		if (session != null) {
+			session.invalidate();
+			return "common/main";
+		} else {
+			model.addAttribute("message", "세션이 만료되어 로그아웃에 실패하였습니다. 메인페이지로 돌아가세요.");
+			return "common/error";
+		}
+	} // 로그아웃 기능
 
 	// 회원가입 기능 | 2024. 09. 28 작성 및 테스트 성공
 	// jmoh03 (오정민)
@@ -259,21 +348,6 @@ public class MemberController {
 			return "common/error";
 		}
 	}
-
-	// 로그아웃 기능 | 2024. 09. 28 작성 및 테스트 성공
-	// jmoh03 (오정민)
-	@RequestMapping("logout.do")
-	public String logoutMethod(HttpServletRequest request, Model model) {
-		HttpSession session = request.getSession(false);
-
-		if (session != null) {
-			session.invalidate();
-			return "common/main";
-		} else {
-			model.addAttribute("message", "세션이 만료되어 로그아웃에 실패하였습니다. 메인페이지로 돌아가세요.");
-			return "common/error";
-		}
-	} // 로그아웃 기능
 
 	// 아이디 중복 검사 기능 | 2024. 09. 28 수정 필요
 	// jmoh03 (오정민)

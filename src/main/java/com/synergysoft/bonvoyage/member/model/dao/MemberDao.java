@@ -71,15 +71,20 @@ public class MemberDao {
 	public int insertMember(Member member) {
 		return sqlSessionTemplate.insert("memberMapper.insertMember", member);
 	}
-	
-	// 카카오 회원가입
-	public int insertKakaoEnroll(Member member) {
-		return sqlSessionTemplate.insert("memberMapper.insertKakaoEnroll", member);
-	}
 
 	// 소셜 회원가입
 	public int insertSocialMember(Member member) {
 		return sqlSessionTemplate.insert("memberMapper.insertSocialMember", member);
+	}
+	
+	// 로그인 로그 변경
+	public int updateLoginLog(String memId) {
+		return sqlSessionTemplate.update("memberMapper.updateLoginLog", memId);
+	}
+
+	// 로그아웃 로그 변경
+	public int updateLogoutLog(String memId) {
+		return sqlSessionTemplate.update("memberMapper.updateLogoutLog", memId);
 	}
 
 	// 내 정보 변경
