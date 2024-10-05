@@ -44,7 +44,7 @@ function requestDelete(){
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 <hr>
 
-<h2 align="center">${ report.reportId } 번 신고글 상세보기 (관리자용)</h2>
+<h2 align="center">${ report.reportId } 번 신고글 상세보기</h2>
 <br>
 <table align="center" width="700" border="1" cellspacing="0" cellpadding="5">
 	<tr><th>제 목</th><td>${ report.postId }</td></tr>
