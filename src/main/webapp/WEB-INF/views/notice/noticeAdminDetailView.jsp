@@ -65,9 +65,24 @@
 	<td align="center" >내용</td>
 	<td colspan="3"> ${notice.content}</td>
 </tr>
-<tr><td align="center" >첨부파일1</td><td colspan="3">${notice.file1}</td></tr>
-<tr><td align="center" >첨부파일2</td><td colspan="3">${notice.file2}</td></tr>
-<tr><td align="center" >첨부파일3</td><td colspan="3">${notice.file3}</td></tr>
+<tr>
+<%-- 파일 다운용 url생성 --%>
+<c:url var="nfdown1" value="nfdown.do">
+			<c:param name="oFile" value="${ notice.oFile1 }"/>
+			<c:param name="rFile" value="${ notice.rFile1 }"/>
+</c:url>
+<c:url var="nfdown2" value="nfdown.do">
+			<c:param name="oFile" value="${ notice.oFile2 }"/>
+			<c:param name="rFile" value="${ notice.rFile2 }"/>
+</c:url>
+<c:url var="nfdown3" value="nfdown.do">
+			<c:param name="oFile" value="${ notice.oFile3 }"/>
+			<c:param name="rFile" value="${ notice.rFile3 }"/>
+</c:url>
+
+<tr><td align="center" >첨부파일1</td><td colspan="3"><a href="${nfdown1}" >${notice.oFile1}</a></td></tr>
+<tr><td align="center" >첨부파일2</td><td colspan="3"><a href="${nfdown2}" >${notice.oFile2}</a></td></tr>
+<tr><td align="center" >첨부파일3</td><td colspan="3"><a href="${nfdown3}" >${notice.oFile3}</a></td></tr>
 <tr><td align="center" colspan="3"> 
 <button onclick="goToPrevious()">이전글</button>
 <button onclick="javascript:history.go(-1);">이전 페이지로 이동</button>

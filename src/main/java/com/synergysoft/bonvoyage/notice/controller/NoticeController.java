@@ -205,6 +205,33 @@ public class NoticeController {
 		return mv;
 	}
 	
+	//ajax 요청으로 파일 다운로드 처리용
+	//첨부파일 다운로드 요청 처리용 메소드
+	//공통모듈로 작성된 fileDownloadView 클래스를 이용함 => 반드시 리턴타입이 ModelAndView이어야한다.
+	@RequestMapping("nfdown.do")
+	public ModelAndView filedownMethod(
+			HttpServletRequest request, ModelAndView mv,
+			@RequestParam("oFile") String originalFileName,
+			@RequestParam("rFile") String renameFileName) {
+		
+		//공지사항 첨부파일 저장 폴더 경로 지정
+		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
+		// 저장 폴더에서 읽을 파일에 대한 file 객체 생성
+		File downFile = new File(savePath + "\\" + renameFileName);
+		// 파일 다운시 브라우저로 내보낼 원래 파일에 대한 File객체 생성함
+		File originFile = new File(originalFileName);
+		
+		// 파일 다운 처리용 뷰 클래스 id 명과 다운로드할 File 객체를 ModelAndView 에 담아서 리턴함
+		mv.setViewName("filedown"); //뷰클래스의 id명 기입
+		mv.addObject("originFile", originFile);
+		mv.addObject("renameFile", downFile);
+		
+		return mv;
+		
+		
+		
+	}
+	
 	// 공지사항 수정페이지 이동
 	@RequestMapping("munotice.do")
 	public ModelAndView noticeMoveUpdate(
@@ -228,9 +255,147 @@ public class NoticeController {
 	@RequestMapping(value="unotice.do", method=RequestMethod.POST)
 	public String noticeUpdate(
 			Notice notice,
-			Model model
+			Model model,
+			HttpServletRequest request,
+			@RequestParam(name="insertFile1", required=false) MultipartFile ifile1,
+			@RequestParam(name="insertFile2", required=false) MultipartFile ifile2,
+			@RequestParam(name="insertFile3", required=false) MultipartFile ifile3
 			) {
 		logger.info("notice : " + notice);
+		
+		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
+		
+		// 파일1
+		// 파일제거
+		if((notice.getoFile1() != null //원래 첨부파일이 있는데
+				&& ifile1.isEmpty())
+				) {    // 파일이 들어왔을때
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + notice.getrFile1()).delete();
+			
+			//notice 안의 파일정보도 삭제함
+			notice.setoFile1(null);
+			notice.setrFile1(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile1.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile1.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile1.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//notice 객체에 첨부파일 정보 저장 처리
+			notice.setoFile1(fileName);
+			notice.setrFile1(renameFileName);
+			
+		}// 첨부파일이 있을때
+		
+		// 파일2
+		// 파일제거
+		if((notice.getoFile2() != null //원래 첨부파일이 있는데
+				&& ifile2.isEmpty())
+				) {    // 파일이 들어왔을때
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + notice.getrFile2()).delete();
+			
+			//notice 안의 파일정보도 삭제함
+			notice.setoFile2(null);
+			notice.setrFile2(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile2.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile2.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile2.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//notice 객체에 첨부파일 정보 저장 처리
+			notice.setoFile2(fileName);
+			notice.setrFile2(renameFileName);
+			
+		}// 첨부파일이 있을때		
+		
+		// 파일3
+		// 파일제거
+		if((notice.getoFile3() != null //원래 첨부파일이 있는데
+				&& ifile3.isEmpty())
+				) {    // 파일이 들어왔을때
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + notice.getrFile3()).delete();
+			
+			//notice 안의 파일정보도 삭제함
+			notice.setoFile3(null);
+			notice.setrFile3(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile3.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile3.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile3.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//notice 객체에 첨부파일 정보 저장 처리
+			notice.setoFile3(fileName);
+			notice.setrFile3(renameFileName);
+			
+		}// 첨부파일이 있을때
+		
+		logger.info("최종 인풋 데이터 : " + notice);
+		
 		if(noticeService.updateNotice(notice)>0) {
 			return "redirect:sanotice.do";
 		}else {
