@@ -2,8 +2,9 @@ package com.synergysoft.bonvoyage.member.model.dto;
 
 import java.sql.Date;
 
-public class Member {
+public class Member implements java.io.Serializable {
 
+	private static final long serialVersionUID = 2981920559250861514L;
 	private String memId;
 	private String memName;
 	private String memType;

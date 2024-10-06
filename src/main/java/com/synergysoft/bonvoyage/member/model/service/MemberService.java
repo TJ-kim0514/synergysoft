@@ -14,6 +14,8 @@ public interface MemberService {
 	Member selectLogin(String memId);
 	String getReturnAccessToken(String code); // 2024. 10. 04 작성 및 테스트 성공
 	Map<String, Object> getMemberInfo(String kakaoToken); // 2024. 10. 04 작성 및 테스트 성공
+	Map<String, Object> naverConnectionCheck(Map<String, Object> apiJson); // 2024. 10. 05 작성
+	Member userNaverLoginPro(Map<String, Object> apiJson); // 2024. 10. 05 작성
 	Member selectSocialLogin(String memId);
 	Member selectSocialLogin(Member member);
 	Member selectIDSearch(String memPhone);
@@ -25,9 +27,10 @@ public interface MemberService {
 	int selectCheckId(String memId);
 	
 	int insertMember(Member member);
-	int insertKakaoEnroll(Member member);
 	int insertSocialMember(Member member);
 	
+	int updateLoginLog(String memId);
+	int updateLogoutLog(String memId);
 	int updateMyinfo(Member member);
 	int updateLeft(String memId);
 	int updateMember(Member member);

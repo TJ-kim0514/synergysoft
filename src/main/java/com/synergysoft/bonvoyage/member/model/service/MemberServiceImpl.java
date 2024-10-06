@@ -127,6 +127,19 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
+	// 네이버 연결 체크 2024. 10. 05 작성
+	public Map<String, Object> naverConnectionCheck(Map<String, Object> apiJson) {
+		return null;
+	}
+	
+	@Override
+	// 네이버 로그인 테스트 2024. 10. 05 작성
+	public Member userNaverLoginPro(Map<String, Object> apiJson) {
+		return null;
+	}
+	
+	@Override
+	// 소셜 로그인
 	public Member selectSocialLogin(Member member) {
 		return memberDao.selectSocialLogin(member);
 	}
@@ -186,15 +199,21 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	// 카카오 회원가입
-	public int insertKakaoEnroll(Member member) {
-		return memberDao.insertKakaoEnroll(member);
-	}
-
-	@Override
 	// 소셜 회원가입
 	public int insertSocialMember(Member member) {
 		return memberDao.insertSocialMember(member);
+	}
+	
+	@Override
+	// 로그인 로그 수정
+	public int updateLoginLog(String memId) {
+		return memberDao.updateLoginLog(memId);
+	}
+
+	@Override
+	// 로그아웃 로그 수정
+	public int updateLogoutLog(String memId) {
+		return memberDao.updateLogoutLog(memId);
 	}
 
 	@Override
