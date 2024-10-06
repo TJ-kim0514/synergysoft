@@ -19,6 +19,43 @@
 
 <h1 class="text-center">가이드블로그 메인페이지</h1>
 
+<button onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button> &nbsp; &nbsp;
+
+
+<%-- 항목별 검색 기능 추라 --%>
+
+	<%-- 검색 항목별 값 입력 전송용 폼 만들기 --%>
+<%-- 제목 검색 폼 --%>
+<form action="gsearchTitle.do" id="titleform" class="sform" method="get">
+	<input type="hidden" name="action" value="title">
+	<fieldset>
+	<legend>검색할 제목을 입력하세요.</legend>
+		<input type="search" name="keyword" size="50"> &nbsp;
+		<input type="submit" value="검색">
+	</fieldset>
+</form>
+
+
+<form action="gsearchContent.do" id="contentform" class="sform" method="get">
+	<input type="hidden" name="action" value="content">
+	<fieldset>
+	<legend>검색할 내용을 입력하세요.</legend>
+		<input type="search" name="keyword" size="50"> &nbsp;
+		<input type="submit" value="검색">
+	</fieldset>
+</form>
+
+
+<form action="gsearchLocation.do" id="contentform" class="sform" method="get">
+	<input type="hidden" name="action" value="content">
+	<fieldset>
+	<legend>검색할 지역을 입력하세요.</legend>
+		<input type="search" name="keyword" size="50"> &nbsp;
+		<input type="submit" value="검색">
+	</fieldset>
+</form>
+	
+
 <div class="container my-5">
     <!-- 블로그 쓰기 버튼 -->
     <button class="btn btn-success mb-4" onclick="javascript:location.href='${pageContext.servletContext.contextPath}/gmoveWrite.do';">블로그 쓰기</button>

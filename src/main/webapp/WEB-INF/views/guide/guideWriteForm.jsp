@@ -53,6 +53,20 @@
       font-weight: bold;
       margin-bottom: 10px;
     }
+    #previewContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    #previewContainer img {
+      width: 150px;
+      height: 150px;
+      border: 1px solid navy;
+      cursor: pointer;
+    }
+    #photofile {
+      display: none;
+    }
   </style>
 </head>
 
@@ -86,6 +100,14 @@
         <textarea name="guideContent" id="guideContent" class="form-control" rows="8" placeholder="블로그 내용을 입력하세요" style="border: none; background-color: transparent;"></textarea>
       </div>
 
+      <div class="mb-3">
+        <label for="photofile" class="form-label">사진 첨부</label>
+        <input type="file" id="photofile" name="gmfiles[]" multiple class="form-control">
+      </div>
+
+      <!-- 미리보기 이미지들이 추가되는 컨테이너 -->
+      <div id="previewContainer"></div>
+
       <!-- Toast UI Editor -->
       <div id="editor" class="mb-3"></div>
 
@@ -103,12 +125,52 @@
 
   <!-- Toast UI Editor JS -->
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
   <script type="text/javascript">
+    let currentImgIndex = -1; // 현재 클릭된 이미지 인덱스 저장 변수
+
+    // Toast UI Editor 설정
     const editor = new toastui.Editor({
       el: document.querySelector('#editor'),
       height: '400px',
       initialEditType: 'markdown',
       previewStyle: 'vertical'
+    });
+
+    // 파일 선택 시 동적으로 이미지를 미리보기 컨테이너에 추가
+    document.getElementById('photofile').addEventListener('change', function(event) {
+      const files = event.target.files;
+      const previewContainer = document.getElementById('previewContainer');
+
+      if (currentImgIndex === -1) {
+        // 각 파일을 순회하면서 이미지 미리보기를 생성
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const reader = new FileReader();
+
+          reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.dataset.index = i; // 인덱스를 데이터 속성으로 저장
+            img.addEventListener('click', function() {
+              currentImgIndex = img.dataset.index; // 클릭한 이미지의 인덱스를 저장
+              document.getElementById('photofile').click(); // 파일 선택창을 다시 열어줌
+            });
+            previewContainer.appendChild(img); // 이미지를 미리보기 컨테이너에 추가
+          };
+
+          reader.readAsDataURL(file); // 파일을 읽어서 이미지 URL로 변환
+        }
+      } else {
+        // 클릭한 이미지의 인덱스에 해당하는 파일을 새로운 파일로 교체
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = previewContainer.querySelector(`img[data-index="${currentImgIndex}"]`);
+          img.src = e.target.result; // 이미지를 새 파일로 변경
+        };
+        reader.readAsDataURL(files[0]); // 선택한 첫 번째 파일로 교체
+        currentImgIndex = -1; // 다시 초기화
+      }
     });
   </script>
 

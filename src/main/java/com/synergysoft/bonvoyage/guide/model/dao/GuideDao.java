@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.guide.model.dto.Guide;
 
 @Repository("guideDao")
@@ -51,6 +52,39 @@ public class GuideDao {
 
 	public int selectListCount() {
 		return sqlSessionTemplate.selectOne("guideMapper.selectListCount");
+	}
+
+// 검색용 메소드----------------------------------------------------------------
+	public int selectSearchTitleCount(String keyword) {
+		return sqlSessionTemplate.selectOne("guideMapper.selectSearchTitleCount", keyword);
+	}
+
+
+	public ArrayList<Guide> selectSearchTitle(Search search) {
+		List<Guide> list = sqlSessionTemplate.selectList("guideMapper.selectSearchTitle", search);
+		return (ArrayList<Guide>)list;
+	}
+
+
+	public int selectSearchContentCount(String keyword) {
+		return sqlSessionTemplate.selectOne("guideMapper.selectSearchContentCount", keyword);
+	}
+
+
+	public ArrayList<Guide> selectSearchContent(Search search) {
+		List<Guide> list = sqlSessionTemplate.selectList("guideMapper.selectSearchContent", search);
+		return (ArrayList<Guide>)list;
+	}
+
+
+	public int selectSearchLocationCount(String keyword) {
+		return sqlSessionTemplate.selectOne("guideMapper.selectSearchLocationCount", keyword);
+	}
+
+
+	public ArrayList<Guide> selectSearchLocation(Search search) {
+		List<Guide> list = sqlSessionTemplate.selectList("guideMapper.selectSearchLocation", search);
+		return (ArrayList<Guide>)list;
 	}
 
 
