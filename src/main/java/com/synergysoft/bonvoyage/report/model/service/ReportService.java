@@ -7,7 +7,9 @@ import com.synergysoft.bonvoyage.report.model.dto.Report;
 public interface ReportService {
 	
 	ArrayList<Report> selectReport();
+	ArrayList<Report> selectReportMe(String reportId);
 	Report selectReportDetail(String reportId);
+	Report selectMyReportDetail(Report report);
 	int insertReport(Report report);
 	int updateReportProcess(Report report);
 	int updateReportReject(Report report);

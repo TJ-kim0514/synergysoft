@@ -37,7 +37,7 @@ public class ReportController {
 		Member loginUser = (Member) session.getAttribute("loginUser");
 
 		if (loginUser != null) {
-			mv.setViewName("member/report/reportWriteForm");
+			mv.setViewName("member/report/reportWriteView");
 		} else {
 			mv.addObject("message", "세션이 없습니다. 로그인 후 다시 이용해주시기 바랍니다.");
 			mv.setViewName("common/error");
@@ -64,14 +64,25 @@ public class ReportController {
 			if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
 				mv.setViewName("admin/report/reportDetailView");
 			} else {
-				mv.addObject("message", "잘못된 접근입니다.");
-				mv.setViewName("common/error");
+				if(loginUser != null && loginUser.getMemType().equals("USER")) {
+					report.setReportUserId(loginUser.getMemId());
+					report.setReportId(reportId);
+					report = reportService.selectMyReportDetail(report);
+					if(report != null) {
+						mv.setViewName("admin/report/reportDetailView");						
+					} else {
+						mv.addObject("message", "잘못된 접근입니다.");
+						mv.setViewName("common/error");
+					}
+				} else {
+					mv.addObject("message", "잘못된 접근입니다.");
+					mv.setViewName("common/error");
+				}
 			}
 		} else {
 			mv.addObject("message", reportId + "번 신고글 상세보기 요청 실패");
 			mv.setViewName("common/error");
 		}
-
 		return mv;
 	} // 신고글 상세정보 보기
 
@@ -87,7 +98,12 @@ public class ReportController {
 				&& loginUser.getMemType().equals("ADMIN")) {
 			mv.addObject("report", reportList);
 			mv.setViewName("admin/report/reportListView");
-		} else {
+
+		} else if (reportList != null && reportList.size() > 0 && loginUser != null
+				&& loginUser.getMemType().equals("USER")) {
+			mv.addObject("report", reportList);
+			mv.setViewName("admin/report/reportListView");
+		}else {
 			mv.addObject("message", "목록 조회 실패!");
 			mv.setViewName("common/error");
 		}

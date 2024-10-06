@@ -20,10 +20,21 @@ public class ReportDao {
 		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport");
 		return (ArrayList<Report>) list;
 	}
+	
+	// 유저 : 내 신고 목록 조회
+	public ArrayList<Report> selectReportMe(String reportId) {
+		List<Report>list = sqlSessionTemplate.selectList("reportMapper.selectReportMe");
+		return (ArrayList<Report>) list;
+	}
 
 	// 관리자 : 신고 상세 조회
 	public Report selectReportDetail(String reportId) {
 		return sqlSessionTemplate.selectOne("reportMapper.selectReportDetail", reportId);
+	}
+	
+	// 유저 : 내 신고 목록 조회
+	public Report selectMyReportDetail(Report report) {
+		return sqlSessionTemplate.selectOne("reportMapper.selectMyReportDetail", report);
 	}
 
 	// 유저&관리자 : 신고 등록
@@ -45,5 +56,5 @@ public class ReportDao {
 	public int deleteReport(String reportId) {
 		return sqlSessionTemplate.delete("reportMapper.deleteReport", reportId);
 	}
-
+	
 }

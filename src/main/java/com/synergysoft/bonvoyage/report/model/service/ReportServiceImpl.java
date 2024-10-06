@@ -18,11 +18,23 @@ public class ReportServiceImpl implements ReportService {
 	public ArrayList<Report> selectReport() {
 		return reportDao.selectReport();
 	}
-
+	
+	@Override
+	// 유저 : 내 신고 목록 조회
+	public ArrayList<Report> selectReportMe(String reportId) {
+		return reportDao.selectReportMe(reportId);
+	}
+	
 	@Override
 	// 관리자 : 신고 상세 조회
 	public Report selectReportDetail(String reportId) {
 		return reportDao.selectReportDetail(reportId);
+	}
+
+	@Override
+	// 유저 : 내 신고 상세 조회
+	public Report selectMyReportDetail(Report report) {
+		return reportDao.selectMyReportDetail(report);
 	}
 
 	@Override
@@ -48,4 +60,5 @@ public class ReportServiceImpl implements ReportService {
 	public int deleteReport(String reportId) {
 		return reportDao.deleteReport(reportId);
 	}
+
 }

@@ -14,39 +14,60 @@
 	<h1 align="center">신고목록</h1>
 	<br>
 	<center>
-		<c:if
-			test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
-			<button
-				onclick="javascript:locatior.href='${ pageContext.servletContext.contextPath}/rwrite.do';">공지글
-				등록</button>
-		</c:if>
+			<button onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/reportWrite.do';">
+				신고글 등록
+			</button>
 	</center>
 	<br>
 
 	<%-- 조회된 공지사항 목록 출력 --%>
-	<table align="center" width="700" border="1" cellspacing="0"
-		cellpadding="5">
-		<tr align="center">
-			<th>번호</th>
-			<th>게시글 제목</th>
-			<th>신고 사유</th>
-			<th>신고자</th>
-			<th>날짜</th>
-		</tr>
-		<c:forEach items="${ requestScope.report }" var="r">
+	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
+		<table align="center" width="700" border="1" cellspacing="0"
+			cellpadding="5">
 			<tr align="center">
-				<td>${ r.reportId }</td>
-				<td><a
-					href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.postId }</a>
-				</td>
-				<td>${ r.reportingReason }</td>
-				<td>익명</td>
-				<td><fmt:formatDate value="${ r.reportDate }"
-						pattern="yyyy-MM-dd" /></td>
+				<th>번호</th>
+				<th>게시글 제목</th>
+				<th>신고 사유</th>
+				<th>신고자</th>
+				<th>날짜</th>
 			</tr>
-		</c:forEach>
-	</table>
-
+			<c:forEach items="${ requestScope.report }" var="r">
+				<tr align="center">
+					<td>${ r.reportId }</td>
+					<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.postId }</a></td>
+					<td>${ r.reportingReason }</td>
+					<td>익명</td>
+					<td><fmt:formatDate value="${ r.reportDate }"
+							pattern="yyyy-MM-dd" /></td>
+				</tr>
+			</c:forEach>
+		</table>
+	</c:if>
+	<br>
+	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'USER' }">
+		<table align="center" width="700" border="1" cellspacing="0"
+			cellpadding="5">
+			<tr align="center">
+				<th>번호</th>
+				<th>게시글 제목</th>
+				<th>신고 사유</th>
+				<th>신고자</th>
+				<th>날짜</th>
+			</tr>
+			<c:forEach items="${ requestScope.report }" var="r">
+				<c:if test="${ sessionScope.loginUser.memId eq r.reportUserId  }">
+					<tr align="center">
+						<td>${ r.reportId }</td>
+						<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.postId }</a></td>
+						<td>${ r.reportingReason }</td>
+						<td>${ r.reportUserId  }</td>
+						<td><fmt:formatDate value="${ r.reportDate }"
+								pattern="yyyy-MM-dd" /></td>
+					</tr>
+				</c:if>
+			</c:forEach>
+		</table>
+	</c:if>
 	<hr>
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
