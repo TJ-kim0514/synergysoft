@@ -70,4 +70,9 @@ public class NoticeServiceImpl implements NoticeService{
 		return noticeDao.selectSearchContentNotice(search);
 	}
 
+	@Override
+	public ArrayList<Notice> selectTopNotice() {
+		return noticeDao.selectTopNotice();
+	}
+
 }

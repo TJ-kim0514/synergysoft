@@ -15,7 +15,6 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
 }
 
 h1 {
@@ -106,9 +105,7 @@ textarea {
 </style>
 </head>
 <body>
-<nav>
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
-</nav>
 <br>
 	<h1 align="center">공지사항 등록 페이지</h1>
 	<br>
@@ -120,7 +117,7 @@ textarea {
 			</tr>
 			<tr>
 			<td class="insert">작성자</td>
-			<td><input type="text" name="adminId" value="${ sessionScope.loginUser.memNickNm }" readonly></td>
+			<td><input type="text" name="adminId" value="${ sessionScope.loginUser.memId }" readonly></td>
 			</tr>
 			<tr>
 			<td class="insert">내용</td>
@@ -146,8 +143,6 @@ textarea {
 			</td></tr>
 		</table>
 	</form>
-<footer>
-<c:import url="/WEB-INF/views/common/footer.jsp"/>	
-</footer>
+<c:import url="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>
