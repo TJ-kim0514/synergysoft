@@ -1,4 +1,4 @@
-package com.synergysoft.bonvoyage.common;
+package com.synergysoft.bonvoyage.place.model.dto;
 
 public class Place implements java.io.Serializable {
 
@@ -9,18 +9,23 @@ public class Place implements java.io.Serializable {
 	private String address;		// ADDRESS	VARCHAR2(255 BYTE)
 	private int latitude;		// LATITUDE	NUMBER
 	private int longitude;		// LONGITUDE	NUMBER
+	private String placeContent;
+	private String placeRouteBoardId;
 	
 	public Place() {
 		super();
 	}
 
-	public Place(String placeId, String placeName, String address, int latitude, int longitude) {
+	public Place(String placeId, String placeName, String address, int latitude, int longitude, String placeContent,
+			String placeRouteBoardId) {
 		super();
 		this.placeId = placeId;
 		this.placeName = placeName;
 		this.address = address;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.placeContent = placeContent;
+		this.placeRouteBoardId = placeRouteBoardId;
 	}
 
 	public String getPlaceId() {
@@ -67,11 +72,32 @@ public class Place implements java.io.Serializable {
 		return serialVersionUID;
 	}
 
+	public String getPlaceContent() {
+		return placeContent;
+	}
+
+
+
+	public void setPlaceContent(String placeContent) {
+		this.placeContent = placeContent;
+	}
+
+
+
+	public String getPlaceRouteBoardId() {
+		return placeRouteBoardId;
+	}
+
+	public void setPlaceRouteBoardId(String placeRouteBoardId) {
+		this.placeRouteBoardId = placeRouteBoardId;
+	}
+
 	@Override
 	public String toString() {
 		return "Place [placeId=" + placeId + ", placeName=" + placeName + ", address=" + address + ", latitude="
-				+ latitude + ", longitude=" + longitude + "]";
+				+ latitude + ", longitude=" + longitude + ", placeContent=" + placeContent + ", placeRouteBoardId="
+				+ placeRouteBoardId + "]";
 	}
-	
+
 	
 }

@@ -6,4 +6,7 @@ import com.synergysoft.bonvoyage.route.model.dto.Route;
 
 public interface RouteService {
 	ArrayList<Route> selectAllRoute();
+	int insertRoute(Route route);
+	Route selectRoute(String routeBoardId);
+	
 }

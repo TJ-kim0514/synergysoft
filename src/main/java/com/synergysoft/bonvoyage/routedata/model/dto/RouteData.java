@@ -1,4 +1,4 @@
-package com.synergysoft.bonvoyage.common;
+package com.synergysoft.bonvoyage.routedata.model.dto;
 
 public class RouteData implements java.io.Serializable {
 

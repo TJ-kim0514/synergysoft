@@ -6,156 +6,186 @@
 <head>
 <meta charset="UTF-8">
 <title>bonvoyage</title>
-    <style type="text/css">
-        .location-item {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-            position: relative;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .location-inputs {
-            display: flex;
-            gap: 10px;
-        }
-        .location-description {
-            width: 400px;
-            height: 100px;
-            margin-top: 10px;
-        }
-        .delete-button {
-            width: 50px;
-            height: 30px;
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        div#locationContainer {
-            display: flex;
-            width: 500px;
-        }
-        div#locationRouteContent {
-            display: flex;
-            width: 400px;
-        }
-/*         #locationInputArea {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        } */
-		.submit-button-container {
-		    display: flex;
-		    justify-content: wrap; /* 중앙 정렬 */
-		    align-items: center;     /* 수직 중앙 정렬 */
-		    flex-direction: row;     /* 가로 방향으로 */
-		    height: auto;            /* 높이를 자동으로 설정 */
-		    padding-top: 20px;       /* 버튼 위에 여백 추가 */
-		}
-    </style>
+<style type="text/css">
+	.routePlace {
+		overflow-x: auto;
+		white-space: nowrap;
+  		position: absolute;
+		left: 10%;
+		top: 10%;
+	}
+	.routePlaceInsert {
+		display: inline-block;
+		
+	}
+	
+	.routePlace input {
+		width: 190px;
+	}
+	
+	.routePlaceButton {
+		
+	}
+	
+</style>
 </head>
 <body>
+<%-- <c:import url="/WEB-INF/views/common/menubar.jsp"/> --%>
+<br>
+<div>
+	<h2 align="center">추천 경로 작성</h2>
+	<form class="routePlace" action="inroute.do" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="userId" value="${ sessionScope.loginUser.memId }">
+		<fieldset>
+			<legend>제목</legend>
+			<input type="text" style="width: 1630px; height: 30px; font-size: 13pt;" name="title">
+		</fieldset>
+		
+		
+		<fieldset class="routePlaceInsert">
+		<legend>출발지</legend>
+		 <table id="routePlace" align="center" width="300" cellspacing="3" cellpadding="0" class="routePlaceInsert">
+		 	<tr><th width="100">주소</th>
+		 		<td width="200">
+		 			<input type="text" id="routePlaceAddress1" name="routePlaceAddress[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>이름</th>
+		 		<td>
+		 			<input type="text" id="routePlaceName1" name="routePlaceName[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>장소사진첨부</th>
+		 		<td>
+		 			<input type="file" id="routePlacePhoto2" name="ofile11">
+		 		</td>
+		 	</tr>
+		 	<tr><th>장소설명</th>
+		 		<td>
+		 			<textarea rows="5" cols="25" id="routePlaceContent1" name="routePlaceContent[]"></textarea>
+		 		</td>
+		 	</tr>
+		 </table>
+		 </fieldset>
+		 
+		 <fieldset class="routePlaceInsert">
+		 <legend>경유지1</legend>
+		 <table id="routePlace" align="center" width="300" cellspacing="3" cellpadding="0" class="routePlaceInsert">
+		 	<tr><th width="100">주소</th>
+		 		<td width="200">
+		 			<input type="text" id="routePlaceAddress2" name="routePlaceAddress[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>이름</th>
+		 		<td>
+		 			<input type="text" id="routePlaceName2" name="routePlaceName[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>장소사진첨부</th>
+		 		<td>
+		 			<input type="file" id="routePlacePhoto2" name="ofile22">
+		 		</td>
+		 	</tr>
+		 	<tr><th width="100">장소설명</th>
+		 		<td>
+		 			<textarea rows="5" cols="25" id="routePlaceContent2" name="routePlaceContent[]"></textarea>
+		 		</td>
+		 	</tr>
+		 </table>
+		 </fieldset>
 
-    <h2 align="center">경로 추천 작성</h2>
-	<button type="button" onclick="addLocationFields()" id="addbutton">추가</button>
-	<br> <br>
-	<hr>
-	<br>
-    <form action="submitLocations.jsp" method="post" id="locationInputArea">
-        <div id="locationContainer">
-            <!-- 필드가 추가될 부분 -->
-        </div>
-        <br>
-        <div id="locationRouteContent">
-            <fieldset>
-                <legend>내용</legend>
-                <textarea rows="100" cols="100" name="routeContent" id="routeContent"></textarea>
-            </fieldset>
-        </div>
-        <!-- 등록 버튼을 감싸는 div 추가 -->
-		<div class="submit-button-container">
-		    <input type="submit" value="등록" id="insertbutton">
-		</div>
-    </form>
-
-    <script type="text/javascript">
-        var locationCounter = 0;
-
-        function addLocationFields() {
-            var container = document.getElementById("locationContainer");
-
-            var newDiv = document.createElement("div");
-            newDiv.classList.add("location-item");
-            newDiv.setAttribute("id", "location-item-" + locationCounter);
-
-            var inputsDiv = document.createElement("div");
-            inputsDiv.classList.add("location-inputs");
-
-            // 장소검색칸 input 생성
-            var searchInput = document.createElement("input");
-            searchInput.setAttribute("type", "text");
-            searchInput.setAttribute("name", "locationAddress[]");
-            searchInput.setAttribute("placeholder", "장소 주소");
-            searchInput.setAttribute("id", "locationSearch_" + locationCounter);
-
-            // 장소이름 input 생성
-            var nameInput = document.createElement("input");
-            nameInput.setAttribute("type", "text");
-            nameInput.setAttribute("name", "locationName[]");
-            nameInput.setAttribute("placeholder", "장소 이름");
-            nameInput.setAttribute("id", "locationName_" + locationCounter);
-
-            // 교통수단 드롭다운 생성
-            var transportSelect = document.createElement("select");
-            transportSelect.setAttribute("name", "transportMode[]");
-            transportSelect.setAttribute("id", "transportMode_" + locationCounter);
-
-            var options = ["버스", "지하철", "택시", "자전거", "도보"];
-            for (var i = 0; i < options.length; i++) {
-                var option = document.createElement("option");
-                option.value = options[i];
-                option.text = options[i];
-                transportSelect.appendChild(option);
-            }
-
-            // 장소설명 textarea 생성
-            var descInput = document.createElement("textarea");
-            descInput.setAttribute("name", "locationDescription[]");
-            descInput.setAttribute("placeholder", "장소 설명");
-            descInput.setAttribute("id", "locationDescription_" + locationCounter);
-            descInput.classList.add("location-description");
-
-            // 삭제 버튼 생성
-            var deleteButton = document.createElement("button");
-            deleteButton.setAttribute("type", "button");
-            deleteButton.classList.add("delete-button");
-            deleteButton.innerHTML = "삭제";
-            deleteButton.setAttribute("onclick", "removeLocationFields('location-item-" + locationCounter + "')");
-
-            // inputsDiv에 장소검색, 장소이름, 교통수단 추가
-            inputsDiv.appendChild(searchInput);
-            inputsDiv.appendChild(nameInput);
-            inputsDiv.appendChild(transportSelect);
-
-            // newDiv에 inputsDiv와 장소설명, 삭제 버튼 추가
-            newDiv.appendChild(inputsDiv);
-            newDiv.appendChild(descInput);
-            newDiv.appendChild(deleteButton);
-
-            container.appendChild(newDiv);
-
-            locationCounter++;
-        }
-
-        function removeLocationFields(itemId) {
-            var item = document.getElementById(itemId);
-            if (item) {
-                item.remove();
-            }
-        }
-    </script>
+		 <fieldset class="routePlaceInsert">
+		 <legend>경유지2</legend>
+		 <table id="routePlace" align="center" width="300" cellspacing="3" cellpadding="0" class="routePlaceInsert">
+		 	<tr><th width="100">주소</th>
+		 		<td width="200">
+		 			<input type="text" id="routePlaceAddress3" name="routePlaceAddress[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>이름</th>
+		 		<td>
+		 			<input type="text" id="routePlaceName3" name="routePlaceName[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>장소사진첨부</th>
+		 		<td>
+		 			<input type="file" id="routePlacePhoto3" name="ofile33">
+		 		</td>
+		 	</tr>
+		 	<tr><th width="100">장소설명</th>
+		 		<td>
+		 			<textarea rows="5" cols="25" id="routePlaceContent3" name="routePlaceContent[]"></textarea>
+		 		</td>
+		 	</tr>
+		 </table>
+		 </fieldset>
+		 
+		 <fieldset class="routePlaceInsert">
+		 <legend>경유지3</legend>
+		 <table id="routePlace" align="center" width="300" cellspacing="3" cellpadding="0" class="routePlaceInsert">
+		 	<tr><th width="100">주소</th>
+		 		<td width="200">
+		 			<input type="text" id="routePlaceAddress4" name="routePlaceAddress[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>이름</th>
+		 		<td>
+		 			<input type="text" id="routePlaceName4" name="routePlaceName[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>장소사진첨부</th>
+		 		<td>
+		 			<input type="file" id="routePlacePhoto4" name="ofile44">
+		 		</td>
+		 	</tr>
+		 	<tr><th width="100">장소설명</th>
+		 		<td>
+		 			<textarea rows="5" cols="25" id="routePlaceContent4" name="routePlaceContent[]"></textarea>
+		 		</td>
+		 	</tr>
+		 </table>
+		 </fieldset>
+		 
+		 <fieldset class="routePlaceInsert">
+		 <legend>목적지</legend>
+		 <table id="routePlace" align="center" width="300" cellspacing="3" cellpadding="0" class="routePlaceInsert">
+		 	<tr><th width="100">주소</th>
+		 		<td width="200">
+		 			<input type="text" id="routePlaceAddress5" name="routePlaceAddress[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>이름</th>
+		 		<td>
+		 			<input type="text" id="routePlaceName5" name="routePlaceName[]">
+		 		</td>
+		 	</tr>
+		 	<tr><th>장소사진첨부</th>
+		 		<td>
+		 			<input type="file" id="routePlacePhoto5" name="ofile55">
+		 		</td>
+		 	</tr>
+		 	<tr><th width="100">장소설명</th>
+		 		<td>
+		 			<textarea rows="5" cols="25" id="routePlaceContent5" name="routePlaceContent[]"></textarea>
+		 		</td>
+		 	</tr>
+		 </table>
+		 </fieldset>
+				 		 		 
+		 <fieldset>
+		 <legend>상세내용</legend>
+		 <div>
+		 	<textarea rows="20" cols="180" name="content" style="font-size: 13pt;"></textarea>
+		 </div>
+		 </fieldset>
+		 <br>
+		 
+		 <input type="submit" value="등록하기"  class="routePlaceButton">
+		 <input type="reset" value="작성취소" class="routePlaceButton">
+		 <input type="button" value="뒤로가기" class="routePlaceButton" onclick="">
+		 
+	</form>
+</div>	
+<%-- <c:import url="/WEB-INF/views/common/footer.jsp"/> --%>
 </body>
 </html>
