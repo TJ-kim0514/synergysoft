@@ -86,6 +86,50 @@
             <th>내 용</th>
             <td>${ guide.guideContent }</td>
         </tr>
+        
+        <tr>
+    <th>이미지</th>
+    <td>
+        <c:choose>
+            <c:when test="${not empty guide.rFile1 || not empty guide.rFile2 || not empty guide.rFile3 || not empty guide.rFile4 || not empty guide.rFile5}">
+                <div class="image-preview">
+                    <!-- rFile1 이미지 출력 -->
+                    <c:if test="${not empty guide.rFile1}">
+                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile1}" alt="첨부된 이미지 1" style="max-width: 300px; margin-right: 10px;">
+                    </c:if>
+
+                    <!-- rFile2 이미지 출력 -->
+                    <c:if test="${not empty guide.rFile2}">
+                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile2}" alt="첨부된 이미지 2" style="max-width: 300px; margin-right: 10px;">
+                    </c:if>
+
+                    <!-- rFile3 이미지 출력 -->
+                    <c:if test="${not empty guide.rFile3}">
+                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile3}" alt="첨부된 이미지 3" style="max-width: 300px; margin-right: 10px;">
+                    </c:if>
+
+                    <!-- rFile4 이미지 출력 -->
+                    <c:if test="${not empty guide.rFile4}">
+                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile4}" alt="첨부된 이미지 4" style="max-width: 300px; margin-right: 10px;">
+                    </c:if>
+
+                    <!-- rFile5 이미지 출력 -->
+                    <c:if test="${not empty guide.rFile5}">
+                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile5}" alt="첨부된 이미지 5" style="max-width: 300px; margin-right: 10px;">
+                    </c:if>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <p>첨부된 이미지가 없습니다.</p>
+            </c:otherwise>
+        </c:choose>
+    </td>
+</tr>
+
+        
+        
+        
+        
     </table>
 
     <!-- 버튼 그룹 -->

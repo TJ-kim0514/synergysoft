@@ -1,6 +1,7 @@
 package com.synergysoft.bonvoyage.common;
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 public class FileNameChange {
 	
@@ -15,8 +16,11 @@ public class FileNameChange {
 		renameFileName = sdf.format(new java.sql.Date(System.currentTimeMillis())); 
 		// 현재시스템 시간을 long형으로 받는메소드 Sys.currentTimeMillis
 		
+		//UUID추가
+		  String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		
 		// 원본 파일의 확장자를 추출해서, 바꿀 파일명 뒤에 추가 연결함
-		renameFileName += "."+ originalFileName.substring(originalFileName.lastIndexOf(".")+1); // indexOf(".")+1);
+		  renameFileName += "_" + uuid + "." + originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
 		
 		return renameFileName;
 	}
