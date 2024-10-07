@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.report.model.dao.ReportDao;
 import com.synergysoft.bonvoyage.report.model.dto.Report;
 
@@ -15,16 +16,16 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	// 관리자 : 신고 목록 조회
-	public ArrayList<Report> selectReport() {
-		return reportDao.selectReport();
+	public ArrayList<Report> selectReport(Paging paging) {
+		return reportDao.selectReport(paging);
 	}
-	
+
 	@Override
 	// 유저 : 내 신고 목록 조회
 	public ArrayList<Report> selectReportMe(String reportId) {
 		return reportDao.selectReportMe(reportId);
 	}
-	
+
 	@Override
 	// 관리자 : 신고 상세 조회
 	public Report selectReportDetail(String reportId) {
@@ -35,6 +36,24 @@ public class ReportServiceImpl implements ReportService {
 	// 유저 : 내 신고 상세 조회
 	public Report selectMyReportDetail(Report report) {
 		return reportDao.selectMyReportDetail(report);
+	}
+	
+	@Override
+	// 관리자용 신고 수 조회
+	public int selectReportListCount() {
+		return reportDao.selectReportListCount();
+	}
+
+	@Override
+	// 유저용 신고 수 조회
+	public int selectAllReportMe(String memId) {
+		return reportDao.selectAllReportMe(memId);
+	}
+	
+	@Override
+	//
+	public ArrayList<Report> selectAllReport(Paging paging) {
+	return reportDao.selectAllReport(paging);
 	}
 
 	@Override
@@ -59,6 +78,7 @@ public class ReportServiceImpl implements ReportService {
 	// 관리자 : 신고 삭제
 	public int deleteReport(String reportId) {
 		return reportDao.deleteReport(reportId);
+
 	}
 
 }
