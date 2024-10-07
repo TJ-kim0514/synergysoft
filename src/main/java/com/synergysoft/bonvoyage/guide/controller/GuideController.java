@@ -1,6 +1,8 @@
 package com.synergysoft.bonvoyage.guide.controller;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,13 +15,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.synergysoft.bonvoyage.common.FileNameChange;
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.guide.model.dto.Guide;
 import com.synergysoft.bonvoyage.guide.model.service.GuideService;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
-import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 
 
 @Controller
@@ -87,31 +91,103 @@ public class GuideController {
 	    return "guide/guideWriteForm";  // guideWriteForm.jsp로 이동
 	}
 	
-	// 새 공지글 등록 요청 처리용 
-	@RequestMapping(value="ginsert.do", method=RequestMethod.POST)
-	public String guideInsertMethod(Guide guide, Model model, HttpServletRequest request) {
-	    // 세션에서 로그인된 사용자 정보 가져오기
-	    HttpSession session = request.getSession();
-	    Member loginUser = (Member) session.getAttribute("loginUser");
-	    
-	    // loginUser가 null이 아닌 경우에 guideUserId를 설정
-	    if (loginUser != null) {
-	        guide.setGuideUserId(loginUser.getMemId());  // guideUserId에 로그인한 사용자 ID 설정
-	    } else {
-	        model.addAttribute("message", "로그인 정보가 없습니다.");
-	        return "common/error";
-	    }
-	    
-	    logger.info("ginsert.do : " + guide);
-	    
-	    if (guideService.insertGuide(guide) > 0) {
-	        // 블로그 등록 성공시 목록 페이지로 리다이렉트
-	        return "redirect:sagBlog.do";
-	    } else {
-	        model.addAttribute("message", "새 공지글 등록 실패!");
-	        return "common/error";
-	    }
-	}
+	
+	// 새 공지글 등록 요청 처리용 (파일 업로드 기능 추가)
+		@RequestMapping(value="ginsert.do", method=RequestMethod.POST)
+		public String guideInsertMethod(Guide guide, Model model, HttpServletRequest request,
+		    @RequestParam(name="gmfiles", required = false) MultipartFile[] gmfiles) {
+		    logger.info("ginsert.do : " + guide);
+		    
+		    // 세션에서 로그인된 사용자 정보 가져오기
+		    HttpSession session = request.getSession();
+		    Member loginUser = (Member) session.getAttribute("loginUser");
+		    
+		    // loginUser가 null이 아닌 경우에 guideUserId를 설정
+		    if (loginUser != null) {
+		        guide.setGuideUserId(loginUser.getMemId());  // guideUserId에 로그인한 사용자 ID 설정
+		    } else {
+		        model.addAttribute("message", "로그인 정보가 없습니다.");
+		        return "common/error";
+		    }
+		    
+		    
+		    // 파일 개수가 5개를 넘는지 확인
+		    if (gmfiles != null && gmfiles.length > 5) {
+		        model.addAttribute("message", "파일 개수는 최대 5개까지 가능합니다.");
+		        return "common/error"; // 오류 발생 시 해당 JSP로 이동
+		    }
+		    
+		    // 파일 저장 경로 설정
+		    String savePath = "D:/ProjectWork/bonvoyage/src/main/webapp/resources/guide_upfiles";
+		    
+
+		    
+		    // 5개의 컬럼에 맞게 파일명을 저장하기 위한 변수 선언
+		    String[] ofiles = new String[5];
+		    String[] rfiles = new String[5];
+
+		    int fileIndex = 0;
+		    
+		    // 파일 배열에서 각 파일 처리
+		    if (gmfiles != null) {
+		        for (MultipartFile file : gmfiles) {
+		            if (!file.isEmpty() && fileIndex < 5) {
+		                // 파일의 원본 이름을 가져옴
+		                String fileName = file.getOriginalFilename();
+		                String renameFileName = null;
+		                
+		                // 파일 이름 바꾸기 : 년월일시분초.확장자
+		                if (fileName != null && fileName.length() > 0) {
+		                    renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+
+		                    try {
+		                        // 실제 파일을 저장할 경로 지정
+		                    	file.transferTo( new File(savePath + "\\" + renameFileName));// 파일 저장
+		                    } catch (Exception e) {
+		                        e.printStackTrace();
+		                        model.addAttribute("message", "첨부파일 저장 실패!");
+		                        return "common/error";
+		                    }
+
+		                    // 배열에 원본 파일명과 변경된 파일명을 저장
+		                    ofiles[fileIndex] = fileName;
+		                    rfiles[fileIndex] = renameFileName;
+
+		                    // 다음 파일을 위한 인덱스 증가
+		                    fileIndex++;
+		                }
+		            }
+		        }
+		    }
+
+		    // guide 객체에 각각의 파일명을 저장 (OFILE1 ~ OFILE5, RFILE1 ~ RFILE5)
+		    guide.setoFile1(ofiles[0]);
+		    guide.setoFile2(ofiles[1]);
+		    guide.setoFile3(ofiles[2]);
+		    guide.setoFile4(ofiles[3]);
+		    guide.setoFile5(ofiles[4]);
+
+		    guide.setrFile1(rfiles[0]);
+		    guide.setrFile2(rfiles[1]);
+		    guide.setrFile3(rfiles[2]);
+		    guide.setrFile4(rfiles[3]);
+		    guide.setrFile5(rfiles[4]);
+		    
+		
+
+		    // 데이터베이스에 저장
+		   
+		    if (guideService.insertGuide(guide) > 0) {
+		        return "redirect:sagBlog.do"; // 성공 후 이동할 페이지
+		    } else {
+		        model.addAttribute("message", "블로그 등록 실패!");
+		        return "common/error"; // 실패 시 에러 페이지
+		    }
+		    
+		    
+		}
+	
+	
 	
 	//블로그 상세내용 보기 요청 처리 메소드(뷰와 모델 함께 가져오는 방법)
 	@RequestMapping("gdetail.do")
@@ -150,7 +226,6 @@ public class GuideController {
 
 	    return mv;  // ModelAndView 반환
 	}
-		
 		
 		
 
@@ -209,6 +284,85 @@ public class GuideController {
 	        return "common/error";  // 에러 페이지로 이동
 	    }
 	}
+	
+	// 통합 검색 처리용 (제목, 내용, 지역을 하나의 메소드에서 처리)
+	@RequestMapping("gsearch.do")
+	public ModelAndView guideSearchMethod(ModelAndView mv, 
+	        @RequestParam("action") String action, // 검색 기준 (title, content, location)
+	        @RequestParam("keyword") String keyword, 
+	        @RequestParam(name = "page", required = false) String page,
+	        @RequestParam(name = "limit", required = false) String slimit,
+	        @RequestParam(name = "groupLimit", required = false) String glimit) {
+
+	    // 페이징 처리
+	    int currentPage = 1;
+	    if (page != null) {
+	        currentPage = Integer.parseInt(page);
+	    }
+
+	    int limit = 10;
+	    if (slimit != null) {
+	        limit = Integer.parseInt(slimit);
+	    }
+
+	    int groupLimit = 5;
+	    if (glimit != null) {
+	        groupLimit = Integer.parseInt(glimit);
+	    }
+
+	    // 검색 결과 목록 총 갯수 조회 및 페이징 처리
+	    int listCount = 0;
+	    ArrayList<Guide> list = null;
+	    Paging paging = null;
+	    
+	    // 검색 기준에 따라 다른 쿼리 호출
+	    if (action.equals("title")) {
+	        listCount = guideService.selectSearchTitleCount(keyword);
+	        paging = new Paging(listCount, limit, currentPage, "gsearch.do", groupLimit);
+	        paging.calculate();
+	        Search search = new Search();
+	        search.setKeyword(keyword);
+	        search.setStartRow(paging.getStartRow());
+	        search.setEndRow(paging.getEndRow());
+	        list = guideService.selectSearchTitle(search);
+	    } else if (action.equals("content")) {
+	        listCount = guideService.selectSearchContentCount(keyword);
+	        paging = new Paging(listCount, limit, currentPage, "gsearch.do", groupLimit);
+	        paging.calculate();
+	        Search search = new Search();
+	        search.setKeyword(keyword);
+	        search.setStartRow(paging.getStartRow());
+	        search.setEndRow(paging.getEndRow());
+	        list = guideService.selectSearchContent(search);
+	    } else if (action.equals("location")) {
+	        listCount = guideService.selectSearchLocationCount(keyword);
+	        paging = new Paging(listCount, limit, currentPage, "gsearch.do", groupLimit);
+	        paging.calculate();
+	        Search search = new Search();
+	        search.setKeyword(keyword);
+	        search.setStartRow(paging.getStartRow());
+	        search.setEndRow(paging.getEndRow());
+	        list = guideService.selectSearchLocation(search);
+	    }
+
+	    // 검색 결과 리스트 확인 후 뷰 설정
+	    if (list != null && list.size() > 0) {
+	        mv.addObject("list", list);
+	        mv.addObject("paging", paging);
+	        mv.addObject("currentPage", currentPage);
+	        mv.addObject("action", action);
+	        mv.addObject("keyword", keyword);
+	        mv.setViewName("guide/guideListView");
+	    } else {
+	        mv.addObject("message", action + "에 대한 " + keyword + " 검색 결과가 존재하지 않습니다.");
+	        mv.setViewName("common/error");
+	    }
+
+	    return mv;
+	}
+
+
+
 
 
 
@@ -217,7 +371,7 @@ public class GuideController {
 
 	
 	
-}
+}// end
 	
 
 

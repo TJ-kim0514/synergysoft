@@ -19,5 +19,6 @@ public interface NoticeService {
 	ArrayList<Notice> selectSearchTitleNotice(Search search);
 	int selectSearchContentListCount(String keyword);
 	ArrayList<Notice> selectSearchContentNotice(Search search);
+	ArrayList<Notice> selectTopNotice();
 
 }

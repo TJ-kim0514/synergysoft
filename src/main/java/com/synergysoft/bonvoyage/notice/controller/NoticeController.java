@@ -2,12 +2,16 @@ package com.synergysoft.bonvoyage.notice.controller;
 
 
 import java.io.File;
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -259,7 +264,10 @@ public class NoticeController {
 			HttpServletRequest request,
 			@RequestParam(name="insertFile1", required=false) MultipartFile ifile1,
 			@RequestParam(name="insertFile2", required=false) MultipartFile ifile2,
-			@RequestParam(name="insertFile3", required=false) MultipartFile ifile3
+			@RequestParam(name="insertFile3", required=false) MultipartFile ifile3,
+			@RequestParam(name="delete1", required=false) String delete1,
+			@RequestParam(name="delete2", required=false) String delete2,
+			@RequestParam(name="delete3", required=false) String delete3
 			) {
 		logger.info("notice : " + notice);
 		
@@ -267,9 +275,9 @@ public class NoticeController {
 		
 		// 파일1
 		// 파일제거
-		if((notice.getoFile1() != null //원래 첨부파일이 있는데
-				&& ifile1.isEmpty())
-				) {    // 파일이 들어왔을때
+		if((notice.getoFile1() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete1.equals("yes") && ifile1.isEmpty())) || !ifile1.isEmpty()
+				) {    
 			//저장폴더에서 이전 파일은 삭제함
 			new File(savePath + "\\" + notice.getrFile1()).delete();
 			
@@ -310,9 +318,9 @@ public class NoticeController {
 		
 		// 파일2
 		// 파일제거
-		if((notice.getoFile2() != null //원래 첨부파일이 있는데
-				&& ifile2.isEmpty())
-				) {    // 파일이 들어왔을때
+		if((notice.getoFile2() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete2.equals("yes") && ifile2.isEmpty())) || !ifile2.isEmpty()
+				) {    
 			//저장폴더에서 이전 파일은 삭제함
 			new File(savePath + "\\" + notice.getrFile2()).delete();
 			
@@ -353,9 +361,9 @@ public class NoticeController {
 		
 		// 파일3
 		// 파일제거
-		if((notice.getoFile3() != null //원래 첨부파일이 있는데
-				&& ifile3.isEmpty())
-				) {    // 파일이 들어왔을때
+		if((notice.getoFile3() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete3.equals("yes") && ifile3.isEmpty())) || !ifile3.isEmpty()
+			) { 
 			//저장폴더에서 이전 파일은 삭제함
 			new File(savePath + "\\" + notice.getrFile3()).delete();
 			
@@ -495,5 +503,33 @@ public class NoticeController {
 	    }
 	}
 	
+	// main페이지 공지사항 top10 출력
+	@ResponseBody
+	@RequestMapping(value= "stnotice.do", method=RequestMethod.POST)
+	public String selectTopNotice(
+			HttpServletResponse response
+			) throws UnsupportedEncodingException {
+		// 최근 등록된 공지글 10개 조회 요청함
+		ArrayList<Notice> list = noticeService.selectTopNotice();
+		
+		// 내보낼 값에 대해 response에 mimitype 설정
+		response.setContentType("application/json; charset=utf-8");
+		
+		// 리턴된 list 를 json 배열에 옮겨 기록하기
+		JSONArray jarr=new JSONArray();
+		logger.info("list : " + list);
+		for(Notice notice : list) {
+			JSONObject job = new JSONObject();
+			job.put("noticeId", notice.getNoticeId());
+			job.put("title", URLEncoder.encode(notice.getTitle(),"utf-8"));
+			job.put("createAt", notice.getCreatedAt().toString());
+			
+			jarr.add(job);
+		}
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("nlist", jarr);
+		logger.info("jarr : " + sendJson.toJSONString());
+		return sendJson.toJSONString();
+	}
 	
 }	

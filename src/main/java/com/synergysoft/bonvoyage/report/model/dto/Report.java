@@ -7,6 +7,7 @@ public class Report implements java.io.Serializable {
 
 	private String reportId;
 	private String postId;
+	private String title; // 2024-10-07 추가
 	private String reportUserId;
 	private String reportingReason;
 	private String detail;
@@ -20,12 +21,13 @@ public class Report implements java.io.Serializable {
 		super();
 	}
 
-	public Report(String reportId, String postId, String reportUserId, String reportingReason, String detail,
+	public Report(String reportId, String postId, String title, String reportUserId, String reportingReason, String detail,
 			Date reportDate, String checkedAdmin, String checkedAdminId, String checkedAssigned,
 			String assignedAdminId) {
 		super();
 		this.reportId = reportId;
 		this.postId = postId;
+		this.title = title;
 		this.reportUserId = reportUserId;
 		this.reportingReason = reportingReason;
 		this.detail = detail;
@@ -122,10 +124,18 @@ public class Report implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "Report [reportId=" + reportId + ", postId=" + postId + ", reportUserId=" + reportUserId
+		return "Report [reportId=" + reportId + ", postId=" + postId + ", title=" + title + ", reportUserId=" + reportUserId
 				+ ", reportingReason=" + reportingReason + ", detail=" + detail + ", reportDate=" + reportDate
 				+ ", checkedAdmin=" + checkedAdmin + ", checkedAdminId=" + checkedAdminId + ", checkedAssigned="
 				+ checkedAssigned + ", assignedAdminId=" + assignedAdminId + "]";
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

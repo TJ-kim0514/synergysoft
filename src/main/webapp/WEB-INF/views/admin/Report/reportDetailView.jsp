@@ -7,7 +7,6 @@
 <head>
 <meta charset="UTF-8">
 <title>bonvoyage</title>
-
 <c:url var="reportUpdateProcess" value="reportUpdateProcess.do">
 	<c:param name="checkedAdminId" value="${ loginUser.memId }" />
 	<c:param name="assignedAdminId" value="${ loginUser.memId }" />
@@ -47,14 +46,16 @@ function requestDelete(){
 <h2 align="center">${ report.reportId } 번 신고글 상세보기</h2>
 <br>
 <table align="center" width="700" border="1" cellspacing="0" cellpadding="5">
-	<tr><th>제 목</th><td>${ report.postId }</td></tr>
+	<tr><th>제 목</th><td>${ report.title }</td></tr>
 	<tr><th>등록날짜</th>
 		<td><fmt:formatDate value="${ report.reportDate }" pattern="yyyy-MM-dd" /></td></tr>
 	<tr><th>신고내용</th><td>${ report.reportingReason }</td></tr>
 	<tr><th>신고상세내용</th><td>${ report.detail }</td></tr>
 	<tr><th colspan="2">
+	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
 		<button onclick="requestUpdateProcess(); return false;">처리하기</button>  &nbsp; 
 		<button onclick="requestUpdateReject(); return false;">반려하기</button>  &nbsp; 
+	</c:if>
 		<button onclick="requestDelete(); return false;">삭제하기</button>  &nbsp; 
 		<button onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/reportList.do';">목록</button> &nbsp;  
 		<button onclick="javascript:history.go(-1); return false;">이전 페이지로 이동</button>

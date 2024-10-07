@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.guide.model.dao.GuideDao;
 import com.synergysoft.bonvoyage.guide.model.dto.Guide;
 import com.synergysoft.bonvoyage.notice.model.dto.Notice;
@@ -50,6 +51,32 @@ public class GuideServiceImpl implements GuideService{
 	@Override
 	public int selectListCount() {
 		return guideDao.selectListCount();
+	}
+	
+	//검색용 메소드--------------------------------------------------
+	@Override
+	public int selectSearchTitleCount(String keyword) {
+		return guideDao.selectSearchTitleCount(keyword);
+	}
+	@Override
+	public ArrayList<Guide> selectSearchTitle(Search search) {
+		return guideDao.selectSearchTitle(search);
+	}
+	@Override
+	public int selectSearchContentCount(String keyword) {
+		return guideDao.selectSearchContentCount(keyword);
+	}
+	@Override
+	public ArrayList<Guide> selectSearchContent(Search search) {
+		return guideDao.selectSearchContent(search);
+	}
+	@Override
+	public int selectSearchLocationCount(String keyword) {
+		return guideDao.selectSearchLocationCount(keyword);
+	}
+	@Override
+	public ArrayList<Guide> selectSearchLocation(Search search) {
+		return guideDao.selectSearchLocation(search);
 	}
 
 	

@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.report.model.dto.Report;
 
 @Repository("ReportDao")
@@ -16,8 +17,8 @@ public class ReportDao {
 	private SqlSessionTemplate sqlSessionTemplate;
 
 	// 관리자 : 신고 목록 조회
-	public ArrayList<Report> selectReport() {
-		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport");
+	public ArrayList<Report> selectReport(Paging paging) {
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport", paging);
 		return (ArrayList<Report>) list;
 	}
 	
@@ -35,6 +36,21 @@ public class ReportDao {
 	// 유저 : 내 신고 목록 조회
 	public Report selectMyReportDetail(Report report) {
 		return sqlSessionTemplate.selectOne("reportMapper.selectMyReportDetail", report);
+	}
+	
+	//
+	public ArrayList<Report> selectAllReport(Paging paging) {
+		return sqlSessionTemplate.selectOne("reportMapper.selectAllReport", paging);
+	}
+	
+	//
+	public int selectReportListCount() {
+		return sqlSessionTemplate.selectOne("reportMapper.selectReportListCount");
+	}
+	
+	//
+	public int selectAllReportMe(String memId) {
+		return sqlSessionTemplate.selectOne("reportMapper.selectAllReportMe", memId);
 	}
 
 	// 유저&관리자 : 신고 등록
