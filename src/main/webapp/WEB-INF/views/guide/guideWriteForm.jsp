@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bon Voyage - 새 블로그 등록</title>
+  <title>BonVoyage - 새 블로그 등록</title>
 
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -100,10 +100,13 @@
         <textarea name="guideContent" id="guideContent" class="form-control" rows="8" placeholder="블로그 내용을 입력하세요" style="border: none; background-color: transparent;"></textarea>
       </div>
 
-      <div class="mb-3">
-        <label for="photofile" class="form-label">사진 첨부</label>
-        <input type="file" id="photofile" name="gmfiles[]" multiple class="form-control">
-      </div>
+    <div class="mb-3">
+    <label for="photofile" class="form-label">사진 첨부</label>
+    <c:forEach var="i" begin="1" end="5">
+        <input type="file" id="photofile${i}" name="gmfiles" class="form-control mb-2">
+    </c:forEach>
+</div>
+
 
       <!-- 미리보기 이미지들이 추가되는 컨테이너 -->
       <div id="previewContainer"></div>

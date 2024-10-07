@@ -10,7 +10,9 @@ public class Search {
 	private Date begin;		// 등록날짜 검색의 시작날짜
 	private	Date end;		// 등록날짜 검색의 끝날짜
 	private int age;		// 회원 관리에서 연령대별 검색에서의 나이
+
 	
+
 	public Search() {}
 
 	public String getKeyword() {

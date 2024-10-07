@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Bon voyage</title>
+<title>Bonvoyage</title>
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -19,41 +19,37 @@
 
 <h1 class="text-center">가이드블로그 메인페이지</h1>
 
-<button onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button> &nbsp; &nbsp;
 
 
-<%-- 항목별 검색 기능 추라 --%>
+
+
+<%-- 항목별 검색 기능 추가 --%>
 
 	<%-- 검색 항목별 값 입력 전송용 폼 만들기 --%>
-<%-- 제목 검색 폼 --%>
-<form action="gsearchTitle.do" id="titleform" class="sform" method="get">
-	<input type="hidden" name="action" value="title">
-	<fieldset>
-	<legend>검색할 제목을 입력하세요.</legend>
-		<input type="search" name="keyword" size="50"> &nbsp;
-		<input type="submit" value="검색">
-	</fieldset>
+<!-- 통합 검색 폼 -->
+<!-- <div style="display: flex; justify-content: flex-end;"> -->
+<!-- 목록 버튼은 폼 외부로 -->
+<button class="btn btn-success" style="border-radius: 50px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button>
+
+
+
+<form action="${pageContext.request.contextPath}/gsearch.do" method="get">
+    <fieldset>
+        <!-- 검색 기준 선택 -->
+        <select name="action" class="form-select" style="width: 150px; display: inline-block;">
+            <option value="title">제목</option>
+            <option value="content">내용</option>
+            <option value="location">지역</option>
+        </select>
+        <!-- 검색어 입력 -->
+        <input type="search" name="keyword" size="50" class="form-control d-inline-block" style="width: auto;" placeholder="제목 또는 내용 또는 지역을 입력해주세요.">
+        <!-- 검색 버튼 -->
+        <input type="submit" value="검색" class="btn btn-success">
+    </fieldset>
 </form>
 
 
-<form action="gsearchContent.do" id="contentform" class="sform" method="get">
-	<input type="hidden" name="action" value="content">
-	<fieldset>
-	<legend>검색할 내용을 입력하세요.</legend>
-		<input type="search" name="keyword" size="50"> &nbsp;
-		<input type="submit" value="검색">
-	</fieldset>
-</form>
 
-
-<form action="gsearchLocation.do" id="contentform" class="sform" method="get">
-	<input type="hidden" name="action" value="content">
-	<fieldset>
-	<legend>검색할 지역을 입력하세요.</legend>
-		<input type="search" name="keyword" size="50"> &nbsp;
-		<input type="submit" value="검색">
-	</fieldset>
-</form>
 	
 
 <div class="container my-5">
@@ -61,23 +57,35 @@
     <button class="btn btn-success mb-4" onclick="javascript:location.href='${pageContext.servletContext.contextPath}/gmoveWrite.do';">블로그 쓰기</button>
 
     <!-- 블로그 카드 목록 -->
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- 블로그 정보를 반복문으로 출력 -->
-        <c:forEach items="${list}" var="g">
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <!-- 블로그 정보를 반복문으로 출력 -->
+    <c:forEach items="${list}" var="g">
         <div class="col">
             <div class="card h-100">
-                <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="블로그 이미지">
+                <!-- rFile1이 있으면 해당 이미지를, 없으면 기본 이미지를 출력 -->
+                <c:choose>
+                    <c:when test="${not empty g.rFile1}">
+                    <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${g.rFile1}?v=${System.currentTimeMillis()}" alt="이미지" />
+                    
+                       <%--  <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${g.rFile1}" class="card-img-top" alt="블로그 이미지" style="max-width: 100%; height: auto;"> --%>
+                    </c:when>
+                    <c:otherwise>
+                        <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="기본 이미지" style="max-width: 100%; height: auto;">
+                    </c:otherwise>
+                </c:choose>
                 <div class="card-body">
                     <h5 class="card-title">${g.guideTitle}</h5>
                     <p class="card-text">지역: ${g.guideLocation}</p>
-                    <p class="card-text">추천 수: ${g.likeCount}</p>
+                    <p class="card-text">조회수: ${g.likeCount}</p>
     
                     <a href="${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=${g.guidepostId}" class="btn btn-dark">상세보기</a>
                 </div>
             </div>
         </div>
-        </c:forEach>
-    </div>
+    </c:forEach>
+</div>
+
+
 
  
 
