@@ -21,11 +21,12 @@ public class MemberDao {
 	public Member selectLogin(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectLogin", memId);
 	}
-	
+
+	// 소셜 로그인
 	public Member selectSocialLogin(Member member) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectSocialLogin", member.getMemId());
 	}
-	
+
 	// 소셜 로그인
 	public Member selectSocialLogin(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectSocialLogin", memId);
@@ -49,6 +50,11 @@ public class MemberDao {
 	// 내 정보 조회
 	public Member selectMyinfo(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectMyinfo", memId);
+	}
+
+	// 회원 정보 찾기
+	public Member selectMemberByEmailId(Member member) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectMemberByEmailId", member);
 	}
 
 	// 관리자 : 회원 목록 조회
@@ -76,7 +82,7 @@ public class MemberDao {
 	public int insertSocialMember(Member member) {
 		return sqlSessionTemplate.insert("memberMapper.insertSocialMember", member);
 	}
-	
+
 	// 로그인 로그 변경
 	public int updateLoginLog(String memId) {
 		return sqlSessionTemplate.update("memberMapper.updateLoginLog", memId);
@@ -90,6 +96,11 @@ public class MemberDao {
 	// 내 정보 변경
 	public int updateMyinfo(Member member) {
 		return sqlSessionTemplate.update("memberMapper.updateMyinfo", member);
+	}
+
+	// 비밀번호 변경
+	public int updateMemberPw(Member member) {
+		return sqlSessionTemplate.update("memberMapper.updateMemberPw", member);
 	}
 
 	// 회원 탈퇴
