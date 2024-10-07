@@ -41,7 +41,7 @@
 </tr>
 <tr>
 	<td align="center" >내용</td>
-	<td colspan="3"> ${notice.content}</td>
+	<td colspan="3" style="white-space: pre-wrap;"> ${notice.content}</td>
 </tr>
 <%-- 파일 다운용 url생성 --%>
 <c:url var="nfdown1" value="nfdown.do">

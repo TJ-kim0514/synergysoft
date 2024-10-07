@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>bonvoyage : error</title>
+<title>Bon voyage</title>
 <!-- Bootstrap CSS CDN 링크 추가 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
@@ -26,9 +26,7 @@
 </style>
 </head>
 <body>
-<nav>
-    <c:import url="/WEB-INF/views/common/menubar.jsp"/>    
-</nav>
+    <c:import url="/WEB-INF/views/common/menubar.jsp"/>
 
 <div class="container">
     <h1>오류 발생 : <%= request.getAttribute("message") %></h1>
@@ -40,10 +38,7 @@
     </div>
 </div>
 
-<footer>
-    <c:import url="/WEB-INF/views/common/footer.jsp"/>    
-</footer>
-
+<c:import url="/WEB-INF/views/common/footer.jsp"/>    
 <!-- Bootstrap JS 및 Popper.js CDN 추가 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

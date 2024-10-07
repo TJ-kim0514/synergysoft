@@ -48,9 +48,7 @@
 
 </head>
 <body>
-<nav>
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
-</nav>
 <br>
 
 <table align="center" width="800px" cellSpacing="5" cellpadding="10" border="1"  >
@@ -63,7 +61,7 @@
 </tr>
 <tr>
 	<td align="center" >내용</td>
-	<td colspan="3"> ${notice.content}</td>
+	<td colspan="3" style="white-space: pre-wrap;"> ${notice.content}</td>
 </tr>
 <tr>
 <%-- 파일 다운용 url생성 --%>
@@ -96,10 +94,7 @@
 </tr>
 </table>
 		
-		
-<footer>
 <c:import url="/WEB-INF/views/common/footer.jsp"/>	
-</footer>
 
 </body>
 </html>
