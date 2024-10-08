@@ -2,6 +2,7 @@ package com.synergysoft.bonvoyage.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -29,7 +30,6 @@ import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.member.model.service.GoogleLoginAuth;
 import com.synergysoft.bonvoyage.member.model.service.MemberService;
-import com.synergysoft.bonvoyage.member.model.service.NaverLoginAuth;
 
 @Controller
 public class MemberController {
@@ -78,6 +78,7 @@ public class MemberController {
 	@RequestMapping(value = "loginPage.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String moveLoginPage(Member member, HttpSession session, SessionStatus status, HttpServletRequest request,
 			Model model) {
+		addAuthURLsMethod(model, session);
 		logger.info("로그인 페이지 요청");
 		return "member/loginPage";
 	}
@@ -125,21 +126,17 @@ public class MemberController {
 		return "redirect:main.do";
 	}
 	
-	// 소셜 로그인 구현(카카오) | 2024. 10. 07 작성
+	// 소셜 로그인 구현(네이버) | 2024. 10. 08 수정 및 테스트 성공
 	// jmoh03 (오정민)
-	@RequestMapping(value = "naverLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String naverLogin(@RequestParam Map<String, String> params, Model model, HttpSession session,
+	@RequestMapping(value = "naverLogin.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String naverLogin(@RequestParam("code") String code,
+			@RequestParam("state") String state,
+			Model model, HttpSession session,
 			SessionStatus status) throws Exception {
 		
 		logger.info("naverLogin.do 접근");
-		// URL 파라미터 확인
-	    logger.info("Received params: {}", params);
-
-	    // 파라미터 추출
-	    String code = params.get("code");
-	    String state = params.get("state");
 	    
-	    logger.info("Code: {}, State: {}", code, state);
+	    logger.info("Code: {}\nState: {}\nSession : {}", code, state, session);
 		// 1. 코드, 세션 및 상태를 사용하여 getAccessToken을 호출합니다.
 		OAuth2AccessToken node = naverloginAuth.getAccessToken(session, code, state);
 		logger.info("node = " + node);
@@ -161,21 +158,31 @@ public class MemberController {
 			JSONObject response_obj = (JSONObject) jsonObj.get("response");
 			String nickname = (String) response_obj.get("nickname");
 			String email = (String) response_obj.get("email");
-			String birthyear = (String) response_obj.get("birthyear");
-			String birthday = (String) response_obj.get("birthday");
-			String phone = (String) response_obj.get("mobile");
-
-			String birth = birthyear + birthday.replaceAll("-", "");
-
+			
+			logger.info("nickname : " + nickname);
+			logger.info("email : " + email);
+			
 			// 유저 테이블에서 회원 정보 조회해 오기
-			Member loginUser = null;
-			Member nUser = memberService.selectSocialLogin(email);
+			Member loginUser = new Member();
 
-			if (nUser == null) {
-				return "redirect:enroll.do?id=" + email + "&email=" + email + "&birth=" + birth + "&phone=" + phone
-						+ "&passWd=DefaultSSMPassword!";
+			if (memberService.selectSocialLogin(email) == null) {
+				loginUser.setMemId(email);
+				loginUser.setMemName(nickname);
+				loginUser.setMemNickNm(nickname);
+				loginUser.setMemSocial("NAVER");
+				if (memberService.insertSocialMember(loginUser) > 0) {
+					if(memberService.updateLoginLog(loginUser.getMemId()) > 0) {
+						session.setAttribute("loginUser", loginUser);
+						status.setComplete();
+						return "redirect:main.do";						
+					} else {
+						return "common/error";						
+					}
+				} else {
+					return "common/error";
+				}
 			} else {
-				loginUser = nUser;
+				loginUser = memberService.selectSocialLogin(email);
 				session.setAttribute("loginUser", loginUser);
 				status.setComplete();
 				return "redirect:main.do";
@@ -183,11 +190,12 @@ public class MemberController {
 		}
 	}
 
-	// 소셜 로그인 구현(구글) | 2024. 10. 07 작성중
+	// 소셜 로그인 구현(구글) | 2024. 10. 08 수정 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping(value = "googleLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String moveGoogleLoginPage(@RequestParam String code, @RequestParam String state, Model model,
 			HttpSession session, SessionStatus status) throws Exception {
+		
 		OAuth2AccessToken node = googleloginAuth.getAccessToken(session, code, state);
 
 		if (node == null) {
@@ -203,13 +211,26 @@ public class MemberController {
 			String name = (String) jsonObj.get("name");
 			String email = (String) jsonObj.get("email");
 
-			Member loginUser = null;
-			Member gUser = memberService.selectSocialLogin(email);
+			Member loginUser = new Member();
 
-			if (gUser == null) {
-				return "redirect:enroll.do?memId=" + email + "&memName=" + name + "&memPw=DefaultSSMPassword!";
+			if (memberService.selectSocialLogin(email) == null) {
+				loginUser.setMemId(email);
+				loginUser.setMemName(name);
+				loginUser.setMemNickNm(name);
+				loginUser.setMemSocial("GOOGLE");
+				if (memberService.insertSocialMember(loginUser) > 0) {
+					if(memberService.updateLoginLog(loginUser.getMemId()) > 0) {
+						session.setAttribute("loginUser", loginUser);
+						status.setComplete();
+						return "redirect:main.do";
+					} else {
+						return "common/error";						
+					}
+				} else {
+					return "common/error";
+				}
 			} else {
-				loginUser = gUser;
+				loginUser = memberService.selectSocialLogin(email);
 				session.setAttribute("loginUser", loginUser);
 				status.setComplete();
 				return "redirect:main.do";
@@ -220,7 +241,8 @@ public class MemberController {
 	// 회원가입 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping("enrollPage.do")
-	public String moveEnrollPage() {
+	public String moveEnrollPage(HttpSession session, SessionStatus status, Model model) {
+		addAuthURLsMethod(model, session);
 		logger.info("회원가입 페이지 요청");
 		return "member/enrollPage";
 	}
@@ -259,7 +281,7 @@ public class MemberController {
 		}
 	} // 내 정보 조회 페이지 출력
 
-	// 내가 쓴 댓글(가이드게시판) 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
+	// 내가 쓴 댓글(가이드게시판) 페이지 출력
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myGuideBoardComment.do")
 	public String moveMyinfoCommentGuideBoard() {
@@ -267,7 +289,7 @@ public class MemberController {
 		return "member/myinfo/comment/guideBoard";
 	}
 
-	// 내가 쓴 댓글(경로게시판) 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
+	// 내가 쓴 댓글(경로게시판) 페이지 출력
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myRouteBoardComment.do")
 	public String moveMyinfoCommentRouteBoard() {
@@ -322,7 +344,7 @@ public class MemberController {
 		}
 	}
 
-	// 관리자 : 회원 상세 조회 페이지 출력 (정은지) | 2024. 10. 07 구현 완료
+	// 관리자 : 회원 상세 조회 페이지 출력 | 2024. 10. 07 수정 및 구현 완료
 	// ejjung02 (정은지) => tsoh03 (오정민)
 	@RequestMapping(value = "memberDetail.do")
 	public ModelAndView moveMemberDetail(ModelAndView mv, @RequestParam("memId") String memId, HttpSession session) {
@@ -388,7 +410,7 @@ public class MemberController {
 
 	// 회원가입 기능 | 2024. 09. 28 작성 및 테스트 성공
 	// jmoh03 (오정민)
-	@RequestMapping(value = "enroll.do", method = RequestMethod.POST)
+	@RequestMapping(value = "enroll.do", method = {RequestMethod.GET, RequestMethod.POST})
 	public String enrollMethod(Member member, Model model, HttpServletRequest request) {
 		logger.info("enroll.do : " + member);
 
@@ -494,7 +516,7 @@ public class MemberController {
 //
 //	} // 비밀번호 찾기 기능
 
-	// 내 정보 수정 기능
+	// 내 정보 수정 기능 | 2024. 09. 30 작정 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myinfo/update.do", method = RequestMethod.POST)
 	public String myinfoUpdateMethod(Member member, Model model, HttpServletRequest request,
@@ -521,7 +543,7 @@ public class MemberController {
 		}
 	} // 내 정보 수정 기능
 
-	// 회원 탈퇴 기능
+	// 회원 탈퇴 기능 | 2024. 09. 30 작정 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myinfo/left.do")
 	public String memberLeftMethod(@RequestParam("memId") String memId, Model model) {
@@ -574,24 +596,57 @@ public class MemberController {
 //		return jOb.toJSONString();
 //	}
 
-	// 관리자 : 회원 정보 수정 기능
-	// ejjung02 (정은지)
+	// 관리자 : 회원 정보 수정 기능 | 2024. 10. 08 작정 및 테스트 성공
+	// ejjung02 (정은지) => jmoh03 (오정민)
 	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.POST)
-	public String memberUpdateMethod() {
-		return "memberDetail.do";
+	public String memberUpdateMethod(Member member, Model model, HttpServletRequest request) {
+		logger.info("memberUpdate.do 접근");
+		if(memberService.updateMember(member) > 0) {
+			logger.info(member.getMemName()+"님의 유저 정보 수정 완료.");
+			return "redirect:memberDetail.do?memId="+member.getMemId();			
+		} else {
+			model.addAttribute("message", member.getMemName()+"님의 회원 정보 수정에 실패하였습니다.");
+			return "common/error";
+		}
 	} // 관리자 : 회원 정보 수정 기능
 
-	// 관리자 : 회원 계정 조치 기능
-	// ejjung02 (정은지)
-	@RequestMapping(value = "memberAccountUpdate.do", method = RequestMethod.POST)
-	public String memberAccountUpdateMethod() {
-		return "memberDetail.do";
+	// 관리자 : 회원 계정 조치 기능 | 2024. 10. 08 작정 및 테스트 성공
+	// ejjung02 (정은지) => jmoh03 (오정민)
+	@RequestMapping(value = "memberAccountUpdate.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String memberAccountUpdateMethod(Member member, Model model, HttpServletRequest request) {
+		
+		if(memberService.updateMemberAccount(member.getMemId()) > 0) {
+			return "redirect:memberDetail.do?memId="+member.getMemId();			
+		} else {
+			model.addAttribute("message", "계정조치에 실패하였습니다.");
+			return "common/error";
+		}
 	} // 관리자 : 회원 계정 조치 기능
 
-	// 관리자 : 회원 관리자 부여 기능
-	// ejjung02 (정은지)
-	@RequestMapping(value = "memberAdmin.do", method = RequestMethod.POST)
-	public String memberAdminMethod() {
-		return "memberDetail.do";
+	// 관리자 : 회원 관리자 부여 기능 | 2024. 10. 08 작정 및 테스트 성공
+	// ejjung02 (정은지) => jmoh03 (오정민)
+	@RequestMapping(value = "memberAdmin.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String memberAdminMethod(Member member, Model model, HttpServletRequest request) {
+		
+		if(memberService.updateMemberAdmin(member.getMemId()) > 0) {
+			return "redirect:memberDetail.do?memId="+member.getMemId();			
+		} else {
+			model.addAttribute("message", "관리자 부여에 실패하였습니다.");
+			return "common/error";
+		}
 	} // 관리자 : 회원 관리자 부여 기능
+	
+	// 관리자 : 회원 관리자 박탈 기능 | 2024. 10. 08 작성 및 테스트 성공
+	// tsoh03 (오정민)
+	@RequestMapping(value = "memberAdminDelete.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public String memberAdminDeleteMethod(Member member, Model model, HttpServletRequest request) {
+		
+		if(memberService.updateMemberAdminDelete(member.getMemId()) > 0) {
+			return "redirect:memberDetail.do?memId="+member.getMemId();
+		} else {
+			model.addAttribute("message", "관리자 박탈에 실패하였습니다.");
+			return "common/error";
+		}
+		
+	}
 }

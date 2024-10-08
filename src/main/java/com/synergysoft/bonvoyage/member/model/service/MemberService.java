@@ -10,10 +10,8 @@ import com.synergysoft.bonvoyage.member.model.dto.Member;
 public interface MemberService {
 	
 	Member selectLogin(String memId);
-	String getReturnAccessToken(String code); // 2024. 10. 04 작성 및 테스트 성공
-	Map<String, Object> getMemberInfo(String kakaoToken); // 2024. 10. 04 작성 및 테스트 성공
-	Map<String, Object> naverConnectionCheck(Map<String, Object> apiJson); // 2024. 10. 05 작성
-	Member userNaverLoginPro(Map<String, Object> apiJson); // 2024. 10. 05 작성
+	String getReturnAccessToken(String code);
+	Map<String, Object> getMemberInfo(String kakaoToken);
 	Member selectSocialLogin(String memId);
 	Member selectSocialLogin(Member member);
 	Member selectIDSearch(String memPhone);
@@ -33,8 +31,9 @@ public interface MemberService {
 	int updateMyinfo(Member member);
 	int updateMemberPw(Member member);
 	int updateLeft(String memId);
-	int updateMember(Member member);
+	int updateMember(Member member); // 구현중
 	int updateMemberAccount(String memId);
 	int updateMemberAdmin(String memId);
+	int updateMemberAdminDelete(String memId);
 	
 }

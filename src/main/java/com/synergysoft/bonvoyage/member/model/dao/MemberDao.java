@@ -123,4 +123,9 @@ public class MemberDao {
 		return sqlSessionTemplate.update("memberMapper.updateMemberAdmin", memId);
 	}
 
+	// 관리자 : 회원 관리자 박탈
+	public int updateMemberAdminDelete(String memId) {
+		return sqlSessionTemplate.update("memberMapper.updateMemberAdminDelete", memId);
+	}
+
 }

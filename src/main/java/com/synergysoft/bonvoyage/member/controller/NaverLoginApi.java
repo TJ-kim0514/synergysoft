@@ -1,4 +1,4 @@
-package com.synergysoft.bonvoyage.member.model.service;
+package com.synergysoft.bonvoyage.member.controller;
 
 import com.github.scribejava.core.builder.api.DefaultApi20;
 
