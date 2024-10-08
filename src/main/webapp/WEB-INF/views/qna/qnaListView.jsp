@@ -21,11 +21,13 @@
     <h1>Q&A 게시판</h1>
 
     <%-- QnA 입력페이지 이동 --%>
+    <c:if test="${!empty sessionScope.loginUser }">
         <div>
             <button onclick="window.location.href='miqna.do'">
                 Q&A 작성
             </button>
         </div>
+    </c:if>    
     <%-- 항목별 검색기능 --%>
     <form method="get" action="ssqna.do" id="ss">
         <select name="action" id="search">

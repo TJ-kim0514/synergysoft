@@ -63,6 +63,22 @@ public class QnaServiceImpl implements QnaService{
 	}
 	//검색용***************************************************
 	
+	// QnA 등록용
+	@Override
+	public int insertQna(Qna qna) {
+		return qnaDao.insertQna(qna);
+	}
+	
+	// QnA 상세보기
+	@Override
+	public Qna moveSelectQna(String qnaId) {
+		return qnaDao.moveSelectQna(qnaId);
+	}
+	@Override
+	public int updateAdminQna(Qna qna) {
+		return qnaDao.updateAdminQna(qna);
+	}
+	
 	
 	
 }

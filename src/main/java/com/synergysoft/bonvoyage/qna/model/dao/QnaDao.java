@@ -60,4 +60,19 @@ public class QnaDao {
 		return (ArrayList<Qna>)list;
 	}
 	// 검색용**************************************************
+	
+	// qna 입력용
+	public int insertQna(Qna qna) {
+		return sqlSessionTemplate.insert("qnaMapper.insertQna", qna);
+	}
+	
+	// qna 상세보기
+	public Qna moveSelectQna(String qnaId) {
+		return sqlSessionTemplate.selectOne("qnaMapper.moveSelectQna",qnaId);
+	}
+	
+	// qna 관리자 답변
+	public int updateAdminQna(Qna qna) {
+		return sqlSessionTemplate.update("qnaMapper.updateAdminQna",qna);
+	}
 }
