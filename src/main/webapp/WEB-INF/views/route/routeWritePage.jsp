@@ -28,6 +28,7 @@
 	}
 	
 </style>
+
 </head>
 <body>
 <%-- <c:import url="/WEB-INF/views/common/menubar.jsp"/> --%>
@@ -57,7 +58,7 @@
 		 	</tr>
 		 	<tr><th>장소사진첨부</th>
 		 		<td>
-		 			<input type="file" id="routePlacePhoto2" name="ofile11">
+		 			<input type="file" id="routePlacePhoto1" name="ofile11">
 		 		</td>
 		 	</tr>
 		 	<tr><th>장소설명</th>

@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.route.model.dto.Route;
 
 @Repository("RouteDao")
@@ -14,8 +15,8 @@ public class RouteDao {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	public ArrayList<Route> selectAllRoute() {
-		List<Route> list = sqlSessionTemplate.selectList("routeMapper.selectAllRoute");
+	public ArrayList<Route> selectAllRoute(Paging paging) {
+		List<Route> list = sqlSessionTemplate.selectList("routeMapper.selectAllRoute", paging);
 		return (ArrayList<Route>)list;
 	}
 
@@ -25,5 +26,17 @@ public class RouteDao {
 
 	public Route selectRoute(String routeBoardId) {
 		return sqlSessionTemplate.selectOne("routeMapper.selectRoute", routeBoardId);
+	}
+
+	public int selectListCount() {
+		return sqlSessionTemplate.selectOne("routeMapper.selectListCount");
+	}
+
+	public int updateRoute(Route route) {
+		return sqlSessionTemplate.update("routeMapper.updateRoute", route);
+	}
+
+	public int deleteRoute(String routeBoardId) {
+		return sqlSessionTemplate.delete("routeMapper.deleteRoute", routeBoardId);
 	}
 }
