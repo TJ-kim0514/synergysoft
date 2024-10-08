@@ -27,53 +27,27 @@
 	<br>
 
 	<%-- 조회된 공지사항 목록 출력 --%>
-	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
 		<table align="center" width="700" border="1" cellspacing="0"
 			cellpadding="5">
 			<tr align="center">
 				<th>번호</th>
-				<th>게시글 제목</th>
 				<th>신고 사유</th>
 				<th>신고자</th>
 				<th>날짜</th>
 			</tr>
-			<c:forEach items="${ requestScope.report }" var="r">
+			<c:forEach items="${ requestScope.list }" var="r">
 				<tr align="center">
 					<td>${ r.reportId }</td>
-					<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.title }</a></td>
-					<td>${ r.reportingReason }</td>
+					<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.reportingReason }</a></td>
 					<td>익명</td>
 					<td><fmt:formatDate value="${ r.reportDate }"
 							pattern="yyyy-MM-dd" /></td>
 				</tr>
 			</c:forEach>
 		</table>
-	</c:if>
 	<br>
-	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'USER' }">
-		<table align="center" width="700" border="1" cellspacing="0"
-			cellpadding="5">
-			<tr align="center">
-				<th>번호</th>
-				<th>게시글 제목</th>
-				<th>신고 사유</th>
-				<th>신고자</th>
-				<th>날짜</th>
-			</tr>
-			<c:forEach items="${ requestScope.report }" var="r">
-				<c:if test="${ sessionScope.loginUser.memId eq r.reportUserId  }">
-					<tr align="center">
-						<td>${ r.reportId }</td>
-						<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.title }</a></td>
-						<td>${ r.reportingReason }</td>
-						<td>${ r.reportUserId  }</td>
-						<td><fmt:formatDate value="${ r.reportDate }"
-								pattern="yyyy-MM-dd" /></td>
-					</tr>
-				</c:if>
-			</c:forEach>
-		</table>
-	</c:if>
+	
+			
 	<%-- 페이징 출력 뷰 포함 처리 --%>
 	<c:import url="/WEB-INF/views/common/pagingView.jsp" />
 	<hr>

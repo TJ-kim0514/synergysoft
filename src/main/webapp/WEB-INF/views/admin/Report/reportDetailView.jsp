@@ -43,13 +43,12 @@ function requestDelete(){
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 <hr>
 
-<h2 align="center">${ report.reportId } 번 신고글 상세보기</h2>
+<h2 align="center">${ report.reportId } 번 신고 사유 상세보기</h2>
 <br>
 <table align="center" width="700" border="1" cellspacing="0" cellpadding="5">
-	<tr><th>제 목</th><td>${ report.title }</td></tr>
+	<tr><th>신고내용</th><td>${ report.reportingReason }</td></tr>
 	<tr><th>등록날짜</th>
 		<td><fmt:formatDate value="${ report.reportDate }" pattern="yyyy-MM-dd" /></td></tr>
-	<tr><th>신고내용</th><td>${ report.reportingReason }</td></tr>
 	<tr><th>신고상세내용</th><td>${ report.detail }</td></tr>
 	<tr><th colspan="2">
 	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
