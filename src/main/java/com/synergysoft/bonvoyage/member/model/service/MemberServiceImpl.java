@@ -127,18 +127,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	// 네이버 연결 체크 2024. 10. 05 작성
-	public Map<String, Object> naverConnectionCheck(Map<String, Object> apiJson) {
-		return null;
-	}
-	
-	@Override
-	// 네이버 로그인 테스트 2024. 10. 05 작성
-	public Member userNaverLoginPro(Map<String, Object> apiJson) {
-		return null;
-	}
-	
-	@Override
 	// 소셜 로그인
 	public Member selectSocialLogin(Member member) {
 		return memberDao.selectSocialLogin(member);
@@ -256,6 +244,12 @@ public class MemberServiceImpl implements MemberService {
 	// 관리자 : 회원 관리자 부여
 	public int updateMemberAdmin(String memId) {
 		return memberDao.updateMemberAdmin(memId);
+	}
+
+	@Override
+	// 관리자 : 회원 관리자 박탈
+	public int updateMemberAdminDelete(String memId) {
+		return memberDao.updateMemberAdminDelete(memId);
 	}
 
 }
