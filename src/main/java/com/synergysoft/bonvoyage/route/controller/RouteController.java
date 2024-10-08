@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.synergysoft.bonvoyage.common.FileNameChange;
-import com.synergysoft.bonvoyage.member.model.dto.Member;
+import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.place.model.dto.Place;
 import com.synergysoft.bonvoyage.place.model.service.PlaceService;
 import com.synergysoft.bonvoyage.route.model.dto.Route;
@@ -45,14 +45,68 @@ public class RouteController {
 		return "route/routeWritePage";
 	}
 	
+	// 경로추천게시판 수정페이지 이동 메소드 : moveUpdateRoute.do
+	@RequestMapping("moveUpdateRoute.do")
+	public ModelAndView moveUpdatePage(ModelAndView mv, @RequestParam("no") String routeBoardId) {
+		Route route = routeService.selectRoute(routeBoardId);
+		ArrayList<Place> place = placeService.selectPlace(routeBoardId);
+		
+		if(route != null) {
+			mv.addObject("route", route);
+			mv.addObject("place", place);
+			mv.setViewName("route/routeUpdateView");
+		}else {
+			mv.addObject("message", "수정페이지 이동 실패");
+			mv.setViewName("common/error");
+		}
+		
+		return mv;
+	}
+	
 	
 	// 경로추천게시판 전체 출력 메소드 : routeall.do
 	@RequestMapping("routeall.do")
-	public ModelAndView selectAllRouteMethod(ModelAndView mv) {
-		ArrayList<Route> list = routeService.selectAllRoute();
-		mv.addObject("list", list);
-		mv.setViewName("route/routeall");
-		return mv;
+	public String selectAllRouteMethod(Model model,
+														@RequestParam(name="page", required=false) String page,
+														@RequestParam(name="limit", required=false) String slimit,
+														@RequestParam(name="groupLimit", required=false) String glimit) {
+		
+		//paging 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage=1;
+		if(page!=null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 공지글 갯수 (기본값 10개 세팅)
+		int limit =10;
+		if(slimit !=null) {
+			limit= Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit =5;
+		if(glimit!=null) {
+			groupLimit=Integer.parseInt(glimit);
+		}
+		// 총 목록 갯수 조회
+		int listCount = routeService.selectListCount();
+		logger.info("공지사항 총 갯수 : " +listCount);
+		
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "routeall.do", groupLimit);
+		paging.calculate();
+		//paging 세팅---------------------------------------------------------------------------
+	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
+	    ArrayList<Route> list = routeService.selectAllRoute(paging);  // 전체목록 받아오기
+	    logger.info("list : " + list);
+	    if(list != null && list.size() > 0) {
+	        model.addAttribute("list", list);
+			model.addAttribute("paging",paging);
+			model.addAttribute("currentPage",currentPage);
+			return "route/routeall";
+	    }else {
+	    	model.addAttribute("message", "목록출력실패");
+	    	return "common/error";
+	    }
 	}//selectAllRouteMethod()
 	
 	// 경로추천게시판 등록 메소드 : inroute.do
@@ -267,10 +321,264 @@ public class RouteController {
 		return mv;
 	}
 	
+	// 경로추천게시판 수정 요청 처리 메소드 : uroute.do
+	@RequestMapping(value="uroute.do", method=RequestMethod.POST)
+	public String routeUpdateMethod(Route route, Model model, HttpServletRequest request,
+													@RequestParam(name="ofile11", required=false) MultipartFile ofile1,
+													@RequestParam(name="ofile22", required=false) MultipartFile ofile2,
+													@RequestParam(name="ofile33", required=false) MultipartFile ofile3,
+													@RequestParam(name="ofile44", required=false) MultipartFile ofile4,
+													@RequestParam(name="ofile55", required=false) MultipartFile ofile5) {
+		// 전송확인
+		logger.info("uroute.do : " + route );
+		
+		String savePath = request.getSession().getServletContext().getRealPath("resources/route_upfiles");
+		
+		// 첨부파일 삭제
+		if(!ofile1.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + route.getRfile1()).delete();
+			
+			// route 안의 파일정보 삭제
+			route.setOfile1(null);
+			route.setRfile1(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = ofile1.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					ofile1.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			route.setOfile1(fileName);
+			route.setRfile1(renameFileName);
+		}
+
+		if(!ofile2.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + route.getRfile2()).delete();
+			
+			// route 안의 파일정보 삭제
+			route.setOfile2(null);
+			route.setRfile2(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = ofile2.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					ofile2.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			route.setOfile2(fileName);
+			route.setRfile2(renameFileName);
+		}
+		
+		
+		if(!ofile3.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + route.getRfile3()).delete();
+			
+			// route 안의 파일정보 삭제
+			route.setOfile3(null);
+			route.setRfile3(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = ofile3.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					ofile3.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			route.setOfile3(fileName);
+			route.setRfile3(renameFileName);
+		}
+		
+		
+		if(!ofile4.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + route.getRfile4()).delete();
+			
+			// route 안의 파일정보 삭제
+			route.setOfile4(null);
+			route.setRfile4(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = ofile4.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					ofile4.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			route.setOfile4(fileName);
+			route.setRfile4(renameFileName);
+		}
+		
+		
+		if(!ofile5.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + route.getRfile5()).delete();
+			
+			// route 안의 파일정보 삭제
+			route.setOfile5(null);
+			route.setRfile5(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = ofile5.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					ofile5.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			route.setOfile5(fileName);
+			route.setRfile5(renameFileName);
+		}
+				
+		if (routeService.updateRoute(route) > 0) {
+			return "redirect:routedetail.do?no=" + route.getRouteBoardId();
+		}else {
+			model.addAttribute("message", "수정 실패");
+			return "common/error";
+		}
+		
+		
+		
+		
+		
+		
+		
+	}
 	
-	
-	
-	
+	// 경로추천게시판 삭제 요청 처리 메소드 : droute.do
+	@RequestMapping("droute.do")
+	public String routeDeleteMethod(Model model, HttpServletRequest request,
+													@RequestParam("no") String routeBoardId,
+													@RequestParam(name="rfile11", required=false) String renameFileName1,
+													@RequestParam(name="rfile22", required=false) String renameFileName2,
+													@RequestParam(name="rfile33", required=false) String renameFileName3,
+													@RequestParam(name="rfile44", required=false) String renameFileName4,
+													@RequestParam(name="rfile55", required=false) String renameFileName5) {
+		
+		logger.info("droute.do : " + renameFileName1);
+		
+		String savePath = request.getSession().getServletContext().getRealPath("resources/route_upfiles");
+		if(routeService.deleteRoute(routeBoardId) > 0 ) {
+			if (renameFileName1 != null && renameFileName1.length() > 0) {
+				
+				new File(savePath + "\\" + renameFileName1).delete();
+			}
+			
+			if (renameFileName2 != null && renameFileName2.length() > 0) {
+				new File(savePath + "\\" + renameFileName2).delete();
+			}
+			
+			if (renameFileName3 != null && renameFileName3.length() > 0) {
+				new File(savePath + "\\" + renameFileName3).delete();
+			}
+			
+			if (renameFileName4 != null && renameFileName4.length() > 0) {
+				new File(savePath + "\\" + renameFileName4).delete();
+			}
+			
+			if (renameFileName5 != null && renameFileName5.length() > 0) {
+				new File(savePath + "\\" + renameFileName5).delete();
+			}
+			
+			return "redirect:routeall.do?page=1";
+		}else {
+			model.addAttribute("message", "게시글 삭제 실패");
+			return "common/error";
+		}
+	}
 	
 	
 	

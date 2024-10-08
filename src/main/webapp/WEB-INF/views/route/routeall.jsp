@@ -43,6 +43,8 @@
     </tbody>
 </table>
 </div>
+    <%-- 페이징 출력 뷰 포함 처리 --%>
+    <c:import url="/WEB-INF/views/common/pagingView.jsp" />
 <footer>
 <c:import url="/WEB-INF/views/common/footer.jsp"/>
 </footer>
