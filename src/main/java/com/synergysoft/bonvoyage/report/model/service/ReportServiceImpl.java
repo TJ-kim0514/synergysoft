@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.report.model.dao.ReportDao;
 import com.synergysoft.bonvoyage.report.model.dto.Report;
 
@@ -15,47 +16,10 @@ public class ReportServiceImpl implements ReportService {
 	private ReportDao reportDao;
 
 	@Override
-	// 관리자 : 신고 목록 조회
-	public ArrayList<Report> selectReport(Paging paging) {
-		return reportDao.selectReport(paging);
-	}
-
-	@Override
-	// 유저 : 내 신고 목록 조회
-	public ArrayList<Report> selectReportMe(String reportId) {
-		return reportDao.selectReportMe(reportId);
-	}
-
-	@Override
-	// 관리자 : 신고 상세 조회
 	public Report selectReportDetail(String reportId) {
 		return reportDao.selectReportDetail(reportId);
 	}
-
-	@Override
-	// 유저 : 내 신고 상세 조회
-	public Report selectMyReportDetail(Report report) {
-		return reportDao.selectMyReportDetail(report);
-	}
 	
-	@Override
-	// 관리자용 신고 수 조회
-	public int selectReportListCount() {
-		return reportDao.selectReportListCount();
-	}
-
-	@Override
-	// 유저용 신고 수 조회
-	public int selectAllReportMe(String memId) {
-		return reportDao.selectAllReportMe(memId);
-	}
-	
-	@Override
-	//
-	public ArrayList<Report> selectAllReport(Paging paging) {
-	return reportDao.selectAllReport(paging);
-	}
-
 	@Override
 	// 유저&관리자 : 신고 등록
 	public int insertReport(Report report) {
@@ -79,6 +43,27 @@ public class ReportServiceImpl implements ReportService {
 	public int deleteReport(String reportId) {
 		return reportDao.deleteReport(reportId);
 
+	}
+
+	@Override
+	// TODO Auto-generated method stub
+	public int selectReportUserListCount(String reportId) {
+		return reportDao.selectReportUserListCount(reportId);
+	}
+
+	@Override
+	public int selectReportAllListCount() {
+		return reportDao.selectReportAllListCount();
+	}
+
+	@Override
+	public ArrayList<Report> selectList(Paging paging) {
+		return reportDao.selectList(paging);
+	}
+
+	@Override
+	public ArrayList<Report> selectList(Search search) {
+		return reportDao.selectList(search);
 	}
 
 }

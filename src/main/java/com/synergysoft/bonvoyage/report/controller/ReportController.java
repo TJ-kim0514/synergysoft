@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
-import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 import com.synergysoft.bonvoyage.report.model.dto.Report;
 import com.synergysoft.bonvoyage.report.model.service.ReportService;
 
@@ -29,7 +28,7 @@ public class ReportController {
 	private ReportService reportService;
 	// 뷰 페이지 이동 처리 메소드
 
-	// 페이징 처리하기
+/*	// 페이징 처리하기
 	@RequestMapping("reP.do")
 	public String reportListMethod(Model model, @RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String slimit,
@@ -42,7 +41,7 @@ public class ReportController {
 		if (page != null) {
 			currentPage = Integer.parseInt(page);
 		}
-		// 한페이지에 출력할 공지글 갯수 (기본값 10개 세팅)
+		// 한페이지에 출력할 신고글 갯수 (기본값 10개 세팅)
 		int limit = 10;
 		if (slimit != null) {
 			limit = Integer.parseInt(slimit);
@@ -75,7 +74,7 @@ public class ReportController {
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	}
-
+*/
 	// 새 신고 등록 페이지 이동 처리
 	@RequestMapping("reportWrite.do")
 	public ModelAndView moveWritePage(ModelAndView mv, HttpSession session) {
@@ -104,27 +103,8 @@ public class ReportController {
 
 		if (report != null) {
 			mv.addObject("report", report);
-
-			Member loginUser = (Member) session.getAttribute("loginUser");
-
-			if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
-				mv.setViewName("admin/report/reportDetailView");
-			} else {
-				if (loginUser != null && loginUser.getMemType().equals("USER")) {
-					report.setReportUserId(loginUser.getMemId());
-					report.setReportId(reportId);
-					report = reportService.selectMyReportDetail(report);
-					if (report != null) {
-						mv.setViewName("admin/report/reportDetailView");
-					} else {
-						mv.addObject("message", "잘못된 접근입니다.");
-						mv.setViewName("common/error");
-					}
-				} else {
-					mv.addObject("message", "잘못된 접근입니다.");
-					mv.setViewName("common/error");
-				}
-			}
+			mv.setViewName("admin/report/reportDetailView");
+			
 		} else {
 			mv.addObject("message", reportId + "번 신고글 상세보기 요청 실패");
 			mv.setViewName("common/error");
@@ -159,81 +139,47 @@ public class ReportController {
 		int groupLimit = 5;
 		if (glimit != null) {
 			groupLimit = Integer.parseInt(glimit);
-		}
-		
-		int resultAllCount = reportService.selectReportListCount();
-		
-		// 총 목록 갯수 조회
-//	    if(action.equals("title")) {
-//	    	listCount = reportService.selectSearchTitleListCount(keyword);
-//	    } else if(action.equals("content")) {
-//	    	listCount = reportService.selectSearchContentListCount(keyword);
-//	    }
-	    
-//	    logger.info("신고글 총 갯수 : " +listCount);
-	    
-	 // 페이징 처리 값생성
- 		
+		}	
+	 
  		//paging 세팅---------------------------------------------------------------------------
- 	    
- 	    // 검색시 사용할 값 전송 객체생성 및 값 입력
- 	    
- 	    
- 	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
-// 	    if(action.equals("title")) {
-// 	    	list = reportService.selectSearchTitleReport(search);
-// 	    } else if(action.equals("content")) {
-// 	    	list = reportService.selectSearchContentReport(search);
-// 	    }
-	    
-		// 서비스롤 목록 조회 요청하고 결과 받기
+ 	// 서비스롤 목록 조회 요청하고 결과 받기
+		//관리자인지 일반회원인지 확인
 		Member loginUser = (Member) session.getAttribute("loginUser");
-
-		if (resultAllCount > 0 && loginUser != null
-				&& loginUser.getMemType().equals("ADMIN")) {
-			int listCount = reportService.selectReportListCount();
-			Paging paging = new Paging(listCount, limit, currentPage, "reportList.do", groupLimit);
-	 		paging.calculate();
+//관리자이면
+		int listCount = 0;
+		if (loginUser != null 	&& loginUser.getMemType().equals("ADMIN")) {
+			//전체 신고글 목록갯수 조회
+			 listCount = reportService.selectReportAllListCount();
 			
-	 		Search search = new Search();
-//	 	    search.setKeyword(keyword);
-	 	    search.setStartRow(paging.getStartRow());
-	 	    search.setEndRow(paging.getEndRow());
-	 	    ArrayList<Report> list =null;
-	 		
-	 	   ArrayList<Report> reportList = reportService.selectReport(paging);
-	 	    
-	 		mv.addObject("list", list);
-			mv.addObject("paging",paging);
-			mv.addObject("currentPage",currentPage);
-//			mv.addObject("action",action);
-//			mv.addObject("keyword",keyword);
-			mv.addObject("report", reportList);
-			mv.setViewName("admin/report/reportListView");
-
-		} else if (resultAllCount > 0 && loginUser != null
-				&& loginUser.getMemType().equals("USER")) {
-			int listCount = reportService.selectReportListCount();
-			Paging paging = new Paging(listCount, limit, currentPage, "reportList.do", groupLimit);
-	 		paging.calculate();
-			
-	 		Search search = new Search();
-//	 	    search.setKeyword(keyword);
-	 	    search.setStartRow(paging.getStartRow());
-	 	    search.setEndRow(paging.getEndRow());
-	 	    ArrayList<Report> list =null;
-	 		
-	 	   ArrayList<Report> reportList = reportService.selectReport(paging);
-	 	    
-			mv.addObject("list", list);
-			mv.addObject("paging",paging);
-			mv.addObject("currentPage",currentPage);
-//			mv.addObject("action",action);
-//			mv.addObject("keyword",keyword);
-			mv.addObject("report", reportList);
-			mv.setViewName("admin/report/reportListView");
-		} else {
-//			mv.addObject("message", action + "에 대한 " + keyword + "검색결과가 존재하지 않습니다.");
+		} else if ( loginUser != null && loginUser.getMemType().equals("USER")) {
+			 listCount = reportService.selectReportUserListCount(loginUser.getMemId());
+		} 		
+		
+		//페이징 계산
+		Paging paging = new Paging(listCount, limit, currentPage, "reportList.do", groupLimit);
+ 		paging.calculate();
+ 		
+ 		ArrayList<Report> list = null;
+ 		if (loginUser != null 	&& loginUser.getMemType().equals("ADMIN")) {
+			//전체 신고글 목록 조회
+ 			 list = reportService.selectList(paging);			
+		} else if ( loginUser != null && loginUser.getMemType().equals("USER")) {
+			//회원이 등록한 목록 조회
+			Search search = new Search();
+			search.setKeyword(loginUser.getMemId());
+			search.setStartRow(paging.getStartRow());
+			search.setEndRow(paging.getEndRow());
+			list = reportService.selectList(search);
+		} 		 		
+ 	   
+ 	    if(list !=null && list.size() > 0) {
+		mv.addObject("list", list);
+		mv.addObject("paging",paging);
+		mv.addObject("currentPage",currentPage);
+		mv.setViewName("admin/report/reportListView");
+ 	    }
+		else {
+			mv.addObject("message", "신고글 목록 조회 실패!");
 			mv.setViewName("common/error");
 		}
 
