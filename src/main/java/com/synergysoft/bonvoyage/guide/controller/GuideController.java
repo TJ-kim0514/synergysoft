@@ -250,23 +250,108 @@ public class GuideController {
 	}//gmoveUpdatePage() end
 
 
-	// 공지글 수정 요청 처리용 (파일 업로드 기능 제거)
+	// 공지글 수정 요청 처리용 (파일 업로드 기능 추가)
 	@RequestMapping(value = "gupdate.do", method = RequestMethod.POST)
 	public String guideUpdate(Guide guide, Model model, HttpServletRequest request, 
-	        @RequestParam(name = "deleteFlag", required = false) String delFlag) {
-	    
+	        @RequestParam(name = "deleteFlag1", required = false) String delFlag1,
+	        @RequestParam(name = "deleteFlag2", required = false) String delFlag2,
+	        @RequestParam(name = "deleteFlag3", required = false) String delFlag3,
+	        @RequestParam(name = "deleteFlag4", required = false) String delFlag4,
+	        @RequestParam(name = "deleteFlag5", required = false) String delFlag5,
+	        @RequestParam(name = "gmfiles", required = false) MultipartFile[] gmfiles) {
+
 	    logger.info("gupdate.do : " + guide); // 전송된 값 확인
 	    
-	  
+	    logger.info("deleteFlag1 : " +  delFlag1);
+	    logger.info("gmfiles : " +  gmfiles.length);
+	    
+	    
+	    // 파일 저장 경로 설정
+	    String savePath = "D:/ProjectWork/bonvoyage/src/main/webapp/resources/guide_upfiles";
 
-	    if (guideService.updateGuide(guide) > 0) { // 공지글 수정 성공 시
+	    // 파일 처리 변수 선언
+	    String[] ofiles = new String[5];
+	    String[] rfiles = new String[5];
+	    int fileIndex = 0;
+
+	    // 1. 개별 파일 삭제 처리 (논리 연산자의 우선순위를 명확히 하기 위해 괄호 사용)
+	    if (guide.getoFile1() != null && ((delFlag1 != null && delFlag1.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
+	        new File(savePath + "\\" + guide.getrFile1()).delete();
+	        guide.setoFile1(null);
+	        guide.setrFile1(null);
+	    }
+	    
+	    if (guide.getoFile2() != null && ((delFlag2 != null && delFlag2.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
+	        new File(savePath + "\\" + guide.getrFile2()).delete();
+	        guide.setoFile2(null);
+	        guide.setrFile2(null);
+	    }
+	    
+	    if (guide.getoFile3() != null && ((delFlag3 != null && delFlag3.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
+	        new File(savePath + "\\" + guide.getrFile3()).delete();
+	        guide.setoFile3(null);
+	        guide.setrFile3(null);
+	    }
+	    
+	    if (guide.getoFile4() != null && ((delFlag4 != null && delFlag4.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
+	        new File(savePath + "\\" + guide.getrFile4()).delete();
+	        guide.setoFile4(null);
+	        guide.setrFile4(null);
+	    }
+
+	    if (guide.getoFile5() != null && ((delFlag5 != null && delFlag5.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
+	        new File(savePath + "\\" + guide.getrFile5()).delete();
+	        guide.setoFile5(null);
+	        guide.setrFile5(null);
+	    }
+
+	    // 2. 새로운 첨부파일이 있을 때 처리
+	    if (gmfiles != null && gmfiles.length > 0) {
+	        for (MultipartFile file : gmfiles) {
+	            logger.info("업로드된 파일 이름: " + file.getOriginalFilename());
+	            if (!file.isEmpty() && fileIndex < 5) {
+	                // 파일 원본 이름 및 변경된 파일명 생성
+	                String fileName = file.getOriginalFilename();
+	                String renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+
+	                // 파일 저장
+	                try {
+	                    file.transferTo(new File(savePath + "\\" + renameFileName)); // 파일을 실제 경로에 저장
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                    model.addAttribute("message", "파일 저장 실패!");
+	                    return "common/error";
+	                }
+
+	                // 파일명 배열에 저장
+	                ofiles[fileIndex] = fileName;
+	                rfiles[fileIndex] = renameFileName;
+	                fileIndex++;
+	            }
+	        }
+
+	        // 가이드 객체에 파일 정보 저장
+	        guide.setoFile1(ofiles[0]);
+	        guide.setoFile2(ofiles[1]);
+	        guide.setoFile3(ofiles[2]);
+	        guide.setoFile4(ofiles[3]);
+	        guide.setoFile5(ofiles[4]);
+
+	        guide.setrFile1(rfiles[0]);
+	        guide.setrFile2(rfiles[1]);
+	        guide.setrFile3(rfiles[2]);
+	        guide.setrFile4(rfiles[3]);
+	        guide.setrFile5(rfiles[4]);
+	    }
+
+	    // 데이터베이스 업데이트 수행
+	    if (guideService.updateGuide(guide) > 0) { // 공지글 수정 성공시
 	        return "redirect:gdetail.do?guidepostId=" + guide.getGuidepostId();
 	    } else {
 	        model.addAttribute("message", guide.getGuidepostId() + "번 공지글 수정 실패!");
 	        return "common/error";
 	    }
 	}
-
 
 	
 	//삭제하기
