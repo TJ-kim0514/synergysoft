@@ -39,6 +39,7 @@ public class NoticeController {
 	@Autowired
 	private NoticeService noticeService;
 	
+	// 공지사항 전체조회
 	@RequestMapping("sanotice.do")
 	public String selectAllNotice(Model model,
 			@RequestParam(name="page", required=false) String page,
@@ -101,6 +102,17 @@ public class NoticeController {
 			@RequestParam(name="insertFile3", required=false) MultipartFile ifile3
 			) {
 		logger.info("ninsert.do : " + notice);
+		
+		// 세션정보확인
+		HttpSession session = request.getSession();
+		// 로그인 정보저장
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		// 세션 확인후 로그아웃이면 에러 출력
+		if(loginUser == null) {
+			model.addAttribute("message","로그인 정보가 없습니다.");
+			return "common/error";
+		}
 		
 		// 파일 저장 경로 생성
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
@@ -270,6 +282,17 @@ public class NoticeController {
 			@RequestParam(name="delete3", required=false) String delete3
 			) {
 		logger.info("notice : " + notice);
+		
+		// 세션정보확인
+		HttpSession session = request.getSession();
+		// 로그인 정보저장
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		// 세션 확인후 로그아웃이면 에러 출력
+		if(loginUser == null) {
+			model.addAttribute("message","로그인 정보가 없습니다.");
+			return "common/error";
+		}
 		
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
 		

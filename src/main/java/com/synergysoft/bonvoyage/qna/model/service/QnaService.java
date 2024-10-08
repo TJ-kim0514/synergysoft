@@ -18,5 +18,8 @@ public interface QnaService {
 	ArrayList<Qna> selectSearchTitleQna(Search search);
 	ArrayList<Qna> selectSearchUserContentQna(Search search);
 	ArrayList<Qna> selectSearchUserIdQna(Search search);
+	int insertQna(Qna qna);
+	Qna moveSelectQna(String qnaId);
+	int updateAdminQna(Qna qna);
 
 }
