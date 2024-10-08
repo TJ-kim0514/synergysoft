@@ -18,5 +18,15 @@ public class RouteServiceImpl implements RouteService {
 	public ArrayList<Route> selectAllRoute() {
 		return routeDao.selectAllRoute();
 	}
+
+	@Override
+	public int insertRoute(Route route) {
+		return routeDao.insertRoute(route);
+	}
+
+	@Override
+	public Route selectRoute(String routeBoardId) {
+		return routeDao.selectRoute(routeBoardId);
+	}
 	
 }

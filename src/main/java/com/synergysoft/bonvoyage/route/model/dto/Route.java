@@ -15,6 +15,16 @@ public class Route implements java.io.Serializable {
 	private int likeCount;			// 좋아요 수
 	private int totalDuration;		// 총 소요시간
 	private String routeName;		// 추천 경로 이름
+	private String ofile1;
+	private String ofile2;
+	private String ofile3;
+	private String ofile4;
+	private String ofile5;
+	private String rfile1;
+	private String rfile2;
+	private String rfile3;
+	private String rfile4;
+	private String rfile5;
 	
 	public Route() {
 		super();
@@ -29,8 +39,11 @@ public class Route implements java.io.Serializable {
 		this.createdAt = createdAt;
 	}
 
+
 	public Route(String routeBoardId, String userId, String title, String content, String transport, Date createdAt,
-			Date updatedAt, int likeCount, int totalDuration, String routeName) {
+			Date updatedAt, int likeCount, int totalDuration, String routeName, String ofile1, String ofile2,
+			String ofile3, String ofile4, String ofile5, String rfile1, String rfile2, String rfile3, String rfile4,
+			String rfile5) {
 		super();
 		this.routeBoardId = routeBoardId;
 		this.userId = userId;
@@ -42,6 +55,16 @@ public class Route implements java.io.Serializable {
 		this.likeCount = likeCount;
 		this.totalDuration = totalDuration;
 		this.routeName = routeName;
+		this.ofile1 = ofile1;
+		this.ofile2 = ofile2;
+		this.ofile3 = ofile3;
+		this.ofile4 = ofile4;
+		this.ofile5 = ofile5;
+		this.rfile1 = rfile1;
+		this.rfile2 = rfile2;
+		this.rfile3 = rfile3;
+		this.rfile4 = rfile4;
+		this.rfile5 = rfile5;
 	}
 
 	public String getRouteBoardId() {
@@ -126,6 +149,88 @@ public class Route implements java.io.Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	
+	
+	public String getOfile1() {
+		return ofile1;
+	}
+
+	public void setOfile1(String ofile1) {
+		this.ofile1 = ofile1;
+	}
+
+	public String getOfile2() {
+		return ofile2;
+	}
+
+	public void setOfile2(String ofile2) {
+		this.ofile2 = ofile2;
+	}
+
+	public String getOfile3() {
+		return ofile3;
+	}
+
+	public void setOfile3(String ofile3) {
+		this.ofile3 = ofile3;
+	}
+
+	public String getOfile4() {
+		return ofile4;
+	}
+
+	public void setOfile4(String ofile4) {
+		this.ofile4 = ofile4;
+	}
+
+	public String getOfile5() {
+		return ofile5;
+	}
+
+	public void setOfile5(String ofile5) {
+		this.ofile5 = ofile5;
+	}
+
+	public String getRfile1() {
+		return rfile1;
+	}
+
+	public void setRfile1(String rfile1) {
+		this.rfile1 = rfile1;
+	}
+
+	public String getRfile2() {
+		return rfile2;
+	}
+
+	public void setRfile2(String rfile2) {
+		this.rfile2 = rfile2;
+	}
+
+	public String getRfile3() {
+		return rfile3;
+	}
+
+	public void setRfile3(String rfile3) {
+		this.rfile3 = rfile3;
+	}
+
+	public String getRfile4() {
+		return rfile4;
+	}
+
+	public void setRfile4(String rfile4) {
+		this.rfile4 = rfile4;
+	}
+
+	public String getRfile5() {
+		return rfile5;
+	}
+
+	public void setRfile5(String rfile5) {
+		this.rfile5 = rfile5;
 	}
 
 	@Override

@@ -18,4 +18,12 @@ public class RouteDao {
 		List<Route> list = sqlSessionTemplate.selectList("routeMapper.selectAllRoute");
 		return (ArrayList<Route>)list;
 	}
+
+	public int insertRoute(Route route) {
+		return sqlSessionTemplate.insert("routeMapper.insertRoute", route);
+	}
+
+	public Route selectRoute(String routeBoardId) {
+		return sqlSessionTemplate.selectOne("routeMapper.selectRoute", routeBoardId);
+	}
 }

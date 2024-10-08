@@ -167,6 +167,12 @@ public class MemberServiceImpl implements MemberService {
 	public Member selectPWSearch(String memId) {
 		return memberDao.selectPWSearch(memId);
 	}
+	
+	@Override
+	// 회원 정보 찾기
+	public Member selectMemberByEmailId(Member member) {
+		return memberDao.selectMemberByEmailId(member);
+	}
 
 	@Override
 	// 내 정보 조회
@@ -220,6 +226,12 @@ public class MemberServiceImpl implements MemberService {
 	// 내 정보 수정
 	public int updateMyinfo(Member member) {
 		return memberDao.updateMyinfo(member);
+	}
+	
+	@Override
+	// 비밀번호 수정
+	public int updateMemberPw(Member member) {
+		return memberDao.updateMemberPw(member);
 	}
 
 	@Override

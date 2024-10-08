@@ -3,8 +3,6 @@ package com.synergysoft.bonvoyage.member.model.service;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 
@@ -25,6 +23,7 @@ public interface MemberService {
 	int selectMemberListCount();
 	Member selectMemberDetail(String memId);
 	int selectCheckId(String memId);
+	Member selectMemberByEmailId(Member member);
 	
 	int insertMember(Member member);
 	int insertSocialMember(Member member);
@@ -32,6 +31,7 @@ public interface MemberService {
 	int updateLoginLog(String memId);
 	int updateLogoutLog(String memId);
 	int updateMyinfo(Member member);
+	int updateMemberPw(Member member);
 	int updateLeft(String memId);
 	int updateMember(Member member);
 	int updateMemberAccount(String memId);

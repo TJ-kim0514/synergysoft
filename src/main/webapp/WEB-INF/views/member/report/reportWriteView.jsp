@@ -103,17 +103,23 @@ textarea {
 		
 			<tr>
 				<td class="insert" >제목</td>
-				<td><input type="text" name="postId" value="${ report.postId }" readonly></td>
+				<td>
+				<input type="hidden" name="postId" value="${ report.postId }" readonly>
+				<input type="text" name="reportTitle" value="${report.title}">
+				</td>
 			</tr>
 
 			<tr>
 				<td class="insert" >작성자</td>
-				<td><input type="text" name="reportUserId" value="${ sessionScope.loginUser.memNickNm }" readonly></td>
+				<td>
+					<input type="hidden" name="reportUserId" value="${ sessionScope.loginUser.memId }">
+					<input type="text" value="${ sessionScope.loginUser.memNickNm }" readonly>
+				</td>
 			</tr>
 			
 			<tr>
 				<td class="insert">신고내용</td>
-				<td><input type="text" name="adminId" required></td>
+				<td><input type="text" name="detail" required></td>
 			</tr>
 			
 			<tr>

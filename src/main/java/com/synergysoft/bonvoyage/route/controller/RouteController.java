@@ -1,23 +1,43 @@
 package com.synergysoft.bonvoyage.route.controller;
 
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.synergysoft.bonvoyage.common.FileNameChange;
+import com.synergysoft.bonvoyage.member.model.dto.Member;
+import com.synergysoft.bonvoyage.place.model.dto.Place;
+import com.synergysoft.bonvoyage.place.model.service.PlaceService;
 import com.synergysoft.bonvoyage.route.model.dto.Route;
 import com.synergysoft.bonvoyage.route.model.service.RouteService;
+import com.synergysoft.bonvoyage.routedata.model.dto.RouteData;
+import com.synergysoft.bonvoyage.routedata.model.service.RouteDataService;
 
 @Controller
 public class RouteController {
 	private static final Logger logger = LoggerFactory.getLogger(RouteController.class);
 	
 	@Autowired
-	private RouteService noticeService;
+	private RouteService routeService;
+	
+	@Autowired
+	private PlaceService placeService;
+	
+	@Autowired
+	private RouteDataService routeDataService;
 	
 	// 뷰 페이지 이동 메소드
 	@RequestMapping("moveWriteRoute.do")
@@ -26,16 +46,226 @@ public class RouteController {
 	}
 	
 	
+	// 경로추천게시판 전체 출력 메소드 : routeall.do
 	@RequestMapping("routeall.do")
 	public ModelAndView selectAllRouteMethod(ModelAndView mv) {
-		ArrayList<Route> list = noticeService.selectAllRoute();
+		ArrayList<Route> list = routeService.selectAllRoute();
+		mv.addObject("list", list);
 		mv.setViewName("route/routeall");
 		return mv;
 	}//selectAllRouteMethod()
 	
+	// 경로추천게시판 등록 메소드 : inroute.do
+	@RequestMapping(value="inroute.do", method=RequestMethod.POST)
+	public String insertRouteMethod(Route route, Model model, Place place,
+													@RequestParam(name="ofile11", required=false) MultipartFile mfile1, 
+													@RequestParam(name="ofile22", required=false) MultipartFile mfile2,
+													@RequestParam(name="ofile33", required=false) MultipartFile mfile3,
+													@RequestParam(name="ofile44", required=false) MultipartFile mfile4,
+													@RequestParam(name="ofile55", required=false) MultipartFile mfile5,
+													@RequestParam("routePlaceAddress[]") String[] rpaddress,
+													@RequestParam("routePlaceName[]") String[] rpname,
+													@RequestParam("routePlaceContent[]") String[] rpcontent,
+													HttpServletRequest request) {
+		
+		logger.info("inroute.do : " + route);
+		
+		// 첨부파일 저장폴더 경로 지정
+		String savePath = request.getSession().getServletContext().getRealPath("resources/route_upfiles");
+		
+		// 첨부파일이 있을경우 : ofile1
+		if(!mfile1.isEmpty()) {
+			// 전송온 파일이름 추출
+			String fileName1 = mfile1.getOriginalFilename();
+			String renameFileName1 = null;
+			
+			// 저장폴더에 변경이름으로 저장
+			// 파일이름 바꾸기 : 년월일시분초.확장자
+			if(fileName1 != null && fileName1.length() > 0) {
+				// 바꿀 파일명에 대한 문자열
+				renameFileName1 = FileNameChange.change(fileName1, "yyyyMMddHHmmssSSS");
+				// 바뀐 파일명 확인
+				logger.info("첨부파일명 확인 : " + renameFileName1);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					mfile1.transferTo(new File(savePath + "\\" + renameFileName1));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일 저장 실패");
+					return "common/error";
+				}
+			}//파일명 바꾸기
+			
+			// 객체에 첨부파일 정보 저장
+			route.setOfile1(fileName1);
+			route.setRfile1(renameFileName1);
+		}// ofile1
+		
+		// 첨부파일이 있을경우 : ofile2
+		if(!mfile2.isEmpty()) {
+			// 전송온 파일이름 추출
+			String fileName2 = mfile2.getOriginalFilename();
+			String renameFileName2 = null;
+			
+			// 저장폴더에 변경이름으로 저장
+			// 파일이름 바꾸기 : 년월일시분초.확장자
+			if(fileName2 != null && fileName2.length() > 0) {
+				// 바꿀 파일명에 대한 문자열
+				renameFileName2 = FileNameChange.change(fileName2, "yyyyMMddHHmmssSSS");
+				// 바뀐 파일명 확인
+				logger.info("첨부파일명 확인 : " + renameFileName2);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					mfile2.transferTo(new File(savePath + "\\" + renameFileName2));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일 저장 실패");
+					return "common/error";
+				}
+			}//파일명 바꾸기
+			
+			// 객체에 첨부파일 정보 저장
+			route.setOfile2(fileName2);
+			route.setRfile2(renameFileName2);
+		}// ofile2
+		
+		// 첨부파일이 있을경우 : ofile3
+		if(!mfile3.isEmpty()) {
+			// 전송온 파일이름 추출
+			String fileName3 = mfile3.getOriginalFilename();
+			String renameFileName3 = null;
+			
+			// 저장폴더에 변경이름으로 저장
+			// 파일이름 바꾸기 : 년월일시분초.확장자
+			if(fileName3 != null && fileName3.length() > 0) {
+				// 바꿀 파일명에 대한 문자열
+				renameFileName3 = FileNameChange.change(fileName3, "yyyyMMddHHmmssSSS");
+				// 바뀐 파일명 확인
+				logger.info("첨부파일명 확인 : " + renameFileName3);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					mfile3.transferTo(new File(savePath + "\\" + renameFileName3));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일 저장 실패");
+					return "common/error";
+				}
+			}//파일명 바꾸기
+			
+			// 객체에 첨부파일 정보 저장
+			route.setOfile3(fileName3);
+			route.setRfile3(renameFileName3);
+		}// ofile3
+		
+		// 첨부파일이 있을경우 : ofile4
+		if(!mfile4.isEmpty()) {
+			// 전송온 파일이름 추출
+			String fileName4 = mfile4.getOriginalFilename();
+			String renameFileName4 = null;
+			
+			// 저장폴더에 변경이름으로 저장
+			// 파일이름 바꾸기 : 년월일시분초.확장자
+			if(fileName4 != null && fileName4.length() > 0) {
+				// 바꿀 파일명에 대한 문자열
+				renameFileName4 = FileNameChange.change(fileName4, "yyyyMMddHHmmssSSS");
+				// 바뀐 파일명 확인
+				logger.info("첨부파일명 확인 : " + renameFileName4);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					mfile4.transferTo(new File(savePath + "\\" + renameFileName4));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일 저장 실패");
+					return "common/error";
+				}
+			}//파일명 바꾸기
+			
+			// 객체에 첨부파일 정보 저장
+			route.setOfile4(fileName4);
+			route.setRfile4(renameFileName4);
+		}// ofile4
+		
+		// 첨부파일이 있을경우 : ofile5
+		if(!mfile5.isEmpty()) {
+			// 전송온 파일이름 추출
+			String fileName5 = mfile5.getOriginalFilename();
+			String renameFileName5 = null;
+			
+			// 저장폴더에 변경이름으로 저장
+			// 파일이름 바꾸기 : 년월일시분초.확장자
+			if(fileName5 != null && fileName5.length() > 0) {
+				// 바꿀 파일명에 대한 문자열
+				renameFileName5 = FileNameChange.change(fileName5, "yyyyMMddHHmmssSSS");
+				// 바뀐 파일명 확인
+				logger.info("첨부파일명 확인 : " + renameFileName5);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					mfile5.transferTo(new File(savePath + "\\" + renameFileName5));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일 저장 실패");
+					return "common/error";
+				}
+			}//파일명 바꾸기
+			
+			// 객체에 첨부파일 정보 저장
+			route.setOfile5(fileName5);
+			route.setRfile5(renameFileName5);
+		}// ofile5
+		
+		if(routeService.insertRoute(route) > 0) {
+			for(int i = 0; i < 5; i++) {
+				place.setAddress(rpaddress[i]);
+				place.setPlaceName(rpname[i]);
+				place.setPlaceContent(rpcontent[i]);
+				
+				place.setPlaceRouteBoardId(route.getRouteBoardId());
+				
+				placeService.insertPlace(place);
+				
+				RouteData routeData = new RouteData();
+				routeData.setRouteBoardId(route.getRouteBoardId());
+				routeData.setRoutePlaceId(place.getPlaceId());
+				routeData.setRoutePlaceOrderNo(i+1);
+				
+				routeDataService.insertRouteData(routeData);
+			}
+			
+			return "redirect:routeall.do?page=1";
+		}else {
+			model.addAttribute("message", "등록실패");
+			return "common/error";
+		}
+		
+	}
 	
-	
-	
+	// 경로추천게시판 상세페이지 출력 메소드 : routedetail.do
+	@RequestMapping("routedetail.do")
+	public ModelAndView routeDetailMethod(@RequestParam("no") String routeBoardId,
+																ModelAndView mv, HttpSession session) {
+		
+		logger.info("routedetail.do : " + routeBoardId);
+		
+		Route route = routeService.selectRoute(routeBoardId);
+		ArrayList<Place> place = placeService.selectPlace(routeBoardId);
+		
+		if(route != null) {
+			mv.addObject("route", route);
+			mv.addObject("place", place);
+			mv.setViewName("route/routeDetailView");
+
+		}else {
+			mv.addObject("message", routeBoardId + "번 게시글 상세보기요청 실패");
+			mv.setViewName("common/error");
+		}
+		
+		return mv;
+	}
 	
 	
 	

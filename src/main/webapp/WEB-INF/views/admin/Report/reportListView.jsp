@@ -2,6 +2,12 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%-- 현재 페이지 변수 생성 --%>
+<c:set var = "nowpage" value="1"/>
+<c:if test="${ !empty requestScope.currentPage }">
+	<c:set var="nowpage" value="${requestScope.currentPage}"/>
+</c:if>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,7 +40,7 @@
 			<c:forEach items="${ requestScope.report }" var="r">
 				<tr align="center">
 					<td>${ r.reportId }</td>
-					<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.postId }</a></td>
+					<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.title }</a></td>
 					<td>${ r.reportingReason }</td>
 					<td>익명</td>
 					<td><fmt:formatDate value="${ r.reportDate }"
@@ -58,7 +64,7 @@
 				<c:if test="${ sessionScope.loginUser.memId eq r.reportUserId  }">
 					<tr align="center">
 						<td>${ r.reportId }</td>
-						<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.postId }</a></td>
+						<td><a href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ r.reportId }">${ r.title }</a></td>
 						<td>${ r.reportingReason }</td>
 						<td>${ r.reportUserId  }</td>
 						<td><fmt:formatDate value="${ r.reportDate }"
@@ -68,6 +74,8 @@
 			</c:forEach>
 		</table>
 	</c:if>
+	<%-- 페이징 출력 뷰 포함 처리 --%>
+	<c:import url="/WEB-INF/views/common/pagingView.jsp" />
 	<hr>
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>

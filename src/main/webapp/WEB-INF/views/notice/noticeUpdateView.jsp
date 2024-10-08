@@ -29,6 +29,9 @@
         
         // 삭제 버튼을 다시 숨김
         document.getElementById('deleteButton' + fileNumber).style.display = 'none';
+        
+     	// hidden 필드에 삭제 여부 설정
+        document.getElementById('delete' + fileNumber).value = 'yes';
     }
 </script>
 </head>
@@ -48,6 +51,11 @@
 <input type="hidden" name="rFile1" value="${notice.rFile1}">
 <input type="hidden" name="rFile2" value="${notice.rFile2}">
 <input type="hidden" name="rFile3" value="${notice.rFile3}">
+<%-- 삭제 여부를 위한 hidden 필드 추가 --%>
+<input type="hidden" id="delete1" name="delete1" value="">
+<input type="hidden" id="delete2" name="delete2" value="">
+<input type="hidden" id="delete3" name="delete3" value="">
+
 <table align="center" width="800px" cellSpacing="5" cellpadding="10" border="1"  >
 <tr><td align="center">제 목</td>
 <td colspan="3" align="center">
@@ -75,7 +83,7 @@
         <!-- 파일명 표시 -->
         <span id="fileName1">${notice.oFile1}</span> &nbsp;
         <!-- 삭제 버튼, 기존 파일이 있을 경우 표시 -->
-        <input type="button" id="deleteButton1" name="delete" value="x" onclick="deleteFile(1)" style="display:${!empty notice.oFile1 ? 'inline' : 'none'};">
+        <input type="button" id="deleteButton1" name="delete1" value="x" onclick="deleteFile(1)" style="display:${!empty notice.oFile1 ? 'inline' : 'none'};">
     </td>
 </tr>
 <tr>
@@ -88,7 +96,7 @@
         <!-- 파일명 표시 -->
         <span id="fileName2">${notice.oFile2}</span> &nbsp;
         <!-- 삭제 버튼, 기존 파일이 있을 경우 표시 -->
-        <input type="button" id="deleteButton2" name="delete" value="x" onclick="deleteFile(2)" style="display:${!empty notice.oFile2 ? 'inline' : 'none'};">
+        <input type="button" id="deleteButton2" name="delete2" value="x" onclick="deleteFile(2)" style="display:${!empty notice.oFile2 ? 'inline' : 'none'};">
     </td>
 </tr>
 <tr>
@@ -101,7 +109,7 @@
         <!-- 파일명 표시 -->
         <span id="fileName3">${notice.oFile3}</span> &nbsp;
         <!-- 삭제 버튼, 기존 파일이 있을 경우 표시 -->
-        <input type="button" id="deleteButton3" name="delete" value="x" onclick="deleteFile(3)" style="display:${!empty notice.oFile3 ? 'inline' : 'none'};">
+        <input type="button" id="deleteButton3" name="delete3" value="x" onclick="deleteFile(3)" style="display:${!empty notice.oFile3 ? 'inline' : 'none'};">
     </td>
 </tr>
 <tr><td align="center" colspan="4"> 
