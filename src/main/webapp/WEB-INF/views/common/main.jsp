@@ -74,16 +74,7 @@
 	
 </script>
 <style>
-  body {
-    background-color: #f8f9fa;
-  }
-  table {
-    background-color: #ffffff;
-  }
-  th {
-    background-color: #4ba483;
-    color: white;
-  }
+
   td a {
     color: black;
     text-decoration: none;
@@ -100,7 +91,7 @@
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
 <br>
-<div class="container text-center">
+<div class="text-center">
   <div class="row">
     <div class="col-7">
 		<h1> 빈도지도 만들기</h1>
@@ -122,18 +113,18 @@
 		</tr>
 	</table> -->
 		<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-		    <div>
-		        <h4> - 공지사항</h4>
+		    <div class="h4">
+		        공지사항
 		    </div>
 		    <div>
 		        <a href="sanotice.do" style="text-decoration:none; color:black;">더보기</a>
 		    </div>
 		</div>
-      	<table id="topnotice">
-		<tr>
-			<th width="80px" >No</th>
-			<th width="500px">제목</th>
-			<th width="200px">등록일</th>
+      	<table class="table table-sm" id="topnotice">
+		<tr class="table-success">
+			<th>No</th>
+			<th>제목</th>
+			<th>등록일</th>
 		</tr>
 	</table>
     </div>

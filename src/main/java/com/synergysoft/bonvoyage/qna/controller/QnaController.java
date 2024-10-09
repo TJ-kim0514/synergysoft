@@ -24,6 +24,7 @@ import com.synergysoft.bonvoyage.common.FileNameChange;
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
+import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 import com.synergysoft.bonvoyage.qna.model.dto.Qna;
 import com.synergysoft.bonvoyage.qna.model.service.QnaService;
 
@@ -347,13 +348,13 @@ public class QnaController {
 		
 	}
 	
-	// 사용자 수정 처리
+	// 사용자 수정 페이지 이동
 	@RequestMapping("muqna.do")
 	public String moveUpdateQna(
 			@RequestParam("qnaId") String qnaId,
 			Model model
 			) {
-		logger.info("상세보기할 qnaId : " + qnaId);
+		logger.info("수정할 qnaId : " + qnaId);
 		Qna qna = qnaService.moveSelectQna(qnaId);
 		logger.info("불러온 Qna : " + qna);
 		
@@ -367,6 +368,281 @@ public class QnaController {
 		
 	}
 	
+	// 사용자 수정 처리
+	@RequestMapping(value="uqna.do", method=RequestMethod.POST)
+	public String updateQna(
+			Qna qna, // 전송온 객체
+			Model model,  // 전송할 객체
+			HttpServletRequest request,  // 파일경로 만들 객체
+			@RequestParam(name="insertFile1", required=false) MultipartFile ifile1,
+			@RequestParam(name="insertFile2", required=false) MultipartFile ifile2,
+			@RequestParam(name="insertFile3", required=false) MultipartFile ifile3,
+			@RequestParam(name="insertFile4", required=false) MultipartFile ifile4,
+			@RequestParam(name="insertFile5", required=false) MultipartFile ifile5,
+			@RequestParam(name="delete1", required=false) String delete1,
+			@RequestParam(name="delete2", required=false) String delete2,
+			@RequestParam(name="delete3", required=false) String delete3,
+			@RequestParam(name="delete4", required=false) String delete4,
+			@RequestParam(name="delete5", required=false) String delete5
+			) {
+		logger.info("수정한 Qna : " + qna);  //전송온값 확인
+		
+		// 로그인 상태확인 *********************************************************
+		// 세션정보확인
+		HttpSession session = request.getSession();
+		// 로그인 정보저장
+		Member loginUser = (Member)session.getAttribute("loginUser");
+		
+		// 세션 확인후 로그아웃이면 에러 출력
+		if(loginUser == null) {
+			model.addAttribute("message","로그인 정보가 없습니다.");
+			return "common/error";
+		}
+		// 로그인 상태확인 *********************************************************
+		
+		// 전송할 경로 String 생성
+		String savePath = request.getSession().getServletContext().getRealPath("resources/qna_upfiles");
+		
+		// 파일1
+		// 파일제거
+		if((qna.getoFile1() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete1.equals("yes") && ifile1.isEmpty())) || !ifile1.isEmpty()
+				) {    
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + qna.getrFile1()).delete();
+			
+			//qna 안의 파일정보도 삭제함
+			qna.setoFile1(null);
+			qna.setrFile1(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile1.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile1.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile1.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//qna 객체에 첨부파일 정보 저장 처리
+			qna.setoFile1(fileName);
+			qna.setrFile1(renameFileName);
+			
+		}// 첨부파일이 있을때
+		
+		// 파일2
+		// 파일제거
+		if((qna.getoFile2() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete2.equals("yes") && ifile2.isEmpty())) || !ifile2.isEmpty()
+				) {    
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + qna.getrFile2()).delete();
+			
+			//qna 안의 파일정보도 삭제함
+			qna.setoFile2(null);
+			qna.setrFile2(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile2.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile2.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile2.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//qna 객체에 첨부파일 정보 저장 처리
+			qna.setoFile2(fileName);
+			qna.setrFile2(renameFileName);
+			
+		}// 첨부파일이 있을때		
+		
+		// 파일3
+		// 파일제거
+		if((qna.getoFile3() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete3.equals("yes") && ifile3.isEmpty())) || !ifile3.isEmpty()
+			) { 
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + qna.getrFile3()).delete();
+			
+			//qna 안의 파일정보도 삭제함
+			qna.setoFile3(null);
+			qna.setrFile3(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile3.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile3.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile3.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//qna 객체에 첨부파일 정보 저장 처리
+			qna.setoFile3(fileName);
+			qna.setrFile3(renameFileName);
+			
+		}// 첨부파일이 있을때
+		
+		// 파일4
+		// 파일제거
+		if((qna.getoFile4() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete4.equals("yes") && ifile4.isEmpty())) || !ifile4.isEmpty()
+			) { 
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + qna.getrFile4()).delete();
+			
+			//qna 안의 파일정보도 삭제함
+			qna.setoFile4(null);
+			qna.setrFile4(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile4.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile4.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile4.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//qna 객체에 첨부파일 정보 저장 처리
+			qna.setoFile4(fileName);
+			qna.setrFile4(renameFileName);
+			
+		}// 첨부파일이 있을때
+		
+		// 파일5
+		// 파일제거
+		if((qna.getoFile5() != null //원래 첨부파일이 있는데 파일이 지워졋을때 또는 신규파일이 들어왔을때
+				&& (delete5.equals("yes") && ifile5.isEmpty())) || !ifile5.isEmpty()
+			) { 
+			//저장폴더에서 이전 파일은 삭제함
+			new File(savePath + "\\" + qna.getrFile5()).delete();
+			
+			//qna 안의 파일정보도 삭제함
+			qna.setoFile5(null);
+			qna.setrFile5(null);
+		}
+		
+		// 파일 추가
+		// 즉, upfile 이름으로 전송온 파일이 있따면
+		if(!ifile5.isEmpty()) {  // mfile이 비어잇지 않다면 // 파일이 있다면
+			// 전송온 파일이름 추출함
+			String fileName = ifile5.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에는 변경된 이름을 저장 처리함
+			// 파일 이름 바꾸기함 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() > 0) { // 파일이름이 null이 아니고 한글자 이상일때(""이 아닐때)
+				// 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				// 바뀔 파일명 확인
+				logger.info("변경될 첨부파일명 확인 : "+renameFileName);
+				
+				try {
+					// 저장 폴더에 파일명 바꾸어 저장하기
+					ifile5.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message","첨부파일 저장 실패!!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기 블록		
+			//qna 객체에 첨부파일 정보 저장 처리
+			qna.setoFile5(fileName);
+			qna.setrFile5(renameFileName);
+			
+		}// 첨부파일이 있을때
+		
+		logger.info("최종 인풋 데이터 : " + qna);
+		
+		if(qnaService.updateQna(qna)>0) {
+			return "redirect:saqna.do";
+		}else {
+			model.addAttribute("message",qna.getQnaId()+ "번 Q&A 수정에 실패하였습니다.");
+			return "common/error";
+		}
+		
+	}
+	
+	// qna 삭제 처리
+	@RequestMapping("dqna.do")
+	public String deleteQna(
+			@RequestParam("qnaId") String qnaId,
+			Model model
+			) {
+		logger.info("삭제할 qna id: "+ qnaId);
+		if(qnaService.deleteQna(qnaId)>0) {
+			return "redirect:saqna.do";
+		} else {
+			model.addAttribute("message",qnaId+"번 게시글 삭제 실패");
+			return "common/error";
+		}
+	}
 }
 
 
