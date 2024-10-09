@@ -28,13 +28,13 @@
 <body>
     <c:import url="/WEB-INF/views/common/menubar.jsp"/>
 
-<div class="container">
-    <h1>오류 발생 : <%= request.getAttribute("message") %></h1>
+<div class="container ">
+    <h1 class="">오류 발생 : <%= request.getAttribute("message") %></h1>
     
     <div class="btn-container mt-4">
         <a href="javascript:history.go(-1);" class="btn btn-secondary btn-lg">이전 페이지로 이동</a>
         &nbsp;
-        <a href="main.do" class="btn btn-primary btn-lg">Home</a>
+        <a href="main.do" class="btn btn-success btn-lg">Home</a>
     </div>
 </div>
 

@@ -11,7 +11,13 @@
 	// 수정하기 버튼 함수
 	function qupdate(qnaId){
 		console.log(qnaId);
-		location.href = "muqna.do?qnaId="+qnaId;
+		location.href = 'muqna.do?qnaId='+qnaId;
+	}
+	
+	// 삭제하기 버튼 함수
+	function qdelete(qnaId){
+		console.log(qnaId);
+		location.href = 'dqna.do?qnaId='+qnaId;
 	}
 	
     // 현재 noticeId를 가져옵니다. 
@@ -39,7 +45,8 @@
 	<br>
 	<c:if test="${ (sessionScope.loginUser.memId eq requestScope.qna.userId)
 				and (requestScope.qna.isAccept eq 'N')}">
-		<button id="qupdate"  onclick="qupdate(${qnaId})">수정하기</button>
+		<button id="qupdate"  onclick="qupdate('${qna.qnaId}')">수정하기</button>
+		<button id="qdelete"  onclick="qdelete('${qna.qnaId}')">삭제하기</button>
 	</c:if>
 	<%-- 파일 다운용 url생성 --%>
 	<c:url var="qfdown1" value="qfdown.do">

@@ -75,4 +75,12 @@ public class QnaDao {
 	public int updateAdminQna(Qna qna) {
 		return sqlSessionTemplate.update("qnaMapper.updateAdminQna",qna);
 	}
+	
+	// qna 수정
+	public int updateQna(Qna qna) {
+		return sqlSessionTemplate.update("qnaMapper.updateQna",qna);
+	}
+	public int deleteQna(String qnaId) {
+		return sqlSessionTemplate.update("qnaMapper.deleteQna",qnaId);
+	}
 }

@@ -74,9 +74,21 @@ public class QnaServiceImpl implements QnaService{
 	public Qna moveSelectQna(String qnaId) {
 		return qnaDao.moveSelectQna(qnaId);
 	}
+	
+	// 관리자 상세보기
 	@Override
 	public int updateAdminQna(Qna qna) {
 		return qnaDao.updateAdminQna(qna);
+	}
+	
+	// QnA 수정
+	@Override
+	public int updateQna(Qna qna) {
+		return qnaDao.updateQna(qna);
+	}
+	@Override
+	public int deleteQna(String qnaId) {
+		return qnaDao.deleteQna(qnaId);
 	}
 	
 	

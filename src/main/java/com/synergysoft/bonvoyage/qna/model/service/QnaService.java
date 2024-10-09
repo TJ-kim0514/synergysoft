@@ -21,5 +21,7 @@ public interface QnaService {
 	int insertQna(Qna qna);
 	Qna moveSelectQna(String qnaId);
 	int updateAdminQna(Qna qna);
+	int updateQna(Qna qna);
+	int deleteQna(String qnaId);
 
 }
