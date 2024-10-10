@@ -66,4 +66,24 @@ public class ReportServiceImpl implements ReportService {
 		return reportDao.selectList(search);
 	}
 
+	@Override
+	public int selectSearchTitleListCount(String keyword) {
+		return reportDao.selectSearchTitleListCount(keyword);
+	}
+
+	@Override
+	public int selectSearchContentListCount(String keyword) {
+		return reportDao.selectSearchContentListCount(keyword);
+	}
+
+	@Override
+	public ArrayList<Report> selectSearchTitleReport(Search search) {
+		return reportDao.selectSearchTitleReport(search);
+	}
+
+	@Override
+	public ArrayList<Report> selectSearchContentReport(Search search) {
+		return reportDao.selectSearchContentReport(search);
+	}
+
 }

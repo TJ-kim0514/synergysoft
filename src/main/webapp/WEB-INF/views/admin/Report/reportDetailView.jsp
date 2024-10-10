@@ -46,6 +46,8 @@ function requestDelete(){
 <h2 align="center">${ report.reportId } 번 신고 사유 상세보기</h2>
 <br>
 <table align="center" width="700" border="1" cellspacing="0" cellpadding="5">
+	<tr><th>신고 글</th><td><a
+							href="${ pageContext.servletContext.contextPath }/reportDetail.do?no=${ report.reportId }" class="text-dark text-decoration-none">${ report.reportId }</a></td></tr>
 	<tr><th>신고내용</th><td>${ report.reportingReason }</td></tr>
 	<tr><th>등록날짜</th>
 		<td><fmt:formatDate value="${ report.reportDate }" pattern="yyyy-MM-dd" /></td></tr>

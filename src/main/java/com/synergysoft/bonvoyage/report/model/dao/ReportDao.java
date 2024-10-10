@@ -21,7 +21,7 @@ public class ReportDao {
 	public Report selectReportDetail(String reportId) {
 		return sqlSessionTemplate.selectOne("reportMapper.selectReportDetail", reportId);
 	}
-	
+
 	// 유저&관리자 : 신고 등록
 	public int insertReport(Report report) {
 		return sqlSessionTemplate.insert("reportMapper.insertReport", report);
@@ -41,25 +41,44 @@ public class ReportDao {
 	public int deleteReport(String reportId) {
 		return sqlSessionTemplate.delete("reportMapper.deleteReport", reportId);
 	}
-	
+
 	public int selectReportAllListCount() {
 		return sqlSessionTemplate.selectOne("reportMapper.selectReportListCount");
 	}
-	//회원이 신고한 글 갯수 조회
+
+	// 회원이 신고한 글 갯수 조회
 	public int selectReportUserListCount(String reportId) {
 		return sqlSessionTemplate.selectOne("reportMapper.selectAllReportMe", reportId);
 	}
-	
-	//관리자 목록조회
+
+	// 관리자 목록조회
 	public ArrayList<Report> selectList(Paging paging) {
-		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport",paging);
-		return (ArrayList<Report>)list;
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport", paging);
+		return (ArrayList<Report>) list;
 	}
-	
-	//회원이 신고한 목록 조회
+
+	// 회원이 신고한 목록 조회
 	public ArrayList<Report> selectList(Search search) {
-		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReportMe",search);
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReportMe", search);
+		return (ArrayList<Report>) list;
+	}
+
+	public int selectSearchTitleListCount(String keyword) {
+return sqlSessionTemplate.selectOne("reportMapper.selectSearchTitleListCount",keyword );
+	}
+
+	public int selectSearchContentListCount(String keyword) {
+return sqlSessionTemplate.selectOne("reportMapper.selectSearchContentListCount",keyword);
+	}
+
+	public ArrayList<Report> selectSearchTitleReport(Search search) {
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectSearchTitleReport", search);
 		return (ArrayList<Report>)list;
 	}
-	
+
+	public ArrayList<Report> selectSearchContentReport(Search search) {
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectSearchContentReport", search);
+		return (ArrayList<Report>)list;
+	}
+
 }
