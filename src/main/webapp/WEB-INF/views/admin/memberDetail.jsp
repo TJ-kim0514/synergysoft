@@ -86,7 +86,7 @@
 				</td>
 				
 				<th>가입날짜</th>
-				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" name="memJoinDate" value="${ requestScope.member.memJoinDate }" readonly></td>
+				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" value="${ requestScope.member.memJoinDate }" readonly></td>
 				
 				<th colspan="2">
 					<c:url var="memberAdmin" value="memberAdmin.do">
@@ -102,10 +102,10 @@
 			
 			<tr>
 				<th>로그인기록</th>
-				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" name="memLoginLog" value="${ requestScope.member.memLoginLog }" readonly></td>
+				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" value="${ requestScope.member.memLoginLog }" readonly></td>
 				
 				<th>로그아웃기록</th>
-				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" name="memLogoutLog" value="${ requestScope.member.memLogoutLog }" readonly></td>
+				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" value="${ requestScope.member.memLogoutLog }" readonly></td>
 				
 				<th>사용자상태</th>
 				<td>
@@ -132,10 +132,10 @@
 				</td>
 				
 				<th>상태적용날짜</th>
-				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" name="memStatusDate" value="${ requestScope.member.memStatusDate }" readonly></td>
+				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" value="${ requestScope.member.memStatusDate }" readonly></td>
 				
 				<th>비밀번호수정일</th>
-				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" name="memPwUpdate" value="${ requestScope.member.memPwUpdate }" readonly></td>
+				<td><input type="date" class="form-control" style="background-color: #bbbbbb;" value="${ requestScope.member.memPwUpdate }" readonly></td>
 			</tr>
 		</table>
 	</form>

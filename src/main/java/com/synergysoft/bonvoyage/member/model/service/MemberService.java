@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
+import com.synergysoft.bonvoyage.member.model.dto.MyComment;
 
 // jmoh03 (오정민)
 public interface MemberService {
@@ -17,6 +18,12 @@ public interface MemberService {
 	Member selectIDSearch(String memPhone);
 	Member selectPWSearch(String memId);
 	Member selectMyinfo(String memId);
+	ArrayList<MyComment> selectCommentAll(MyComment mycomment);
+	ArrayList<MyComment> selectCommentRouteBoard(MyComment mycomment);
+	ArrayList<MyComment> selectCommentGuideBoard(MyComment mycomment);
+	int selectCommentAllCount(String memId);
+	int selectCommentRouteBoardCount(String memId);
+	int selectCommentGuideBoardCount(String memId);
 	ArrayList<Member> selectMember(Paging paging);
 	int selectMemberListCount();
 	Member selectMemberDetail(String memId);
@@ -31,7 +38,7 @@ public interface MemberService {
 	int updateMyinfo(Member member);
 	int updateMemberPw(Member member);
 	int updateLeft(String memId);
-	int updateMember(Member member); // 구현중
+	int updateMember(Member member);
 	int updateMemberAccount(String memId);
 	int updateMemberAdmin(String memId);
 	int updateMemberAdminDelete(String memId);

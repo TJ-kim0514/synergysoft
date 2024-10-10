@@ -24,9 +24,9 @@
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 
 <div class="container">
-    <h1 class="text-center my-4">내가 쓴 댓글(경로추천)</h1>
+    <h1 class="text-center my-4">내가 쓴 댓글(전체)</h1>
     <c:if test="${!empty sessionScope.loginUser}">
-    <form method="get" action="myRouteBoardCommentSearch.do" class="d-flex mb-4" id="ss" style="float:left">
+    <form method="get" action="myAllCommentSearch.do" class="d-flex mb-4" id="ss" style="float:left">
         <input type="hidden" name="memId" value="${loginUser.memId}">
         <select name="action" id="search" class="form-select w-auto">
             <option value="title" id="title">게시글제목</option>
@@ -34,7 +34,7 @@
         </select>
         <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
         <button type="submit" class="btn btn-success">검색</button> &nbsp;
-        <button type="button" class="btn btn-outline-success" onclick="location.href='myAllComment.do?memId=${loginUser.memId}'">전체 댓글</button> &nbsp;
+       	<button type="button" class="btn btn-outline-success" onclick="location.href='myAllComment.do?memId=${loginUser.memId}'">전체 댓글</button> &nbsp;
         <button type="button" class="btn btn-outline-success" onclick="location.href='myRouteBoardComment.do?memId=${loginUser.memId}'">경로추천</button> &nbsp;
         <button type="button" class="btn btn-outline-success" onclick="location.href='myGuideBoardComment.do?memId=${loginUser.memId}'">지역소담이</button> &nbsp;
     </form>
@@ -51,18 +51,36 @@
             <tbody>
                 <c:forEach items="${requestScope.commentList}" var="comment">
                     <tr>
-                        <td>
-                            <a href="${pageContext.servletContext.contextPath}/routedetail.do?no=${comment.postId}" class="text-dark text-decoration-none">
-                                ${comment.title}
-                            </a>
-                        </td>
-                        <td> 
-                        	<a href="${pageContext.servletContext.contextPath}/routedetail.do?no=${comment.postId}" class="text-dark text-decoration-none">
-                        		${comment.commentContent}
-                        	</a>
-                        </td>
+                       	<c:if test="${fn:substring(comment.postId, 0, 1) eq 'r'}">
+	                        <td>
+	                            <a href="${pageContext.servletContext.contextPath}/routedetail.do?no=${comment.postId}" class="text-dark text-decoration-none">
+	                                ${comment.title}
+	                            </a>
+	                        </td>
+                        </c:if>
+                       	<c:if test="${fn:substring(comment.postId, 0, 1) eq 'g'}">
+	                        <td>
+	                            <a href="${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=${comment.postId}" class="text-dark text-decoration-none">
+	                                ${comment.title}
+	                            </a>
+	                        </td>
+                        </c:if>
+                        <c:if test="${(fn:substring(comment.postId, 0, 1)) eq 'r'}">
+	                        <td>
+	                        	<a href="${pageContext.servletContext.contextPath}/routedetail.do?no=${comment.postId}" class="text-dark text-decoration-none">
+	                        		${comment.commentContent}
+	                        	</a>
+	                        </td>
+                        </c:if>
+                        <c:if test="${(fn:substring(comment.postId, 0, 1)) eq 'g'}">
+	                        <td>
+	                        	<a href="${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=${comment.postId}" class="text-dark text-decoration-none">
+	                        		${comment.commentContent}
+	                        	</a>
+	                        </td>
+                        </c:if>
                         <td class="text-center">
-                        	<a href="${pageContext.servletContext.contextPath}/memberDetail.do?memId=${comment.memId}" class="text-dark text-decoration-none">
+                        	<a href="${pageContext.servletContext.contextPath}/myinfo.do?memId=${comment.memId}" class="text-dark text-decoration-none">
                         		${comment.memNickNm}
                         	</a>
                         </td>

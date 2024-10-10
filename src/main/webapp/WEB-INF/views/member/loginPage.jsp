@@ -127,57 +127,17 @@ a#kakao-login-btn{
 				<p>------------------- 또는 --------------------</p>
 				</li>
 				<li>
-					<!-- 소셜로그인 -->
-					<ul class="sns">
-						<li>
-					 		<a href="javascript:loginWithKakao();"> 
-								 <img src="${pageContext.servletContext.contextPath }/resources/assets/img/Kakao.png" width="80" height="80" alt="카카오로고" />
-							</a>
-						</li>
-						<li>
-					 		<%-- <%
-							    String clientId = "GcBRifOkv0F3VVJTZbQd";//애플리케이션 클라이언트 아이디값";
-							    String redirectURI = URLEncoder.encode("http://localhost:8080/bonvoyage/naverLogin.do", "UTF-8");
-							    SecureRandom random = new SecureRandom();
-							    String state = new BigInteger(130, random).toString();
-							    String apiURL = "https://nid.naver.com/oauth2.0/authorize?response_type=code"
-							         + "&client_id=" + clientId
-							         + "&redirect_uri=" + redirectURI
-							         + "&state=" + state;
-							    session.setAttribute("state", state);
-							 %>  --%>
-							  <a href="${ naverurl }"><img width="80" height="80" src="${pageContext.servletContext.contextPath }/resources/assets/img/Naver.png"/></a>
-						</li>
-						<li>
-					 		<a href="${ googleurl }"><img width="80" height="80" src="${pageContext.servletContext.contextPath }/resources/assets/img/Google.png"/></a>
-							<!-- <script>
-							    function handleCredentialResponse(response) {
-							      console.log("Encoded JWT ID token: " + response.credential);
-							    }
-							    window.onload = function () {
-							      google.accounts.id.initialize({
-							        client_id: "1026897669776-hk79tbpi0nihevh9li9vipn2ltgltaeb.apps.googleusercontent.com",
-							        callback: handleCredentialResponse
-							      });
-							      google.accounts.id.renderButton(
-							        document.getElementById("buttonDiv"),
-							        { theme: "outline", size: "large" }  // customization attributes
-							      );
-							      google.accounts.id.prompt(); // also display the One Tap dialog
-							    }
-							</script> -->
-						</li>
-					</ul>
-				</li>
-			</ul>
+				<!-- 소셜로그인 -->
+		 		<a href="javascript:loginWithKakao();"> 
+					 <img src="${pageContext.servletContext.contextPath }/resources/assets/img/Kakao.png" width="80" height="80" alt="카카오로고" />
+				</a>
+				  <a href="${ naverurl }">
+				  	<img width="80" height="80" src="${pageContext.servletContext.contextPath }/resources/assets/img/Naver.png"/>
+				  </a>
+		 		<a href="${ googleurl }">
+		 			<img width="80" height="80" src="${pageContext.servletContext.contextPath }/resources/assets/img/Google.png"/>
+		 		</a>
 		<br>
-		<%-- <center>
-			<a href="javascript:loginWithKakao();">
-				<img alt="카카오로그인" src="${pageContext.request.contextPath}/resources/assets/img/kakao_login_medium_narrow.png">
-			</a>
-			<div id="naver_id_login"></div>
-		    
-		</center> --%>
 	</div>
 	<footer>
 	<c:import url="/WEB-INF/views/common/footer.jsp"/>	

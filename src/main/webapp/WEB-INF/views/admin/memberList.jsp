@@ -24,16 +24,17 @@
 	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
 		<h1 align="center">회원 리스트</h1>
 		<br><br>
-		<form method="get" action="memberList.do" align="center">
-			<select name="item" id="searchItem">
-				<option value="memId">아이디</option>
-				<option value="memNickNm">닉네임</option>
-				<option value="memName">이름</option>
-			</select>
-			<input type="search" name="keyword" size="50" placeholder="검색어를 입력해주세요">
-			<input type="submit" value="search">
-		</form>
-		<br>
+		<fieldset>
+			<form method="get" action="memberList.do" class="d-flex mb-4" id="ss" style="float:left">
+		        <select name="action" id="searchItem" class="form-select w-auto">
+		            <option value="memId" id="memId">아이디</option>
+		            <option value="memNickNm" id="memNickNm">닉네임</option>
+		            <option value="memName" id="memName">이름</option>
+		        </select>
+		        <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
+		        <button type="submit" class="btn btn-success">검색</button>
+		    </form>
+	    </fieldset>
 		<div class="row row-cols-1 row-cols-md-4 g-5">
 		<c:forEach items="${memberList}" var="memberList">
 			<div class="col">
