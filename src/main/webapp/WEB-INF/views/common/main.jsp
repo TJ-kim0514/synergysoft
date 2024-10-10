@@ -72,6 +72,45 @@
 		})
 	}); */
 	
+	
+	//가이드게시판 인기 게시글 3개 (top-N) 전송받아서 출력 처리
+$.ajax({
+    url: 'gtop3.do',  // 서버의 데이터 요청 URL
+    type: 'post',
+    dataType: 'json',
+    success: function(data) {
+        console.log(data);  // 응답 데이터 확인
+        if (data.glist && data.glist.length > 0) {
+            // 첫 번째 슬라이드 이미지와 링크 설정
+            $('#carouselExampleIndicators .carousel-item:nth-child(1) a').attr('href', '${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=' + data.glist[0].guidepostId);
+            $('#carouselExampleIndicators .carousel-item:nth-child(1) img').attr('src', '${pageContext.servletContext.contextPath}/resources/guide_upfiles/' + data.glist[0].rFile1);
+            $('.carousel-item:nth-child(1) .carousel-caption h5').text(decodeURIComponent(data.glist[0].gtitle).replace(/\+/g, ' '));
+            $('.carousel-item:nth-child(1) .carousel-caption p').text(decodeURIComponent(data.glist[0].glocation).replace(/\+/g, ' '));
+            console.log('첫 번째 포스트 제목:', data.glist[0].gtitle);  // 첫 번째 포스트의 제목 확인
+            console.log('첫 번째 포스트 지역:', data.glist[0].location);  
+
+            // 두 번째 슬라이드 이미지와 링크 설정
+            $('#carouselExampleIndicators .carousel-item:nth-child(2) a').attr('href', '${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=' + data.glist[1].guidepostId);
+            $('#carouselExampleIndicators .carousel-item:nth-child(2) img').attr('src', '${pageContext.servletContext.contextPath}/resources/guide_upfiles/' + data.glist[1].rFile1);
+            $('.carousel-item:nth-child(2) .carousel-caption h5').text(decodeURIComponent(data.glist[1].gtitle).replace(/\+/g, ' '));
+            $('.carousel-item:nth-child(2) .carousel-caption p').text(decodeURIComponent(data.glist[1].glocation).replace(/\+/g, ' '));
+
+            // 세 번째 슬라이드 이미지와 링크 설정
+            $('#carouselExampleIndicators .carousel-item:nth-child(3) a').attr('href', '${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=' + data.glist[2].guidepostId);
+            $('#carouselExampleIndicators .carousel-item:nth-child(3) img').attr('src', '${pageContext.servletContext.contextPath}/resources/guide_upfiles/' + data.glist[2].rFile1);
+            $('.carousel-item:nth-child(3) .carousel-caption h5').text(decodeURIComponent(data.glist[2].gtitle).replace(/\+/g, ' '));
+            $('.carousel-item:nth-child(3) .carousel-caption p').text(decodeURIComponent(data.glist[2].glocation).replace(/\+/g, ' '));
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.error('Error loading top blogs: ' + textStatus + ', ' + errorThrown);
+    }
+});
+
+	
+	
+	
+	
 </script>
 <style>
 
@@ -134,9 +173,96 @@
       <h1>인기 경로추천 넣기</h1>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <h1>인기 지역소담이 넣기</h1>
+  
+  
+ <div class="row">
+    <div class="col"> 
+    
+    
+    <h2>지역소담이</h2>
+    
+<style>
+  /* 캐러셀 컨테이너의 전체 크기를 조정 */
+  .carousel {
+    width: 60%;     /* 전체 너비의 60%로 설정 */
+    margin: 0 auto; /* 중앙에 정렬 */
+  }
+
+  /* 슬라이드 이미지 크기 조정 */
+  .carousel-inner img {
+    width: 100%;    /* 슬라이드 이미지의 너비를 부모 요소의 너비에 맞춤 */
+    height: 300px;  /* 이미지 높이를 300px로 고정 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 넘치는 부분을 잘라냄 */
+  }
+
+  /* 슬라이드 안에 제목과 지역 정보를 표시할 스타일 */
+  .carousel-caption {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경을 반투명하게 */
+    padding: 10px;
+    border-radius: 5px;
+  }
+</style>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  
+  <div class="carousel-inner">
+    <!-- 첫 번째 슬라이드 -->
+    <div class="carousel-item active">
+      <a href="#">
+        <img src="https://via.placeholder.com/300x150" class="d-block w-100" alt="블로그 이미지">
+      </a>
+      <div class="carousel-caption">
+        <h5>제목</h5>
+        <p>지역</p>
+      </div>
+    </div>
+
+    <!-- 두 번째 슬라이드 -->
+    <div class="carousel-item">
+      <a href="#">
+        <img src="https://via.placeholder.com/300x150" class="d-block w-100" alt="블로그 이미지">
+      </a>
+      <div class="carousel-caption">
+        <h5>제목</h5>
+        <p>지역</p>
+      </div>
+    </div>
+
+    <!-- 세 번째 슬라이드 -->
+    <div class="carousel-item">
+      <a href="#">
+        <img src="https://via.placeholder.com/300x150" class="d-block w-100" alt="블로그 이미지">
+      </a>
+      <div class="carousel-caption">
+        <h5>제목</h5>
+        <p>지역</p>
+      </div>
+    </div>
+  </div>
+  
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+
+
+    
     </div>
   </div>
 </div>

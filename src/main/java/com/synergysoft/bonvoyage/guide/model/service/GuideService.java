@@ -36,6 +36,8 @@ public interface GuideService {
 
 	ArrayList<Guide> selectSearchLocation(Search search);
 
+	ArrayList<Guide> selectTop3();
+
 
 
 

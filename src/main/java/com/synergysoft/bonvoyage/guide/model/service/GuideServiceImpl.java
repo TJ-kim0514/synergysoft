@@ -78,6 +78,11 @@ public class GuideServiceImpl implements GuideService{
 	public ArrayList<Guide> selectSearchLocation(Search search) {
 		return guideDao.selectSearchLocation(search);
 	}
+	//메인 조회수 top3
+	@Override
+	public ArrayList<Guide> selectTop3() {
+		return guideDao.selectTop3();
+	}
 
 	
 
