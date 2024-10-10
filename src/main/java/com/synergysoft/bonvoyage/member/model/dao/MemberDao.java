@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
+import com.synergysoft.bonvoyage.member.model.dto.MyComment;
 
 //jmoh03 (오정민)
 @Repository("memberDao")
@@ -50,6 +51,39 @@ public class MemberDao {
 	// 내 정보 조회
 	public Member selectMyinfo(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectMyinfo", memId);
+	}
+	
+	// 내가 쓴 댓글 전체 조회
+	public ArrayList<MyComment> selectCommentAll(MyComment mycomment) {
+		List<MyComment> list = sqlSessionTemplate.selectList("memberMapper.selectCommentAll", mycomment);
+		return (ArrayList<MyComment>) list;
+	}
+
+	// 내가 쓴 댓글 조회(경로게시판)
+	public ArrayList<MyComment> selectCommentRouteBoard(MyComment mycomment) {
+		List<MyComment> list = sqlSessionTemplate.selectList("memberMapper.selectCommentRouteBoard", mycomment);
+		return (ArrayList<MyComment>) list;
+	}
+
+	// 내가 쓴 댓글 조회(가이드게시판)
+	public ArrayList<MyComment> selectCommentGuideBoard(MyComment mycomment) {
+		List<MyComment> list = sqlSessionTemplate.selectList("memberMapper.selectCommentGuideBoard", mycomment);
+		return (ArrayList<MyComment>) list;
+	}
+
+	// 내가 쓴 댓글 전체 수 조회
+	public int selectCommentAllCount(String memId) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectCommentAllCount", memId);
+	}
+
+	// 내가 쓴 댓글 수 조회(경로게시판)
+	public int selectCommentRouteBoardCount(String memId) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectCommentRouteBoardCount", memId);
+	}
+
+	// 내가 쓴 댓글 수 조회(가이드게시판)
+	public int selectCommentGuideBoardCount(String memId) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectCommentGuideBoardCount", memId);
 	}
 
 	// 회원 정보 찾기

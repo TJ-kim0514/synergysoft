@@ -20,6 +20,7 @@ import com.google.gson.JsonParser;
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.member.model.dao.MemberDao;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
+import com.synergysoft.bonvoyage.member.model.dto.MyComment;
 
 //jmoh03 (오정민)
 @Service("memberService")
@@ -166,6 +167,42 @@ public class MemberServiceImpl implements MemberService {
 	// 내 정보 조회
 	public Member selectMyinfo(String memId) {
 		return memberDao.selectMyinfo(memId);
+	}
+
+	@Override
+	// 내가 쓴 댓글 전체 조회
+	public ArrayList<MyComment> selectCommentAll(MyComment mycomment) {
+		return memberDao.selectCommentAll(mycomment);
+	}
+
+	@Override
+	// 내가 쓴 댓글 조회(경로게시판)
+	public ArrayList<MyComment> selectCommentRouteBoard(MyComment mycomment) {
+		return memberDao.selectCommentRouteBoard(mycomment);
+	}
+
+	@Override
+	// 내가 쓴 댓글 조회(가이드게시판)
+	public ArrayList<MyComment> selectCommentGuideBoard(MyComment mycomment) {
+		return memberDao.selectCommentGuideBoard(mycomment);
+	}
+	
+	@Override
+	// 내가 쓴 댓글 전체 수 조회
+	public int selectCommentAllCount(String memId) {
+		return memberDao.selectCommentAllCount(memId);
+	}
+
+	@Override
+	// 내가 쓴 댓글 수 조회(경로게시판)
+	public int selectCommentRouteBoardCount(String memId) {
+		return memberDao.selectCommentRouteBoardCount(memId);
+	}
+
+	@Override
+	// 내가 쓴 댓글 수 조회(가이드게시판)
+	public int selectCommentGuideBoardCount(String memId) {
+		return memberDao.selectCommentGuideBoardCount(memId);
 	}
 
 	@Override
