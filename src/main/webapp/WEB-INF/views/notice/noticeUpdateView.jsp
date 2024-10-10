@@ -36,10 +36,14 @@
 </script>
 </head>
 <body>
-<nav>
+
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
-</nav>
+
 <br>
+<div class="container">
+<div class="h2 text-center mt-2 mb-5">
+	공지사항 수정 페이지
+</div>
 <form action="unotice.do" method="post" enctype="multipart/form-data">
 
 <%-- 추가 input필요 데이터 --%>
@@ -56,25 +60,25 @@
 <input type="hidden" id="delete2" name="delete2" value="">
 <input type="hidden" id="delete3" name="delete3" value="">
 
-<table align="center" width="800px" cellSpacing="5" cellpadding="10" border="1"  >
-<tr><td align="center">제 목</td>
-<td colspan="3" align="center">
-	<textarea name="title" cols="75" rows="2" >${ notice.title }</textarea>
+<table class="table">
+<tr><th class="text-center">제 목</th>
+<td colspan="3">
+	<textarea name="title" cols="140" rows="2" >${ notice.title }</textarea>
 </td></tr>
 <tr>
-	<td align="center" width="200px">작성자</td>
-	<td align="center" width="200px"><input name="adminId" readonly value="${notice.adminId}"></td>
-	<td align="center" width="200px">게시일</td>
-	<td align="center" width="200px"><input name="createdAt" readonly value="${notice.createdAt}"></td>
+	<th class="text-center" width="200px">작성자</th>
+	<td width="200px"><input type="hidden" name="adminId" readonly value="${notice.adminId}">${notice.adminId}</td>
+	<th class="text-center" width="200px">게시일</th>
+	<td width="200px"><input type="hidden" name="createdAt" readonly value="${notice.createdAt}">${notice.createdAt}</td>
 </tr>
 <tr>
-	<td align="center" >내용</td>
+	<th class="text-center" >내용</th>
 	<td colspan="3">
-		<textarea name="content" rows="20" cols="75"> ${notice.content}</textarea>
+		<textarea name="content" rows="20" cols="140">${notice.content}</textarea>
 	</td>
 </tr>
 <tr>
-    <td align="center">첨부파일1</td>
+    <th class="text-center">첨부파일1</th>
     <td colspan="3">
         <!-- 실제 파일 선택 input은 숨김 -->
         <input type="file" id="insertFile1" name="insertFile1" style="display: none;" onchange="updateFileName(1, this)">
@@ -87,7 +91,7 @@
     </td>
 </tr>
 <tr>
-    <td align="center">첨부파일2</td>
+    <th class="text-center">첨부파일2</th>
     <td colspan="3">
         <!-- 실제 파일 선택 input은 숨김 -->
         <input type="file" id="insertFile2" name="insertFile2" style="display: none;" onchange="updateFileName(2, this)">
@@ -100,7 +104,7 @@
     </td>
 </tr>
 <tr>
-    <td align="center">첨부파일3</td>
+    <th class="text-center">첨부파일3</th>
     <td colspan="3">
         <!-- 실제 파일 선택 input은 숨김 -->
         <input type="file" id="insertFile3" name="insertFile3" style="display: none;" onchange="updateFileName(3, this)">
@@ -112,18 +116,16 @@
         <input type="button" id="deleteButton3" name="delete3" value="x" onclick="deleteFile(3)" style="display:${!empty notice.oFile3 ? 'inline' : 'none'};">
     </td>
 </tr>
-<tr><td align="center" colspan="4"> 
-<input type="submit" value="수정"> &nbsp;
-<button onclick="javascript:history.go(-1); return false;">수정취소</button> &nbsp;
-<button onclick="javascript:location.href='${pageContext.servletContext.contextPath}/sanotice.do'; return false;">목록</button>
-</td>
-</tr>
 </table>
+<div class="text-center">
+<input class="btn btn-success" type="submit" value="수정"> &nbsp;
+<button class="btn btn-success" onclick="javascript:history.go(-1); return false;">수정취소</button> &nbsp;
+<button class="btn btn-success" onclick="javascript:location.href='${pageContext.servletContext.contextPath}/sanotice.do'; return false;">목록</button>
+</div>
 </form>		
-		
-<footer>
+</div>
+
 <c:import url="/WEB-INF/views/common/footer.jsp"/>	
-</footer>
 
 </body>
 </html>

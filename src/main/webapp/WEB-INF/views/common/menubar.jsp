@@ -17,8 +17,8 @@
 		crossorigin="anonymous"></script>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg bg-body-tertiary">
-		<div class="container-fluid">
+	<nav class="navbar container navbar-expand-lg bg-body-tertiary">
+		<div class="container">
 			<button class="navbar-toggler" type="button"
 				data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
 				aria-controls="navbarTogglerDemo01" aria-expanded="false"
@@ -28,7 +28,6 @@
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
 				<a href="main.do"
 					style="font-family: Arial, sans-serif; font-size: 30px; font-weight: bold; color: #a0c9bb; text-decoration: none; text-shadow: 2px 2px 2px #4ba483; margin-left: 20px;">
-
 					Bon Voyage </a>
 				<ul class="navbar-nav me-auto mx-auto ">
 					<li class="nav-item" style="width: 120px; text-align: center;">

@@ -15,30 +15,30 @@
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
-
 <br>
-	<h1>Q&A 등록 페이지</h1>
+<div class="container">
+	<h1 class="text-center">Q&A 등록 페이지</h1>
 	<br>
-	<form action="iqna.do" method="post" enctype="multipart/form-data">
-		<table >
+	<form class="container" action="iqna.do" method="post" enctype="multipart/form-data">
+		<table class="table">
 			<tr>
-			<td class="insert" >제목</td>
-			<td><input type="text" name="title"></td>
+			<td width="150">제목</td>
+			<td><textarea cols="140" rows="2" name="title"></textarea></td>
 			</tr>
 			<tr>
-			<td class="insert">작성자</td>
-			<td><input type="text" name="userId" value="${ sessionScope.loginUser.memId }" readonly></td>
+			<td>작성자</td>
+			<td><input type="hidden" name="userId" value="${ sessionScope.loginUser.memId }" readonly>${ sessionScope.loginUser.memId }</td>
 			</tr>
 			<tr>
-			<td class="insert">비밀글 여부</td>
+			<td>비밀글 여부</td>
 			<td>
 				<input type="hidden" name="isSecret" value="N">
 				<input type="checkbox" id="isSecretCheckbox" value="Y" onclick="setSecretValue(this)">
 			</td>
 			</tr>
 			<tr>
-			<td class="insert">내용</td>
-			<td><textarea cols="100" rows="10" name="userContent"></textarea></td>
+			<td>내용</td>
+			<td><textarea cols="140" rows="10" name="userContent"></textarea></td>
 			</tr>
 			<c:forEach var="i" begin="1" end="5">
 				<tr>
@@ -46,13 +46,13 @@
 					<td><input type="file" id="insertFile${i}" name="insertFile"></td>
 				</tr>
 			</c:forEach>					
-			<tr><td colspan="2" align="center">
-				<input type="submit" value="입력"> &nbsp;
-				<input type="button" value="목록" onclick="javascript:history.go(-1);return false;">
-			</td></tr>
 		</table>
+		<div class="container text-center">
+				<input class="btn btn-success" type="submit" value="입력"> &nbsp;
+				<input class="btn btn-success" type="button" value="목록" onclick="javascript:history.go(-1);return false;">
+		</div>
 	</form>
-
+</div>
 <c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

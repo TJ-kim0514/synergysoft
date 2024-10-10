@@ -17,33 +17,34 @@
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 
-<div>
-    <h1>Q&A 게시판</h1>
-
-    <%-- QnA 입력페이지 이동 --%>
-    <c:if test="${!empty sessionScope.loginUser }">
-        <div>
-            <button onclick="window.location.href='miqna.do'">
-                Q&A 작성
-            </button>
-        </div>
-    </c:if>    
+<div class="container">
+	<div class="h1 text-center m-4">
+    Q&A 게시판
+	</div>
     <%-- 항목별 검색기능 --%>
-    <form method="get" action="ssqna.do" id="ss">
-        <select name="action" id="search">
+    <form method="get" action="ssqna.do" id="ss" class="d-flex mb-2" style="float:left">
+        <select name="action" id="search" class="form-select w-auto">
             <option value="title" id="title">제목</option>
             <option value="userContent" id="userContent">내용</option>
             <option value="userId" id="userId">작성자</option>
         </select>
-        <input type="search" name="keyword" placeholder="검색어를 입력해주세요" size="50">
-        <button type="submit" >검색</button>
+        <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
+        <button type="submit" class="btn btn-success">검색</button>
     </form>
+    <%-- QnA 입력페이지 이동 --%>
+    <c:if test="${!empty sessionScope.loginUser }">
+        <div class="text-end">
+            <button onclick="window.location.href='miqna.do'" class="btn btn-success">
+                Q&A 작성
+            </button>
+        </div>
+    </c:if>    
 
     <%-- QnA 전체 테이블 --%>
-    <div>
-        <table>
-            <thead>
-                <tr>
+    <div class="container">
+        <table class="table table-sm">
+            <thead class="table-success">
+                <tr class="text-center">
                     <th width="80px">No</th>
                     <th width="500px">제목</th>
                     <th width="100px">작성자</th>
@@ -55,12 +56,12 @@
             <tbody>
                 <c:forEach items="${requestScope.list}" var="q">
                     <tr>
-                        <td>${fn:substring(q.qnaId, 4, -1)}</td>
-                        <td>
+                        <td class="text-center">${fn:substring(q.qnaId, 4, -1)}</td>
+                        <td class="px-2">
                         	<c:if test="${ q.isSecret eq 'N'
                         				or( q.isSecret eq 'Y' and sessionScope.loginUser.memId eq q.userId)
                         				or( loginUser.memType eq 'ADMIN') }">
-	                            <a href="${pageContext.servletContext.contextPath}/msqna.do?qnaId=${q.qnaId}">
+	                            <a href="${pageContext.servletContext.contextPath}/msqna.do?qnaId=${q.qnaId}" class="text-dark text-decoration-none">
 	                                ${q.title}
 	                            </a>
 	                        </c:if>
@@ -68,9 +69,9 @@
 	                                ${q.title}
 	                        </c:if>
                         </td>
-                        <td>${q.userId }</td>
-                        <td>${q.qCreatedAt}</td>
-                        <td>
+                        <td class="text-center">${q.userId }</td>
+                        <td class="text-center">${q.qCreatedAt}</td>
+                        <td class="text-center">
                         	<c:if test="${q.isSecret eq 'Y'}">
                         		<input type="checkbox" checked disabled>
                        		</c:if>
@@ -78,7 +79,7 @@
                         		<input type="checkbox" disabled>
                         	</c:if>
                         </td>
-                        <td>
+                        <td class="text-center">
                          	<c:if test="${q.isAccept eq 'Y'}">
                         		<input type="checkbox" checked disabled>
                        		</c:if>

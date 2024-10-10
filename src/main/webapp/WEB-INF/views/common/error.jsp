@@ -9,32 +9,17 @@
 <!-- Bootstrap CSS CDN 링크 추가 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-    body {
-        background-color: #f8f9fa;
-    }
-    h1 {
-        margin-top: 50px;
-        color: #dc3545;
-    }
-    .container {
-        text-align: center;
-        margin-top: 50px;
-    }
-    nav, footer {
-        margin: 20px 0;
-    }
+
 </style>
 </head>
 <body>
     <c:import url="/WEB-INF/views/common/menubar.jsp"/>
 
-<div class="container ">
-    <h1 class="">오류 발생 : <%= request.getAttribute("message") %></h1>
-    
-    <div class="btn-container mt-4">
-        <a href="javascript:history.go(-1);" class="btn btn-secondary btn-lg">이전 페이지로 이동</a>
-        &nbsp;
-        <a href="main.do" class="btn btn-success btn-lg">Home</a>
+<div class="container h1 mt-5 text-center">
+    오류 발생 : <%= request.getAttribute("message") %>
+    <div class="btn-container mt-4 mb-5">
+        <a href="javascript:history.go(-1);" class="btn btn-secondary">이전 페이지로 이동</a>
+        <a href="main.do" class="btn btn-success">Home</a>
     </div>
 </div>
 
