@@ -26,22 +26,20 @@
 </script>
 </head>
 <body>
-<nav>
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
-</nav>
 <br>
-
-<table align="center" width="800px" cellSpacing="5" cellpadding="10" border="1"  >
-<tr><td colspan="4" align="center"><h4 align="center">${ notice.title }</h4></td></tr>
+<div class="container">
+<div class="h2 text-center">${ notice.title }</div>
+<table class="table">
 <tr>
-	<td align="center" width="200px">작성자</td>
-	<td align="center" width="200px">${notice.adminId}</td>
-	<td align="center" width="200px">게시일</td>
-	<td align="center" width="200px">${notice.createdAt}</td>
+	<th class="text-center" width="200px">작성자</th>
+	<td class="text-center" width="200px">${notice.adminId}</td>
+	<th class="text-center" width="200px">게시일</th>
+	<td class="text-center" width="200px">${notice.createdAt}</td>
 </tr>
 <tr>
-	<td align="center" >내용</td>
-	<td colspan="3" style="white-space: pre-wrap;"> ${notice.content}</td>
+	<th class="text-center" >내용</th>
+	<td colspan="3" style="white-space: pre-wrap;">${notice.content}</td>
 </tr>
 <%-- 파일 다운용 url생성 --%>
 <c:url var="nfdown1" value="nfdown.do">
@@ -57,20 +55,18 @@
 			<c:param name="rFile" value="${ notice.rFile3 }"/>
 </c:url>
 
-<tr><td align="center" >첨부파일1</td><td colspan="3"><a href="${nfdown1}" >${notice.oFile1}</a></td></tr>
-<tr><td align="center" >첨부파일2</td><td colspan="3"><a href="${nfdown2}" >${notice.oFile2}</a></td></tr>
-<tr><td align="center" >첨부파일3</td><td colspan="3"><a href="${nfdown3}" >${notice.oFile3}</a></td></tr>
-<tr><td align="center" colspan="4"> 
-<button onclick="goToPrevious()">이전글</button>
-<button onclick="javascript:history.go(-1);">이전 페이지로 이동</button>
-<button onclick="javascript:location.href='${pageContext.servletContext.contextPath }/sanotice.do'; return false;">목록</button>
-<button onclick="goToNext()">다음글</button>
-</td></tr>
+<tr><th class="text-center" >첨부파일1</th><td colspan="3"><a style="text-decoration:none;color:black;" href="${nfdown1}" >${notice.oFile1}</a></td></tr>
+<tr><th class="text-center" >첨부파일2</th><td colspan="3"><a style="text-decoration:none;color:black;" href="${nfdown2}" >${notice.oFile2}</a></td></tr>
+<tr><th class="text-center" >첨부파일3</th><td colspan="3"><a style="text-decoration:none;color:black;" href="${nfdown3}" >${notice.oFile3}</a></td></tr>
 </table>
+<div class="text-center">
+<button class="btn btn-success" onclick="goToPrevious()">이전글</button>
+<button class="btn btn-success" onclick="javascript:history.go(-1);">이전 페이지로 이동</button>
+<button class="btn btn-success" onclick="javascript:location.href='${pageContext.servletContext.contextPath }/sanotice.do'; return false;">목록</button>
+<button class="btn btn-success" onclick="goToNext()">다음글</button>
+</div>
+</div>	
 		
-		
-<footer>
 <c:import url="/WEB-INF/views/common/footer.jsp"/>	
-</footer>
 </body>
 </html>

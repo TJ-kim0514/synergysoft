@@ -43,9 +43,10 @@
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
-
 <br>
-	<h1>Q&A 수정 페이지</h1>
+<div class="container">
+<div class="h1 text-center my-2">
+	Q&A 수정 페이지</div>
 	<br>
 	<form action="uqna.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="qnaId" value="${ requestScope.qna.qnaId }">
@@ -67,17 +68,17 @@
 		<input type="hidden" id="delete5" name="delete5" value="">
 		
 		
-		<table >
+		<table class="table">
 			<tr>
-			<td class="insert" >제목</td>
-			<td><input type="text" name="title" value="${ requestScope.qna.title }"></td>
+			<td class="text-center" >제목</td>
+			<td><textarea cols="140" rows="2" name="title">${ requestScope.qna.title }</textarea></td>
 			</tr>
 			<tr>
-			<td class="insert">작성자</td>
-			<td><input type="text" name="userId" value="${ requestScope.qna.userId }" readonly></td>
+			<td class="text-center" width="200px">작성자</td>
+			<td><input type="hidden" name="userId" value="${ requestScope.qna.userId }" readonly>${ requestScope.qna.userId }</td>
 			</tr>
 			<tr>
-			<td class="insert">비밀글 여부</td>
+			<td class="text-center">비밀글 여부</td>
 			<td>
 				<c:if test="${ requestScope.qna.isSecret == 'Y' }">
 					<input type="hidden" name="isSecret" value="Y">
@@ -90,11 +91,11 @@
 			</td>
 			</tr>
 			<tr>
-			<td class="insert">내용</td>
-			<td><textarea cols="100" rows="10" name="userContent">${ requestScope.qna.userContent }</textarea></td>
+			<td class="text-center">내용</td>
+			<td><textarea cols="140" rows="10" name="userContent">${ requestScope.qna.userContent }</textarea></td>
 			</tr>
 			<tr>
-			    <td align="center">첨부파일1</td>
+			    <td class="text-center">첨부파일1</td>
 			    <td>
 			        <!-- 실제 파일 선택 input은 숨김 -->
 			        <input type="file" id="insertFile1" name="insertFile1" style="display: none;" onchange="updateFileName(1, this)">
@@ -107,7 +108,7 @@
 			    </td>
 			</tr>
 			<tr>
-			    <td align="center">첨부파일2</td>
+			    <td class="text-center">첨부파일2</td>
 			    <td>
 			        <!-- 실제 파일 선택 input은 숨김 -->
 			        <input type="file" id="insertFile2" name="insertFile2" style="display: none;" onchange="updateFileName(2, this)">
@@ -120,7 +121,7 @@
 			    </td>
 			</tr>
 			<tr>
-			    <td align="center">첨부파일3</td>
+			    <td class="text-center">첨부파일3</td>
 			    <td>
 			        <!-- 실제 파일 선택 input은 숨김 -->
 			        <input type="file" id="insertFile3" name="insertFile3" style="display: none;" onchange="updateFileName(3, this)">
@@ -133,7 +134,7 @@
 			    </td>
 			</tr>
 			<tr>
-			    <td align="center">첨부파일4</td>
+			    <td class="text-center">첨부파일4</td>
 			    <td>
 			        <!-- 실제 파일 선택 input은 숨김 -->
 			        <input type="file" id="insertFile4" name="insertFile4" style="display: none;" onchange="updateFileName(4, this)">
@@ -146,7 +147,7 @@
 			    </td>
 			</tr>
 			<tr>
-			    <td align="center">첨부파일5</td>
+			    <td class="text-center">첨부파일5</td>
 			    <td>
 			        <!-- 실제 파일 선택 input은 숨김 -->
 			        <input type="file" id="insertFile5" name="insertFile5" style="display: none;" onchange="updateFileName(5, this)">
@@ -158,14 +159,14 @@
 			        <input type="button" id="deleteButton5" name="delete5" value="x" onclick="deleteFile(5)" style="display:${!empty qna.oFile5 ? 'inline' : 'none'};">
 			    </td>
 			</tr>
-				
-			<tr><td colspan="2" align="center">
-				<input type="submit" value="수정하기"> &nbsp;
-				<input type="button" value="돌아가기" onclick="javascript:history.go(-1);return false;">
-			</td></tr>
 		</table>
+				
+			<div class="text-center">
+				<input class="btn btn-success" type="submit" value="수정하기"> &nbsp;
+				<input class="btn btn-success" type="button" value="돌아가기" onclick="javascript:history.go(-1);return false;">
+			</div>
 	</form>
-
+</div>
 <c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>
