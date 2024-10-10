@@ -29,7 +29,7 @@
 
 
     <%-- 항목별 검색기능 --%>
-    <form method="get" action="ssnotice.do" class="d-flex mb-4" id="ss" style="float:left">
+    <form method="get" action="ssnotice.do" class="d-flex mb-2" id="ss" style="float:left">
         <select name="action" id="search" class="form-select w-auto">
             <option value="title" id="title">제목</option>
             <option value="content" id="content">내용</option>
