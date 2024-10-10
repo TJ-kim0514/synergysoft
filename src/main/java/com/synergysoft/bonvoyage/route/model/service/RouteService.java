@@ -12,5 +12,6 @@ public interface RouteService {
 	int selectListCount();
 	int updateRoute(Route route);
 	int deleteRoute(String routeBoardId);
+	int updateRouteLikeCount(String postId);
 	
 }

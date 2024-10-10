@@ -39,4 +39,8 @@ public class RouteDao {
 	public int deleteRoute(String routeBoardId) {
 		return sqlSessionTemplate.delete("routeMapper.deleteRoute", routeBoardId);
 	}
+
+	public int updateRouteLikeCount(String postId) {
+		return sqlSessionTemplate.update("routeMapper.updateRouteLikeCount", postId);
+	}
 }

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.synergysoft.bonvoyage.comment.model.dto.Comment;
+import com.synergysoft.bonvoyage.comment.model.service.CommentService;
 import com.synergysoft.bonvoyage.common.FileNameChange;
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.place.model.dto.Place;
@@ -38,6 +40,9 @@ public class RouteController {
 	
 	@Autowired
 	private RouteDataService routeDataService;
+	
+	@Autowired
+	private CommentService commentService;
 	
 	// 뷰 페이지 이동 메소드
 	@RequestMapping("moveWriteRoute.do")
@@ -307,10 +312,13 @@ public class RouteController {
 		
 		Route route = routeService.selectRoute(routeBoardId);
 		ArrayList<Place> place = placeService.selectPlace(routeBoardId);
+		ArrayList<Comment> clist = commentService.selectComment(routeBoardId);
 		
 		if(route != null) {
 			mv.addObject("route", route);
 			mv.addObject("place", place);
+			mv.addObject("clist", clist);
+			logger.info("route : " + route);
 			mv.setViewName("route/routeDetailView");
 
 		}else {
