@@ -44,5 +44,10 @@ public class RouteServiceImpl implements RouteService {
 	public int deleteRoute(String routeBoardId) {
 		return routeDao.deleteRoute(routeBoardId);
 	}
+
+	@Override
+	public int updateRouteLikeCount(String postId) {
+		return routeDao.updateRouteLikeCount(postId);
+	}
 	
 }

@@ -14,7 +14,7 @@
 	<c:import url="/WEB-INF/views/common/menubar.jsp"/>
 </nav>
 <br>
-<div>
+<div class="container">
 <h1 align="center">경로 추천 게시판</h1>
 <br>
 <center>
