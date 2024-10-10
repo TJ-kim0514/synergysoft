@@ -1,12 +1,16 @@
 package com.synergysoft.bonvoyage.guide.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,7 +38,54 @@ public class GuideController {
 	@Autowired
 	private GuideService guideService;
 	
-	
+	// 조회수 많은 인기 게시글 top-3 요청 처리용
+	@RequestMapping(value = "gtop3.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String boardTop3Method(HttpServletResponse response) throws UnsupportedEncodingException {
+	    // ajax 요청시 리턴방법은 여러가지가 있음 (문자열, json 객체 등)
+	    // 방법1 : 출력스트림을 따로 생성해서 응답하는 방법 -> public void 로 지정
+	    // 방법2 : 뷰리졸버로 리턴해서 등록된 JSONView 가 내보내는 방법 (servlet-context.xml 에 등록)
+	    // public String 으로 지정
+
+	    // 조회수 많은 게시글 3개 조회 요청함
+	    ArrayList<Guide> list = guideService.selectTop3();
+
+	    // 내보낼 값에 대해 response 에 mimiType 설정
+	    response.setContentType("application/json; charset=utf-8");
+
+	    // 리턴된 list 를 json 배열에 옮겨 기록하기
+	    JSONArray jarr = new JSONArray();
+
+	    for (Guide guide : list) {
+	        // 각 게시글 정보를 JSON 객체로 변환
+	        JSONObject job = new JSONObject(); // org.json.simple.JSONObject 임포트
+
+	        job.put("guidepostId", guide.getGuidepostId());
+	        // 문자열값에 한글이 포함되어 있다면, 반드시 인코딩해서 저장해야 함
+	        job.put("gtitle", URLEncoder.encode(guide.getGuideTitle(), "utf-8"));
+	        // 조회수 또는 좋아요 수
+	        job.put("lcount", guide.getLikeCount());
+	        
+	        job.put("glocation", guide.getGuideLocation());
+
+	        // 추가적인 이미지 파일 정보 (carousel에 사용할 이미지 경로)
+	        if (guide.getrFile1() != null && !guide.getrFile1().isEmpty()) {
+	            job.put("rFile1", guide.getrFile1());
+	        } else {
+	            job.put("rFile1", "");  // 이미지가 없는 경우 빈 문자열
+	        }
+
+	        jarr.add(job); // 배열에 JSON 객체 추가
+	    }
+
+	    // 전송용 JSON 객체 생성
+	    JSONObject sendJson = new JSONObject();
+	    sendJson.put("glist", jarr); // glist 라는 키에 배열 추가
+
+	    // 최종적으로 JSON 문자열로 변환하여 반환
+	    return sendJson.toJSONString();
+	}
+
 	
 	//가이드 게시판 페이징 처리
 	@RequestMapping("sagBlog.do")

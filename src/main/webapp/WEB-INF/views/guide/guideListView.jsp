@@ -29,25 +29,28 @@
 <!-- 통합 검색 폼 -->
 <!-- <div style="display: flex; justify-content: flex-end;"> -->
 <!-- 목록 버튼은 폼 외부로 -->
-<button class="btn btn-success" style="border-radius: 50px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button>
-
-
-
-<form action="${pageContext.request.contextPath}/gsearch.do" method="get">
-    <fieldset>
-        <!-- 검색 기준 선택 -->
-        <select name="action" class="form-select" style="width: 150px; display: inline-block;">
-            <option value="title">제목</option>
-            <option value="content">내용</option>
-            <option value="location">지역</option>
-        </select>
-        <!-- 검색어 입력 -->
-        <input type="search" name="keyword" size="50" class="form-control d-inline-block" style="width: auto;" placeholder="제목 또는 내용 또는 지역을 입력해주세요.">
-        <!-- 검색 버튼 -->
-        <input type="submit" value="검색" class="btn btn-success">
-    </fieldset>
-</form>
-
+<div class="row">
+    <!-- 검색 폼을 왼쪽에 배치 -->
+    <div class="col text-end">
+        <form action="${pageContext.request.contextPath}/gsearch.do" method="get" style="display: inline-block; margin-right: 10px;"> <!-- 오른쪽 여백 추가 -->
+            <fieldset>
+                <!-- 검색 기준 선택 -->
+                <select name="action" class="form-select" style="width: 150px; display: inline-block;">
+                    <option value="title">제목</option>
+                    <option value="content">내용</option>
+                    <option value="location">지역</option>
+                </select>
+                <!-- 검색어 입력 -->
+                <input type="search" name="keyword" size="50" class="form-control d-inline-block" style="width: auto;" placeholder="제목 또는 내용 또는 지역을 입력해주세요.">
+                <!-- 검색 버튼 -->
+                <input type="submit" value="검색" class="btn btn-success">
+            </fieldset>
+        </form>
+        
+        <!-- 목록 버튼을 검색 폼 오른쪽에 배치 -->
+        <button class="btn btn-success" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button>
+    </div>
+</div>
 
 
 	
@@ -77,6 +80,8 @@
                     <h5 class="card-title">${g.guideTitle}</h5>
                     <p class="card-text">지역: ${g.guideLocation}</p>
                     <p class="card-text">조회수: ${g.likeCount}</p>
+                   
+                    
     
                     <a href="${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=${g.guidepostId}" class="btn btn-dark">상세보기</a>
                 </div>

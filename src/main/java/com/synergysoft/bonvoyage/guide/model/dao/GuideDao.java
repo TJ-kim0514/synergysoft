@@ -88,6 +88,12 @@ public class GuideDao {
 	}
 
 
+	public ArrayList<Guide> selectTop3() {
+		List<Guide> list = sqlSessionTemplate.selectList("guideMapper.selectTop3");
+		return (ArrayList<Guide>)list;
+	}
+
+
 
 
 
