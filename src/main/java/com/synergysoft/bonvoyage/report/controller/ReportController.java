@@ -10,15 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.common.Search;
+import com.synergysoft.bonvoyage.guide.model.dto.Guide;
+import com.synergysoft.bonvoyage.guide.model.service.GuideService;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
-import com.synergysoft.bonvoyage.notice.model.dto.Notice;
+import com.synergysoft.bonvoyage.member.model.service.MemberService;
 import com.synergysoft.bonvoyage.report.model.dto.Report;
 import com.synergysoft.bonvoyage.report.model.service.ReportService;
+import com.synergysoft.bonvoyage.route.model.dto.Route;
+import com.synergysoft.bonvoyage.route.model.service.RouteService;
 
 @Controller
 public class ReportController {
@@ -27,55 +32,16 @@ public class ReportController {
 
 	@Autowired
 	private ReportService reportService;
-	// 뷰 페이지 이동 처리 메소드
-
-/*	// 페이징 처리하기
-	@RequestMapping("reP.do")
-	public String reportListMethod(Model model, @RequestParam(name = "page", required = false) String page,
-			@RequestParam(name = "limit", required = false) String slimit,
-			@RequestParam(name = "groupLimit", required = false) String glimit) {
-
-		// paging
-		// 기본세팅-----------------------------------------------------------------------
-		// 출력할 페이지(기본값 1페이지)
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-		// 한페이지에 출력할 신고글 갯수 (기본값 10개 세팅)
-		int limit = 10;
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-		// 페이징 그룹 갯수 (기본값 5개 세팅)
-		int groupLimit = 5;
-		if (glimit != null) {
-			groupLimit = Integer.parseInt(glimit);
-		}
-		// 총 목록 갯수 조회
-		int listCount = reportService.selectReportListCount();
-		logger.info("신고글 총 갯수 : " + listCount);
-
-		// 페이징 처리 값생성
-		Paging paging = new Paging(listCount, limit, currentPage, "reP.do", groupLimit);
-		paging.calculate();
-		// paging
-		// 세팅---------------------------------------------------------------------------
-		// 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
-		ArrayList<Report> list = reportService.selectAllReport(paging); // 전체목록 받아오기
-
-		logger.info("list : " + list);
-		if (list != null && list.size() > 0) {
-			model.addAttribute("list", list);
-			model.addAttribute("paging", paging);
-			model.addAttribute("currentPage", currentPage);
-			return "admin/report/reportListView"; // 뷰의 이름을 반환
-		} else {
-			model.addAttribute("message", "목록 조회 실패!");
-			return "common/error"; // 에러 페이지 뷰의 이름 반환
-		}
-	}
-*/
+	
+	@Autowired
+	private MemberService memberService;
+	
+	@Autowired
+	private GuideService guideService;
+	
+	@Autowired
+	private RouteService routeService;
+	
 	// 새 신고 등록 페이지 이동 처리
 	@RequestMapping("reportWrite.do")
 	public ModelAndView moveWritePage(ModelAndView mv, HttpSession session) {
@@ -92,20 +58,21 @@ public class ReportController {
 	}
 
 	// 요청 처리
-
 	// 신고글 상세 내용 보기 요청 처리
 	@RequestMapping("reportDetail.do")
-	public ModelAndView reportDetailMethod(@RequestParam("no") String reportId, ModelAndView mv, HttpSession session) {
+	public ModelAndView reportDetailMethod(@RequestParam("reportId") String reportId, ModelAndView mv, HttpSession session) {
+		
 		// 관리자용 상세보기 페이지와 일반회원 상세보기 페이지를 구분해서 응답 처리
 
 		logger.info("rdetail.do : " + reportId); // 전송받은 값 확인
 
 		Report report = reportService.selectReportDetail(reportId);
-
-		if (report != null) {
+		
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		if ((report != null && report.getReportUserId().equals(loginUser.getMemId())) || loginUser.getMemType().equals("ADMIN")) {
 			mv.addObject("report", report);
 			mv.setViewName("admin/report/reportDetailView");
-			
 		} else {
 			mv.addObject("message", reportId + "번 신고글 상세보기 요청 실패");
 			mv.setViewName("common/error");
@@ -120,8 +87,8 @@ public class ReportController {
 //			@RequestParam("keyword") String keyword,  // 검색키워드값		
 			@RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String slimit,
-			@RequestParam(name = "groupLimit", required = false) String glimit,
-			ModelAndView mv, HttpSession session, Model model) {
+			@RequestParam(name = "groupLimit", required = false) String glimit, ModelAndView mv, HttpSession session,
+			Model model) {
 
 		// paging
 		// 기본세팅-----------------------------------------------------------------------
@@ -140,46 +107,46 @@ public class ReportController {
 		int groupLimit = 5;
 		if (glimit != null) {
 			groupLimit = Integer.parseInt(glimit);
-		}	
-	 
- 		//paging 세팅---------------------------------------------------------------------------
- 	// 서비스롤 목록 조회 요청하고 결과 받기
-		//관리자인지 일반회원인지 확인
+		}
+
+		// paging
+		// 세팅---------------------------------------------------------------------------
+		// 서비스롤 목록 조회 요청하고 결과 받기
+		// 관리자인지 일반회원인지 확인
 		Member loginUser = (Member) session.getAttribute("loginUser");
 //관리자이면
 		int listCount = 0;
-		if (loginUser != null 	&& loginUser.getMemType().equals("ADMIN")) {
-			//전체 신고글 목록갯수 조회
-			 listCount = reportService.selectReportAllListCount();
-			
-		} else if ( loginUser != null && loginUser.getMemType().equals("USER")) {
-			 listCount = reportService.selectReportUserListCount(loginUser.getMemId());
-		} 		
-		
-		//페이징 계산
+		if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
+			// 전체 신고글 목록갯수 조회
+			listCount = reportService.selectReportListCount();
+
+		} else if (loginUser != null && loginUser.getMemType().equals("USER")) {
+			listCount = reportService.selectReportUserListCount(loginUser.getMemId());
+		}
+
+		// 페이징 계산
 		Paging paging = new Paging(listCount, limit, currentPage, "reportList.do", groupLimit);
- 		paging.calculate();
- 		
- 		ArrayList<Report> list = null;
- 		if (loginUser != null 	&& loginUser.getMemType().equals("ADMIN")) {
-			//전체 신고글 목록 조회
- 			 list = reportService.selectList(paging);			
-		} else if ( loginUser != null && loginUser.getMemType().equals("USER")) {
-			//회원이 등록한 목록 조회
-			Search search = new Search();
-			search.setKeyword(loginUser.getMemId());
-			search.setStartRow(paging.getStartRow());
-			search.setEndRow(paging.getEndRow());
-			list = reportService.selectList(search);
-		} 		 		
- 	   
- 	    if(list !=null && list.size() > 0) {
-		mv.addObject("list", list);
-		mv.addObject("paging",paging);
-		mv.addObject("currentPage",currentPage);
-		mv.setViewName("admin/report/reportListView");
- 	    }
-		else {
+		paging.calculate();
+
+		ArrayList<Report> list = null;
+		if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
+			// 전체 신고글 목록 조회
+			list = reportService.selectReport(paging);
+		} else if (loginUser != null && loginUser.getMemType().equals("USER")) {
+			// 회원이 등록한 목록 조회
+			Report userReport = new Report();
+			userReport.setReportUserId(loginUser.getMemId());
+			userReport.setStartRow(paging.getStartRow());
+			userReport.setEndRow(paging.getEndRow());
+			list = reportService.selectReportMe(userReport);
+		}
+
+		if (list != null && list.size() > 0) {
+			mv.addObject("list", list);
+			mv.addObject("paging", paging);
+			mv.addObject("currentPage", currentPage);
+			mv.setViewName("admin/report/reportListView");
+		} else {
 			mv.addObject("message", "신고글 목록 조회 실패!");
 			mv.setViewName("common/error");
 		}
@@ -204,28 +171,41 @@ public class ReportController {
 	// 신고글 처리 기능
 	@RequestMapping("reportUpdateProcess.do")
 	public ModelAndView reportUpdateProcessMethod(Report report, ModelAndView mv, HttpSession session) {
-
+		
+		logger.info("report :: " + report);
 		Member loginUser = (Member) session.getAttribute("loginUser");
-
+		Report reportProcess = reportService.selectReportDetail(report.getReportId());
+		
 		if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
-			if (reportService.updateReportProcess(report) > 0) {
-				mv.addObject("report", report);
-				mv.setViewName("redirect:reportList.do");
+			Route route = routeService.selectRoute(reportProcess.getPostId()); // 문제의 게시글을 불러옴
+			Guide guide = guideService.selectGuide(reportProcess.getPostId()); // 문제의 게시글을 불러옴
+			if(memberService.updateMemberAccount(route.getUserId()) > 0 || memberService.updateMemberAccount(guide.getGuideUserId()) > 0) { // 문제의 게시글의 작성자의 계정을 정지처리함
+				if(routeService.deleteRoute(reportProcess.getPostId()) > 0 || guideService.deleteGuide(reportProcess.getPostId()) > 0) { // 문제의 게시글을 삭제함
+					if (reportService.updateReportProcess(report) > 0) { // 신고처리 완료 처리함
+						mv.addObject("report", reportProcess);
+						mv.setViewName("redirect:reportList.do");
+					} else {
+						mv.addObject("message", "신고 처리 실패");		
+						mv.setViewName("common/error");
+					}
+				} else {
+					mv.addObject("message", "신고 처리 실패");		
+					mv.setViewName("common/error");
+				}
 			} else {
-				mv.addObject("message", "신고 처리 실패");
+				mv.addObject("message", "신고 처리 실패");	
 				mv.setViewName("common/error");
 			}
 		} else {
 			mv.addObject("message", "권한이 없습니다.");
+			mv.setViewName("common/error");
 		}
-
 		return mv;
 	}
 
 	// 신고글 처리 반려 기능
 	@RequestMapping("reportUpdateReject.do")
 	public ModelAndView reportUpdateRejectMethod(Report report, ModelAndView mv, HttpSession session) {
-
 		Member loginUser = (Member) session.getAttribute("loginUser");
 
 		if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
@@ -256,78 +236,143 @@ public class ReportController {
 		}
 		return mv;
 	} // 신고글 삭제 기능
+
+	// 신고글 검색 처리(제목/내용)
+	@RequestMapping("reportSearch.do")
+	public String selectSearchTitleReport(Model model, 
+			@RequestParam("action") String action, // 검색 유형 (제목,내용)
+			@RequestParam("keyword") String keyword, // 검색키워드값
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String slimit,
+			@RequestParam(name = "groupLimit", required = false) String glimit,
+			HttpSession session) {
+
+		// paging
+		// 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+
+		// 한페이지에 출력할 공지글 갯수 (기본값 10개 세팅)
+		int limit = 10;
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit = 5;
+		if (glimit != null) {
+			groupLimit = Integer.parseInt(glimit);
+		}
+		
+		int listCount = 0;
+		// 총 목록 갯수 조회
+		
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		Report reportSearch = new Report();
+		
+		if(loginUser != null && loginUser.getMemType().equals("ADMIN")) {
+			if (action.equals("reportingReason")) {
+				reportSearch = new Report();
+				reportSearch.setAction(action);
+				reportSearch.setKeyword(keyword);
+				listCount = reportService.selectReportSearchCount(reportSearch);
+			} else if (action.equals("detail")) {
+				reportSearch = new Report();
+				reportSearch.setAction(action);
+				reportSearch.setKeyword(keyword);
+				listCount = reportService.selectReportSearchCount(reportSearch);
+			}
 	
-	// 공지사항 검색 처리(제목/내용)
-		@RequestMapping("searchreport.do")
-		public String selectSearchTitleNotice(Model model,
-				@RequestParam("action") String action,  // 검색 유형 (제목,내용)
-				@RequestParam("keyword") String keyword,  // 검색키워드값			
-				@RequestParam(name="page", required=false) String page,
-				@RequestParam(name="limit", required=false) String slimit,
-				@RequestParam(name="groupLimit", required=false) String glimit
-				) {
-			
-			
-			//paging 기본세팅-----------------------------------------------------------------------
-			// 출력할 페이지(기본값 1페이지)
-			int currentPage=1;
-			if(page!=null) {
-				currentPage = Integer.parseInt(page);
-			}
-			
-			// 한페이지에 출력할 공지글 갯수 (기본값 10개 세팅)
-			int limit =10;
-			if(slimit !=null) {
-				limit= Integer.parseInt(slimit);
-			}
-			// 페이징 그룹 갯수 (기본값 5개 세팅)
-			int groupLimit =5;
-			if(glimit!=null) {
-				groupLimit=Integer.parseInt(glimit);
-			}
-			
-			int listCount = 0;
-			// 총 목록 갯수 조회
-		    if(action.equals("title")) {
-		    	listCount = reportService.selectSearchTitleListCount(keyword);
-		    } else if(action.equals("content")) {
-		    	listCount = reportService.selectSearchContentListCount(keyword);
-		    }
-			
-			logger.info("신고글 총 갯수 : " +listCount);
-			
+			logger.info("신고글 총 갯수 : " + listCount);
+	
 			// 페이징 처리 값생성
 			Paging paging = new Paging(listCount, limit, currentPage, "searchreport.do", groupLimit);
 			paging.calculate();
-			//paging 세팅---------------------------------------------------------------------------
-		    
-		    // 검색시 사용할 값 전송 객체생성 및 값 입력
-		    Search search = new Search();
-		    search.setKeyword(keyword);
-		    search.setStartRow(paging.getStartRow());
-		    search.setEndRow(paging.getEndRow());
-		    ArrayList<Report> list =null;
-		    
-		    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
-		    if(action.equals("title")) {
-		    	list = reportService.selectSearchTitleReport(search);
-		    } else if(action.equals("content")) {
-		    	list = reportService.selectSearchContentReport(search);
-		    }
-		    
-		    
-		    logger.info("list : " + list);
-		    if(list != null && list.size() > 0) {
-		        model.addAttribute("list", list);
-				model.addAttribute("paging",paging);
-				model.addAttribute("currentPage",currentPage);
-				model.addAttribute("action",action);
-				model.addAttribute("keyword",keyword);
-				
-		        return "admin/report/reportListView";  // 뷰의 이름을 반환
-		    } else {
-		        model.addAttribute("message", action + "에 대한 " + keyword + "검색결과가 존재하지 않습니다.");
-		        return "common/error";  // 에러 페이지 뷰의 이름 반환
-		    }
+			// paging
+			// 세팅---------------------------------------------------------------------------
+	
+			// 검색시 사용할 값 전송 객체생성 및 값 입력
+			reportSearch = new Report();
+			reportSearch.setAction(action);
+			reportSearch.setKeyword(keyword);
+			reportSearch.setStartRow(paging.getStartRow());
+			reportSearch.setEndRow(paging.getEndRow());
+			ArrayList<Report> list = null;
+	
+			// 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
+			if (action.equals("reportingReason")) {
+				list = reportService.selectReportSearch(reportSearch);
+			} else if (action.equals("detail")) {
+				list = reportService.selectReportSearch(reportSearch);
+			}
+	
+			logger.info("list : " + list);
+			if (list != null && list.size() > 0) {
+				model.addAttribute("list", list);
+				model.addAttribute("paging", paging);
+				model.addAttribute("currentPage", currentPage);
+				model.addAttribute("action", action);
+				model.addAttribute("keyword", keyword);
+	
+				return "admin/report/reportListView"; // 뷰의 이름을 반환
+			} else {
+				model.addAttribute("message", action + "에 대한 '" + keyword + "' 검색결과가 존재하지 않습니다.");
+				return "common/error"; // 에러 페이지 뷰의 이름 반환
+			}
+		} else if(loginUser != null && loginUser.getMemType().equals("USER")) {
+			if (action.equals("title")) {
+				reportSearch = new Report();
+				reportSearch.setAction(action);
+				reportSearch.setKeyword(keyword);
+				listCount = reportService.selectReportMeSearchCount(reportSearch);
+			} else if (action.equals("content")) {
+				reportSearch = new Report();
+				reportSearch.setAction(action);
+				reportSearch.setKeyword(keyword);
+				listCount = reportService.selectReportMeSearchCount(reportSearch);
+			}
+	
+			logger.info("신고글 총 갯수 : " + listCount);
+	
+			// 페이징 처리 값생성
+			Paging paging = new Paging(listCount, limit, currentPage, "searchreport.do", groupLimit);
+			paging.calculate();
+			// paging
+			// 세팅---------------------------------------------------------------------------
+	
+			// 검색시 사용할 값 전송 객체생성 및 값 입력
+			reportSearch = new Report();
+			reportSearch.setAction(action);
+			reportSearch.setKeyword(keyword);
+			reportSearch.setStartRow(paging.getStartRow());
+			reportSearch.setEndRow(paging.getEndRow());
+			ArrayList<Report> list = null;
+	
+			// 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
+			if (action.equals("reportingReason")) {
+				list = reportService.selectReportMeSearch(reportSearch);
+			} else if (action.equals("detail")) {
+				list = reportService.selectReportMeSearch(reportSearch);
+			}
+	
+			logger.info("list : " + list);
+			if (list != null && list.size() > 0) {
+				model.addAttribute("list", list);
+				model.addAttribute("paging", paging);
+				model.addAttribute("currentPage", currentPage);
+				model.addAttribute("action", action);
+				model.addAttribute("keyword", keyword);
+	
+				return "admin/report/reportListView"; // 뷰의 이름을 반환
+			} else {
+				model.addAttribute("message", action + "에 대한 " + keyword + "검색결과가 존재하지 않습니다.");
+				return "common/error"; // 에러 페이지 뷰의 이름 반환
+			}
+		} else {
+			model.addAttribute("message", "세션이 없습니다. 로그인 후 다시 이용해주시기 바랍니다.");
+			return "common/error";
 		}
+	}
 }

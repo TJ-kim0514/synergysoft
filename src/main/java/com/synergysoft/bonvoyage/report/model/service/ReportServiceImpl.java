@@ -16,74 +16,81 @@ public class ReportServiceImpl implements ReportService {
 	private ReportDao reportDao;
 
 	@Override
+	// TODO Auto-generated method stub
+	public ArrayList<Report> selectReport(Paging paging) {
+		return reportDao.selectReport(paging);
+	}
+
+	@Override
+	// TODO Auto-generated method stub
+	public ArrayList<Report> selectReportMe(Report report) {
+		return reportDao.selectReportMe(report);
+	}
+
+	@Override
+	// TODO Auto-generated method stub
+	public ArrayList<Report> selectReportSearch(Report report) {
+		return reportDao.selectReportSearch(report);
+	}
+
+	@Override
+	// TODO Auto-generated method stub
+	public ArrayList<Report> selectReportMeSearch(Report report) {
+		return reportDao.selectReportMeSearch(report);
+	}
+
+	@Override
+	// TODO Auto-generated method stub
+	public int selectReportSearchCount(Report report) {
+		return reportDao.selectReportSearchCount(report);
+	}
+
+	@Override
+	// TODO Auto-generated method stub
+	public int selectReportMeSearchCount(Report report) {
+		return reportDao.selectReportMeSearchCount(report);
+	}
+
+	@Override
+	// TODO Auto-generated method stub
 	public Report selectReportDetail(String reportId) {
 		return reportDao.selectReportDetail(reportId);
 	}
-	
+
 	@Override
-	// 유저&관리자 : 신고 등록
+	// TODO Auto-generated method stub
+	public int selectReportListCount() {
+		return reportDao.selectReportListCount();
+	}
+
+	@Override
+	// TODO Auto-generated method stub
+	public int selectReportUserListCount(String memId) {
+		return reportDao.selectReportUserListCount(memId);
+	}
+
+	@Override
+	// TODO Auto-generated method stub
 	public int insertReport(Report report) {
 		return reportDao.insertReport(report);
 	}
 
 	@Override
-	// 관리자 : 신고 처리
+	// TODO Auto-generated method stub
 	public int updateReportProcess(Report report) {
 		return reportDao.updateReportProcess(report);
 	}
 
 	@Override
-	// 관리자 : 신고 반려
+	// TODO Auto-generated method stub
 	public int updateReportReject(Report report) {
 		return reportDao.updateReportReject(report);
 	}
 
 	@Override
-	// 관리자 : 신고 삭제
+	// TODO Auto-generated method stub
 	public int deleteReport(String reportId) {
 		return reportDao.deleteReport(reportId);
-
-	}
-
-	@Override
-	// TODO Auto-generated method stub
-	public int selectReportUserListCount(String reportId) {
-		return reportDao.selectReportUserListCount(reportId);
-	}
-
-	@Override
-	public int selectReportAllListCount() {
-		return reportDao.selectReportAllListCount();
-	}
-
-	@Override
-	public ArrayList<Report> selectList(Paging paging) {
-		return reportDao.selectList(paging);
-	}
-
-	@Override
-	public ArrayList<Report> selectList(Search search) {
-		return reportDao.selectList(search);
-	}
-
-	@Override
-	public int selectSearchTitleListCount(String keyword) {
-		return reportDao.selectSearchTitleListCount(keyword);
-	}
-
-	@Override
-	public int selectSearchContentListCount(String keyword) {
-		return reportDao.selectSearchContentListCount(keyword);
-	}
-
-	@Override
-	public ArrayList<Report> selectSearchTitleReport(Search search) {
-		return reportDao.selectSearchTitleReport(search);
-	}
-
-	@Override
-	public ArrayList<Report> selectSearchContentReport(Search search) {
-		return reportDao.selectSearchContentReport(search);
 	}
 
 }

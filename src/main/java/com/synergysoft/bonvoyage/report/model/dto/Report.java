@@ -9,6 +9,7 @@ public class Report implements java.io.Serializable {
 	private String postId;
 	private String title; // 2024-10-07 추가
 	private String reportUserId;
+	private String memNickNm; // 2024-10-11 추가
 	private String reportingReason;
 	private String detail;
 	private Date reportDate;
@@ -16,6 +17,10 @@ public class Report implements java.io.Serializable {
 	private String checkedAdminId;
 	private String checkedAssigned;
 	private String assignedAdminId;
+	private String action;
+	private String keyword; // 제목, 내용 검색용
+	private int startRow;	// 한페이지에 출력할 목록의 시작행
+	private int endRow;		// 한페이지에 출력할 목록의 끝행
 
 	public Report() {
 		super();
@@ -121,6 +126,38 @@ public class Report implements java.io.Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public int getStartRow() {
+		return startRow;
+	}
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+	public int getEndRow() {
+		return endRow;
+	}
+
+	public void setEndRow(int endRow) {
+		this.endRow = endRow;
+	}
 
 	@Override
 	public String toString() {
@@ -130,12 +167,20 @@ public class Report implements java.io.Serializable {
 				+ checkedAssigned + ", assignedAdminId=" + assignedAdminId + "]";
 	}
 
-	public String getTitle() {
-		return title;
+	public String getMemNickNm() {
+		return memNickNm;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setMemNickNm(String memNickNm) {
+		this.memNickNm = memNickNm;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 
 }

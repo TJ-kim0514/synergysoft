@@ -104,8 +104,8 @@ textarea {
 			<tr>
 				<td class="insert" >제목</td>
 				<td>
-				<%-- <input type="hidden" name="postId" value="${ report.reportingReason }" readonly> --%>
-				<input type="text" name="reportTitle" value="${report.title}" readonly>
+				<input type="hidden" name="postId" value="${ report.postId }" readonly>
+				<input type="text" name="reportTitle" value="${report.title}" required>
 				</td>
 			</tr>
 
