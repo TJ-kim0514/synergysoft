@@ -24,4 +24,12 @@ public class CommentDao {
 		return (ArrayList<Comment>)list;
 	}
 
+	public int deleteRouteComment(String commentId) {
+		return sqlSessionTemplate.delete("commentMapper.deleteRouteComment", commentId);
+	}
+
+	public int updateRouteComment(Comment comment) {
+		return sqlSessionTemplate.update("commentMapper.updateRouteComment", comment);
+	}
+
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.route.model.dto.Route;
 
 @Repository("RouteDao")
@@ -42,5 +43,36 @@ public class RouteDao {
 
 	public int updateRouteLikeCount(String postId) {
 		return sqlSessionTemplate.update("routeMapper.updateRouteLikeCount", postId);
+	}
+
+	public int updateRouteReadCount(String routeBoardId) {
+		return sqlSessionTemplate.update("routeMapper.updateRouteReadCount", routeBoardId);
+	}
+
+	public int selectSearchTitleListCount(String keyword) {
+		return sqlSessionTemplate.selectOne("routeMapper.selectSearchTitleListCount", keyword);
+	}
+
+	public int selectSearchContentListCount(String keyword) {
+		return sqlSessionTemplate.selectOne("routeMapper.selectSearchContentListCount", keyword);
+	}
+
+	public int selectSearchUserIdListCount(String keyword) {
+		return sqlSessionTemplate.selectOne("routeMapper.selectSearchUserIdListCount", keyword);
+	}
+
+	public ArrayList<Route> selectSearchTitleRoute(Search search) {
+		List<Route> list = sqlSessionTemplate.selectList("routeMapper.selectSearchTitleRoute", search);
+		return (ArrayList<Route>)list;
+	}
+
+	public ArrayList<Route> selectSearchContentRoute(Search search) {
+		List<Route> list = sqlSessionTemplate.selectList("routeMapper.selectSearchContentRoute", search);
+		return (ArrayList<Route>)list;
+	}
+
+	public ArrayList<Route> selectSearchUserIdRoute(Search search) {
+		List<Route> list = sqlSessionTemplate.selectList("routeMapper.selectSearchUserIdRoute", search);
+		return (ArrayList<Route>)list;
 	}
 }

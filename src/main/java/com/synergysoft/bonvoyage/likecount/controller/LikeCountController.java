@@ -30,16 +30,18 @@ public class LikeCountController {
 												@RequestParam("userId") String userId) {
 		
 		
-		
+		// 게시글 식별코드와 로그인된 유저아이디를 보내기 위한 likecount 객체생성
 		LikeCount likeCount = new LikeCount();
+		// 생성한 객체에 전송된 식별코드와 아이디 저장
 		likeCount.setPostId(postId);
 		likeCount.setUserId(userId);
 		
 		logger.info("likeCount" + likeCount);
 		
+		// likecount 테이블에 전송된 게시글 식별코드와 아이디를 보내 추천한 이력이 있는지 확인
 		LikeCount chkLikeCount = likeCountService.selectLikeCount(likeCount);
 		
-		
+		// 추천 이력 여부에 따른 추천수 증가
 		if(chkLikeCount == null) {
 			likeCountService.insertLikeCount(likeCount);
 			routeService.updateRouteLikeCount(postId);

@@ -17,24 +17,42 @@
 <div class="container">
 <h1 align="center">경로 추천 게시판</h1>
 <br>
-<center>
-    <button onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveWriteRoute.do';">글쓰기</button>
-</center>
+
+
+
 <br>
-<table class="table table-bordered table-hover">
-    <tr style="background-color: green;">
-        <th style="text-align: center;" width="70">순 번</th>
-        <th style="text-align: center;">제 목</th>
-        <th style="text-align: center;" width="250">작성자</th>
-        <th style="text-align: center;" width="200">작성일자</th>
-        <th style="text-align: center;" width="100">좋아요</th>
+    <%-- 항목별 검색기능 --%>
+    <form method="get" action="sroute.do" class="d-flex mb-2" id="ss" style="float:left">
+        <select name="action" id="search" class="form-select w-auto">
+            <option value="title" id="title">제목</option>
+            <option value="content" id="content">내용</option>
+            <option value="userId" id="userId">작성자</option>
+        </select>
+        <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
+        <button type="submit" class="btn btn-success">검색</button>
+    </form>
+    
+    <c:if test="${ !empty loginUser }">
+		<div class="text-end">
+	    	<button class="btn btn-success" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveWriteRoute.do';">글쓰기</button>
+	    </div>
+    </c:if>
+<br>
+<table class="table table-sm">
+	<thead class="table-success">
+    <tr class="text-center">
+        <th width="70">순 번</th>
+        <th widht="500">제 목</th>
+        <th width="250">작성자</th>
+        <th width="200">작성일자</th>
+        <th width="100">좋아요</th>
     </tr>
     </thead>
-    <tbody class="table-group-divider">
+    <tbody>
     <c:forEach items="${ requestScope.list }" var="r">
         <tr>
             <td align="center">${fn:substring(r.routeBoardId,6,-1)}</td>
-            <td align="left"><a style="text-decoration: none; color: black;" href="${ pageContext.servletContext.contextPath }/routedetail.do?no=${ r.routeBoardId }">${ r.title }</a></td>
+            <td align="left"><a style="text-decoration: none; color: black;" href="${ pageContext.servletContext.contextPath }/routedetail.do?no=${ r.routeBoardId }"> &nbsp; ${ r.title }</a></td>
             <td align="center">${ r.userId }</td>
             <td align="center">${ r.createdAt }</td>
             <td align="center">${ r.likeCount }</td>
