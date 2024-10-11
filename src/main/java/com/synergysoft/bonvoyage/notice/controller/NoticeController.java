@@ -456,7 +456,7 @@ public class NoticeController {
 	@RequestMapping("ssnotice.do")
 	public String selectSearchTitleNotice(Model model,
 			@RequestParam("action") String action,  // 검색 유형 (제목,내용)
-			@RequestParam("keyword") String keyword,  // 검색키워드값			
+			@RequestParam("keyword") String keyword, // 검색키워드값			
 			@RequestParam(name="page", required=false) String page,
 			@RequestParam(name="limit", required=false) String slimit,
 			@RequestParam(name="groupLimit", required=false) String glimit

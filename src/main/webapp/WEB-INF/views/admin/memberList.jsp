@@ -25,13 +25,13 @@
 		<h1 align="center">회원 리스트</h1>
 		<br><br>
 		<fieldset>
-			<form method="get" action="memberList.do" class="d-flex mb-4" id="ss" style="float:left">
+			<form method="get" action="memberListSearch.do" class="d-flex mb-4" id="ss" style="float:left">
 		        <select name="action" id="searchItem" class="form-select w-auto">
 		            <option value="memId" id="memId">아이디</option>
 		            <option value="memNickNm" id="memNickNm">닉네임</option>
 		            <option value="memName" id="memName">이름</option>
 		        </select>
-		        <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
+		        <input type="search" name="keyword" class="form-control d-inline-block" style="width: auto;" placeholder="검색어를 입력해주세요" size="80">
 		        <button type="submit" class="btn btn-success">검색</button>
 		    </form>
 	    </fieldset>

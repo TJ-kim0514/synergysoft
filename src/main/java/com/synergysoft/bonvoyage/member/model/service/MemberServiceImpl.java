@@ -18,6 +18,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.member.model.dao.MemberDao;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.member.model.dto.MyComment;
@@ -216,6 +217,54 @@ public class MemberServiceImpl implements MemberService {
 	public int selectMemberListCount() {
 		return memberDao.selectMemberListCount();
 	}
+	
+	@Override
+	// 내가 쓴 댓글 검색 전체 조회
+	public ArrayList<MyComment> selectCommentAllSearch(MyComment mycomment) {
+		return memberDao.selectCommentAllSearch(mycomment);
+	}
+
+	@Override
+	// 내가 쓴 댓글 검색 조회(경로게시판)
+	public ArrayList<MyComment> selectCommentRouteBoardSearch(MyComment mycomment) {
+		return memberDao.selectCommentRouteBoardSearch(mycomment);
+	}
+
+	@Override
+	// 내가 쓴 댓글 검색 조회(가이드게시판)
+	public ArrayList<MyComment> selectCommentGuideBoardSearch(MyComment mycomment) {
+		return memberDao.selectCommentGuideBoardSearch(mycomment);
+	}
+
+	@Override
+	// 내가 쓴 댓글 검색 전체 수 조회
+	public int selectCommentAllSearchCount(MyComment mycomment) {
+		return memberDao.selectCommentAllSearchCount(mycomment);
+	}
+
+	@Override
+	// 내가 쓴 댓글 검색 수 조회(경로게시판)
+	public int selectCommentRouteBoardSearchCount(MyComment mycomment) {
+		return memberDao.selectCommentRouteBoardSearchCount(mycomment);
+	}
+
+	@Override
+	// 내가 쓴 댓글 검색 수 조회(가이드게시판)
+	public int selectCommentGuideBoardSearchCount(MyComment mycomment) {
+		return memberDao.selectCommentGuideBoardSearchCount(mycomment);
+	}
+
+	@Override
+	// 관리자 : 회원 목록 검색 조회
+	public ArrayList<Member> selectMemberSearch(Search search) {
+		return memberDao.selectMemberSearch(search);
+	}
+
+	@Override
+	// 회원 목록 검색 수 조회
+	public int selectMemberListSearchCount(Search search) {
+		return memberDao.selectMemberListSearchCount(search);
+	}
 
 	@Override
 	// 관리자 : 회원 상세 조회
@@ -275,6 +324,13 @@ public class MemberServiceImpl implements MemberService {
 	// 관리자 : 회원 계정 조치
 	public int updateMemberAccount(String memId) {
 		return memberDao.updateMemberAccount(memId);
+	}
+	
+
+	@Override
+	// 관리자 : 회원 계정 조치 해제
+	public int updateMemberAccountClear(String memId) {
+		return memberDao.updateMemberAccountClear(memId);
 	}
 
 	@Override

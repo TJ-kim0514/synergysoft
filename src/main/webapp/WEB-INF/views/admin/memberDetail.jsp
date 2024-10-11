@@ -52,6 +52,7 @@
 						<c:param name="memId" value="${ requestScope.member.memId }" />
 					</c:url>
 					<button type="button" class="btn btn-outline-success" onclick="location.href='${memberAccountUpdate}'">계정조치</button> &nbsp;
+					<button type="button" class="btn btn-outline-success" onclick="location.href='${memberAccountUpdateClear}'">계정조치 해제</button> &nbsp;
 				</th>
 			</tr>
 			

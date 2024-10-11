@@ -26,7 +26,7 @@
 <div class="container">
     <h1 class="text-center my-4">내가 쓴 댓글(지역소담이)</h1>
     <c:if test="${!empty sessionScope.loginUser}">
-    <form method="get" action="myRouteBoardCommentSearch.do" class="d-flex mb-4" id="ss" style="float:left">
+    <form method="get" action="myGuideBoardCommentSearch.do" class="d-flex mb-4" id="ss" style="float:left">
     	<input type="hidden" name="memId" value="${loginUser.memId}">
         <select name="action" id="search" class="form-select w-auto">
             <option value="title" id="title">게시글제목</option>

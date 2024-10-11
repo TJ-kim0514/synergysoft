@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.member.model.dto.MyComment;
 
@@ -26,6 +27,14 @@ public interface MemberService {
 	int selectCommentGuideBoardCount(String memId);
 	ArrayList<Member> selectMember(Paging paging);
 	int selectMemberListCount();
+	ArrayList<MyComment> selectCommentAllSearch(MyComment mycomment);
+	ArrayList<MyComment> selectCommentRouteBoardSearch(MyComment mycomment);
+	ArrayList<MyComment> selectCommentGuideBoardSearch(MyComment mycomment);
+	int selectCommentAllSearchCount(MyComment mycomment);
+	int selectCommentRouteBoardSearchCount(MyComment mycomment);
+	int selectCommentGuideBoardSearchCount(MyComment mycomment);
+	ArrayList<Member> selectMemberSearch(Search search);
+	int selectMemberListSearchCount(Search search);
 	Member selectMemberDetail(String memId);
 	int selectCheckId(String memId);
 	Member selectMemberByEmailId(Member member);
@@ -40,6 +49,7 @@ public interface MemberService {
 	int updateLeft(String memId);
 	int updateMember(Member member);
 	int updateMemberAccount(String memId);
+	int updateMemberAccountClear(String memId);
 	int updateMemberAdmin(String memId);
 	int updateMemberAdminDelete(String memId);
 	

@@ -9,8 +9,46 @@
 <meta charset="UTF-8">
 <title>bonvoyage</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<script type="text/javascript" src="/first/resources/js/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
+	
+	const memIdAuthBtn = document.getElementById('memIdAuthBtn');
+	
+	function emailAuth(){   	 
+		 var memId = $('#memId').val();
+		 
+		 if(memId == ''){
+		 	alert("이메일을 입력해주세요.");
+		 	return false;
+		 }
+		 
+		 $.ajax({
+			type : "POST",
+			url : "emailAuth.do",
+			data : {memId : memId},
+			success: function(data){
+				alert("인증번호가 발송되었습니다.");
+				
+				email_auth_cd = data;
+			},
+			error: function(data){
+				alert("메일 발송에 실패했습니다.");
+			}
+		});
+		 return false;
+	}
+	
+	function emailAuthChk(){
+		if($('#memIdAuth').val() != email_auth_cd){
+			alert("인증번호가 일치하지 않습니다.");
+			return false;
+		} else {
+			alert("이메일 인증에 성공하셨습니다.");
+			return true;
+		}
+	}
+
+
 	function dupIdCheck() {
 		$.ajax({
 			url : 'idchk.do',
@@ -59,6 +97,7 @@
 	<br>
 	<form action="enroll.do" method="post" onsubmit="return validate();"
 		enctype="multipart/form-data">
+		<div class="container">
 		<table class="table table-sm">
 			<thead class="table-success">
 				<tr>
@@ -67,8 +106,21 @@
 			</thead>
 			<tr>
 				<th width="120">*이메일</th>
-				<td><input type="text" class="form-control" name="memId" id="memId" required>
-					&nbsp; <input type="button" class="btn btn-outline-success" value="중복체크" onclick="return dupIdCheck();">
+				<td>
+					<div class="form-inline form-group" >
+						<div class="col-sm-10">
+							<input type="text" class="form-control" name="memId" id="memId" required>
+							<input type="button" class="btn btn-primary mb-3" onclick="return dupIdCheck();" value="중복체크">
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>* 인증번호 입력</th>
+				<td>
+					<input type="text" class="form-control" id="memIdAuth" required>
+					<input type="button" class="btn btn-primary mb-3" onclick="return emailAuth();" value="인증받기">
+					<input type="button" id="memIdAuthBtn" class="btn btn-primary mb-3" onclick="return emailAuthChk()" value="인증확인">
 				</td>
 			</tr>
 			<tr>
@@ -97,12 +149,13 @@
 			</tr>
 			<tr>
 				<th colspan="2">
-					<input type="submit" class="btn btn-outline-success" value="가입하기"> &nbsp; 
+					<input type="submit" id="submit" class="btn btn-outline-success" value="가입하기"> &nbsp; 
 					<input type="reset" class="btn btn-outline-success" value="작성취소"> &nbsp; 
 					<a class="btn btn-primary" href="main.do" role="button">Home</a>
 				</th>
 			</tr>
 		</table>
+		</div>
 	</form>
 
 	<hr>
