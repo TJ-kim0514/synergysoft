@@ -71,6 +71,9 @@ public class NoticeDao {
 		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectTopNotice");
 		return (ArrayList<Notice>)list;
 	}
+	public int updateReadCount(String noticeId) {
+		return sqlSessionTemplate.update("noticeMapper.updateReadCount",noticeId);
+	}
 
 	
 }

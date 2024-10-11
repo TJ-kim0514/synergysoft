@@ -20,12 +20,14 @@ public class Notice implements java.io.Serializable{
 	private String rFile1;						// RFILE1	VARCHAR2(500 BYTE)
 	private String rFile2;						// RFILE2	VARCHAR2(500 BYTE)
 	private String rFile3;						// RFILE3	VARCHAR2(500 BYTE)
+	private int readCount;						//READ_COUNT	NUMBER
+	
 	
 	public Notice() {}
 
 	public Notice(String noticeId, String title, String content, String adminId, Date createdAt, Date updatedAt,
 			String updateCheck, Date deletedAt, String deleteCheck, String oFile1, String oFile2, String oFile3,
-			String rFile1, String rFile2, String rFile3) {
+			String rFile1, String rFile2, String rFile3, int readCount) {
 		super();
 		this.noticeId = noticeId;
 		this.title = title;
@@ -42,6 +44,7 @@ public class Notice implements java.io.Serializable{
 		this.rFile1 = rFile1;
 		this.rFile2 = rFile2;
 		this.rFile3 = rFile3;
+		this.readCount = readCount;
 	}
 
 	public String getNoticeId() {
@@ -168,13 +171,21 @@ public class Notice implements java.io.Serializable{
 		this.rFile3 = rFile3;
 	}
 
+	public int getReadCount() {
+		return readCount;
+	}
+
+	public void setReadCount(int readCount) {
+		this.readCount = readCount;
+	}
+
 	@Override
 	public String toString() {
 		return "Notice [noticeId=" + noticeId + ", title=" + title + ", content=" + content + ", adminId=" + adminId
 				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", updateCheck=" + updateCheck
 				+ ", deletedAt=" + deletedAt + ", deleteCheck=" + deleteCheck + ", oFile1=" + oFile1 + ", oFile2="
 				+ oFile2 + ", oFile3=" + oFile3 + ", rFile1=" + rFile1 + ", rFile2=" + rFile2 + ", rFile3=" + rFile3
-				+ "]";
+				+ ", readCount=" + readCount + "]";
 	}
 
 

@@ -204,7 +204,12 @@ public class NoticeController {
 			HttpSession session									// 관리자 여부 확인용 객체
 			) {
 		logger.info("상세보기 noticeId : " + noticeId);
+		
+		// 조회수1증가
+		noticeService.updateReadCount(noticeId);
+		
 		Notice notice = noticeService.selectDetailNotice(noticeId);
+
 		logger.info("상세보기 notice : "+notice);
 		if(notice != null) {
 			mv.addObject("notice", notice);

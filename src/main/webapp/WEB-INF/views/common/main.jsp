@@ -13,7 +13,7 @@
 <%-- 지도 api용 스크립트 --%>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6c21cf4a0f3f4a8aa848524ff9fe27db"></script>
 <%-- 지도 실제구현 --%>
-<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/mainViewMap.js"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/mainMarkerMap.js"></script>
 <script type="text/javascript">
 
 	//공지사항 top10
@@ -180,10 +180,7 @@ $.ajax({
   
  <div class="row">
     <div class="col"> 
-    
-    
-    <h2>지역소담이</h2>
-    
+  
 <style>
   /* 캐러셀 컨테이너의 전체 크기를 조정 */
   .carousel {

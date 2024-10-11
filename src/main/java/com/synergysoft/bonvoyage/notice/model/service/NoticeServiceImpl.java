@@ -75,4 +75,9 @@ public class NoticeServiceImpl implements NoticeService{
 		return noticeDao.selectTopNotice();
 	}
 
+	@Override
+	public int updateReadCount(String noticeId) {
+		return noticeDao.updateReadCount(noticeId);
+	}
+
 }
