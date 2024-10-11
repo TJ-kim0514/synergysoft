@@ -29,7 +29,10 @@
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
 <br>
 <div class="container">
-<div class="h2 text-center">${ notice.title }</div>
+	<div class="container">
+		<div class="h2 text-center">${ notice.title }</div>
+		<div class="float-end">조회수 ${ notice.readCount }</div>
+	</div>
 <table class="table">
 <tr>
 	<th class="text-center" width="200px">작성자</th>

@@ -54,6 +54,7 @@
                     <th width="80px">No</th>
                     <th width="500px">제목</th>
                     <th width="200px">등록일</th>
+                    <th width="100px">조회수</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,6 +67,7 @@
                             </a>
                         </td>
                         <td class="text-center">${n.createdAt}</td>
+                        <td class="text-center">${n.readCount}</td>
                     </tr>
                 </c:forEach>
             </tbody>
