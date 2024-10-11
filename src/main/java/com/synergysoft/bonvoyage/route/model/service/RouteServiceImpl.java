@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.route.model.dao.RouteDao;
 import com.synergysoft.bonvoyage.route.model.dto.Route;
 
@@ -48,6 +49,41 @@ public class RouteServiceImpl implements RouteService {
 	@Override
 	public int updateRouteLikeCount(String postId) {
 		return routeDao.updateRouteLikeCount(postId);
+	}
+
+	@Override
+	public int updateRouteReadCount(String routeBoardId) {
+		return routeDao.updateRouteReadCount(routeBoardId);
+	}
+
+	@Override
+	public int selectSearchTitleListCount(String keyword) {
+		return routeDao.selectSearchTitleListCount(keyword);
+	}
+
+	@Override
+	public int selectSearchContentListCount(String keyword) {
+		return routeDao.selectSearchContentListCount(keyword);
+	}
+
+	@Override
+	public int selectSearchUserIdListCount(String keyword) {
+		return routeDao.selectSearchUserIdListCount(keyword);
+	}
+
+	@Override
+	public ArrayList<Route> selectSearchTitleRoute(Search search) {
+		return routeDao.selectSearchTitleRoute(search);
+	}
+
+	@Override
+	public ArrayList<Route> selectSearchContentRoute(Search search) {
+		return routeDao.selectSearchContentRoute(search);
+	}
+
+	@Override
+	public ArrayList<Route> selectSearchUserIdRoute(Search search) {
+		return routeDao.selectSearchUserIdRoute(search);
 	}
 	
 }

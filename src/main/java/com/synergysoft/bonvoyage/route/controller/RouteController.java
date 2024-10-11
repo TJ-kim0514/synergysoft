@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,8 @@ import com.synergysoft.bonvoyage.comment.model.dto.Comment;
 import com.synergysoft.bonvoyage.comment.model.service.CommentService;
 import com.synergysoft.bonvoyage.common.FileNameChange;
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
+import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 import com.synergysoft.bonvoyage.place.model.dto.Place;
 import com.synergysoft.bonvoyage.place.model.service.PlaceService;
 import com.synergysoft.bonvoyage.route.model.dto.Route;
@@ -68,6 +71,24 @@ public class RouteController {
 		return mv;
 	}
 	
+	// 신고글 작성페이지 이동 메소드 : routeReport.do
+	@RequestMapping("routeReport.do")
+	public ModelAndView moveRouteReportPage(ModelAndView mv,
+																		@RequestParam("routeBoardId") String routeBoardId,
+																		@RequestParam("userId") String userId,
+																		@RequestParam("title") String title) {
+		// 전송보낼 데이터를 담기 위한 객체 생성
+		Route route = new Route();
+		route.setRouteBoardId(routeBoardId);
+		route.setUserId(userId);
+		route.setTitle(title);
+		
+		// 전송보낼 데이터를 담은 객체 mv 에 저장
+		mv.addObject(route);
+		mv.setViewName("member/report/reportWriteView");
+		
+		return mv;
+	}
 	
 	// 경로추천게시판 전체 출력 메소드 : routeall.do
 	@RequestMapping("routeall.do")
@@ -125,6 +146,7 @@ public class RouteController {
 													@RequestParam("routePlaceAddress[]") String[] rpaddress,
 													@RequestParam("routePlaceName[]") String[] rpname,
 													@RequestParam("routePlaceContent[]") String[] rpcontent,
+													@RequestParam(name="transport", required=false) String transport,
 													HttpServletRequest request) {
 		
 		logger.info("inroute.do : " + route);
@@ -277,6 +299,18 @@ public class RouteController {
 			route.setRfile5(renameFileName5);
 		}// ofile5
 		
+		if(transport.equals("publicTransport")) {
+			route.setTransport(transport);
+		} else if(transport.equals("bicycle")) {
+			route.setTransport(transport);
+		} else if(transport.equals("car")) {
+			route.setTransport(transport);
+		} else if(transport.equals("walking")) {
+			route.setTransport(transport);
+		} else if(transport.equals("train")) {
+			route.setTransport(transport);
+		}
+		
 		if(routeService.insertRoute(route) > 0) {
 			for(int i = 0; i < 5; i++) {
 				place.setAddress(rpaddress[i]);
@@ -310,6 +344,8 @@ public class RouteController {
 		
 		logger.info("routedetail.do : " + routeBoardId);
 		
+		routeService.updateRouteReadCount(routeBoardId);
+		
 		Route route = routeService.selectRoute(routeBoardId);
 		ArrayList<Place> place = placeService.selectPlace(routeBoardId);
 		ArrayList<Comment> clist = commentService.selectComment(routeBoardId);
@@ -336,7 +372,8 @@ public class RouteController {
 													@RequestParam(name="ofile22", required=false) MultipartFile ofile2,
 													@RequestParam(name="ofile33", required=false) MultipartFile ofile3,
 													@RequestParam(name="ofile44", required=false) MultipartFile ofile4,
-													@RequestParam(name="ofile55", required=false) MultipartFile ofile5) {
+													@RequestParam(name="ofile55", required=false) MultipartFile ofile5,
+													@RequestParam("transport") String transport) {
 		// 전송확인
 		logger.info("uroute.do : " + route );
 		
@@ -530,7 +567,19 @@ public class RouteController {
 			route.setOfile5(fileName);
 			route.setRfile5(renameFileName);
 		}
-				
+		
+		if(transport.equals("publicTransport")) {
+			route.setTransport(transport);
+		} else if(transport.equals("bicycle")) {
+			route.setTransport(transport);
+		} else if(transport.equals("car")) {
+			route.setTransport(transport);
+		} else if(transport.equals("walking")) {
+			route.setTransport(transport);
+		} else if(transport.equals("train")) {
+			route.setTransport(transport);
+		}
+		
 		if (routeService.updateRoute(route) > 0) {
 			return "redirect:routedetail.do?no=" + route.getRouteBoardId();
 		}else {
@@ -588,8 +637,91 @@ public class RouteController {
 		}
 	}
 	
+	// 경로추천게시판 검색 처리 메소드 : sroute.do
+	@RequestMapping("sroute.do")
+	public String selectSearchRoute(Model model,
+													@RequestParam("action") String action,
+													@RequestParam("keyword") String keyword,
+													@RequestParam(name="page", required=false) String page,
+													@RequestParam(name="limit", required=false) String slimit,
+													@RequestParam(name="groupLimit", required=false) String glimit) {
+		
+		//paging 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage=1;
+		if(page!=null) {
+			currentPage = Integer.parseInt(page);
+		}
+		
+		// 한페이지에 출력할 공지글 갯수 (기본값 10개 세팅)
+		int limit =10;
+		if(slimit !=null) {
+			limit= Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit =5;
+		if(glimit!=null) {
+			groupLimit=Integer.parseInt(glimit);
+		}
+		
+		int listCount = 0;
+		// 총 목록 갯수 조회
+	    if(action.equals("title")) {
+	    	listCount = routeService.selectSearchTitleListCount(keyword);
+	    } else if(action.equals("content")) {
+	    	listCount = routeService.selectSearchContentListCount(keyword);
+	    } else if(action.equals("userId")) {
+	    	listCount = routeService.selectSearchUserIdListCount(keyword);
+	    }
+	    
+	 // 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "sroute.do", groupLimit);
+		paging.calculate();
+		
+		// 검색시 사용할 값 전송 객체생성 및 값 입력
+	    Search search = new Search();
+	    search.setKeyword(keyword);
+	    search.setStartRow(paging.getStartRow());
+	    search.setEndRow(paging.getEndRow());
+	    ArrayList<Route> list =null;
+	    
+	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
+	    if(action.equals("title")) {
+	    	list = routeService.selectSearchTitleRoute(search);
+	    } else if(action.equals("content")) {
+	    	list = routeService.selectSearchContentRoute(search);
+	    } else if(action.equals("userId")) {
+	    	list = routeService.selectSearchUserIdRoute(search);
+	    }
+	    
+	    logger.info("list : " + list);
+	    if(list != null && list.size() > 0) {
+	        model.addAttribute("list", list);
+			model.addAttribute("paging",paging);
+			model.addAttribute("currentPage",currentPage);
+			model.addAttribute("action",action);
+			model.addAttribute("keyword",keyword);
+			
+	        return "route/routeall";  // 뷰의 이름을 반환
+	    } else {
+	        model.addAttribute("message", action + "에 대한 " + keyword + "검색결과가 존재하지 않습니다.");
+	        return "common/error";  // 에러 페이지 뷰의 이름 반환
+	    }
+	}
 	
 	
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

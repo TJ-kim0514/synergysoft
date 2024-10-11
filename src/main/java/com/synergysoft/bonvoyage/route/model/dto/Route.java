@@ -25,6 +25,7 @@ public class Route implements java.io.Serializable {
 	private String rfile3;
 	private String rfile4;
 	private String rfile5;
+	private String readCount;
 	
 	public Route() {
 		super();
@@ -39,11 +40,10 @@ public class Route implements java.io.Serializable {
 		this.createdAt = createdAt;
 	}
 
-
 	public Route(String routeBoardId, String userId, String title, String content, String transport, Date createdAt,
 			Date updatedAt, int likeCount, int totalDuration, String routeName, String ofile1, String ofile2,
 			String ofile3, String ofile4, String ofile5, String rfile1, String rfile2, String rfile3, String rfile4,
-			String rfile5) {
+			String rfile5, String readCount) {
 		super();
 		this.routeBoardId = routeBoardId;
 		this.userId = userId;
@@ -65,6 +65,7 @@ public class Route implements java.io.Serializable {
 		this.rfile3 = rfile3;
 		this.rfile4 = rfile4;
 		this.rfile5 = rfile5;
+		this.readCount = readCount;
 	}
 
 	public String getRouteBoardId() {
@@ -232,13 +233,23 @@ public class Route implements java.io.Serializable {
 	public void setRfile5(String rfile5) {
 		this.rfile5 = rfile5;
 	}
+	
+
+	public String getReadCount() {
+		return readCount;
+	}
+
+	public void setReadCount(String readCount) {
+		this.readCount = readCount;
+	}
 
 	@Override
 	public String toString() {
 		return "Route [routeBoardId=" + routeBoardId + ", userId=" + userId + ", title=" + title + ", content="
 				+ content + ", transport=" + transport + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
-				+ ", likeCount=" + likeCount + ", totalDuration=" + totalDuration + ", routeName=" + routeName + "]";
+				+ ", likeCount=" + likeCount + ", totalDuration=" + totalDuration + ", routeName=" + routeName
+				+ ", ofile1=" + ofile1 + ", ofile2=" + ofile2 + ", ofile3=" + ofile3 + ", ofile4=" + ofile4
+				+ ", ofile5=" + ofile5 + ", rfile1=" + rfile1 + ", rfile2=" + rfile2 + ", rfile3=" + rfile3
+				+ ", rfile4=" + rfile4 + ", rfile5=" + rfile5 + ", readCount=" + readCount + "]";
 	}
-	
-	
 }

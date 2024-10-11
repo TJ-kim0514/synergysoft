@@ -10,4 +10,8 @@ public interface CommentService {
 
 	ArrayList<Comment> selectComment(String routeBoardId);
 
+	int deleteRouteComment(String commentId);
+
+	int updateRouteComment(Comment comment);
+
 }

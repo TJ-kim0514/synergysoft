@@ -24,4 +24,14 @@ public 	class CommentServiceImpl implements CommentService {
 		return commentDao.selectComment(routeBoardId);
 	}
 
+	@Override
+	public int deleteRouteComment(String commentId) {
+		return commentDao.deleteRouteComment(commentId);
+	}
+
+	@Override
+	public int updateRouteComment(Comment comment) {
+		return commentDao.updateRouteComment(comment);
+	}
+
 }
