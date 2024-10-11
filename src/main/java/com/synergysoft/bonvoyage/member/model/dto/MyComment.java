@@ -10,6 +10,8 @@ public class MyComment {
 	private String title;
 	private String commentContent;
 	private Date createdAt;
+	private String action;
+	private String keyword; // 제목, 내용 검색용
 	private int startRow; // 한페이지에 출력할 목록의 시작행
 	private int endRow; // 한페이지에 출력할 목록의 끝행
 
@@ -86,6 +88,22 @@ public class MyComment {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
+	
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+	
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
 
 	public int getStartRow() {
 		return startRow;
@@ -107,7 +125,7 @@ public class MyComment {
 	public String toString() {
 		return "MyComment [postId=" + postId + ", commentId=" + commentId + ", memNickNm=" + memNickNm + ", MemId="
 				+ memId + ", title=" + title + ", commentContent=" + commentContent + ", createdAt=" + createdAt
-				+ ", startRow=" + startRow + ", endRow=" + endRow + "]";
+				+ ", action=" + action + ", keyword" + keyword + ", startRow=" + startRow + ", endRow=" + endRow + "]";
 	}
 
 }

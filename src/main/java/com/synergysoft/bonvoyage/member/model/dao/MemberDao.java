@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.member.model.dto.MyComment;
 
@@ -85,6 +86,50 @@ public class MemberDao {
 	public int selectCommentGuideBoardCount(String memId) {
 		return sqlSessionTemplate.selectOne("memberMapper.selectCommentGuideBoardCount", memId);
 	}
+	
+	// 내가 쓴 댓글 전체 검색 조회
+	public ArrayList<MyComment> selectCommentAllSearch(MyComment mycomment) {
+		List<MyComment> list = sqlSessionTemplate.selectList("memberMapper.selectCommentAllSearch", mycomment);
+		return (ArrayList<MyComment>) list;
+	}
+
+	// 내가 쓴 댓글 검색 조회(경로게시판)
+	public ArrayList<MyComment> selectCommentRouteBoardSearch(MyComment mycomment) {
+		List<MyComment> list = sqlSessionTemplate.selectList("memberMapper.selectCommentRouteBoardSearch", mycomment);
+		return (ArrayList<MyComment>) list;
+	}
+
+	// 내가 쓴 댓글 검색 조회(가이드게시판)
+	public ArrayList<MyComment> selectCommentGuideBoardSearch(MyComment mycomment) {
+		List<MyComment> list = sqlSessionTemplate.selectList("memberMapper.selectCommentGuideBoardSearch", mycomment);
+		return (ArrayList<MyComment>) list;
+	}
+
+	// 내가 쓴 댓글 전체 검색 수 조회
+	public int selectCommentAllSearchCount(MyComment mycomment) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectCommentAllSearchCount", mycomment);
+	}
+
+	// 내가 쓴 댓글 경로게시판 검색 수 조회
+	public int selectCommentRouteBoardSearchCount(MyComment mycomment) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectCommentRouteBoardSearchCount", mycomment);
+	}
+
+	// 내가 쓴 댓글 가이드게시판 검색 수 조회
+	public int selectCommentGuideBoardSearchCount(MyComment mycomment) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectCommentGuideBoardSearchCount", mycomment);
+	}
+
+	// 관리자 : 회원 목록 검색 조회
+	public ArrayList<Member> selectMemberSearch(Search search) {
+		List<Member> list = sqlSessionTemplate.selectList("memberMapper.selectMemberSearch", search);
+		return (ArrayList<Member>) list;
+	}
+
+	// 관리자 : 회원 목록 검색 수 조회
+	public int selectMemberListSearchCount(Search search) {
+		return sqlSessionTemplate.selectOne("memberMapper.selectMemberListSearchCount", search);
+	}
 
 	// 회원 정보 찾기
 	public Member selectMemberByEmailId(Member member) {
@@ -151,7 +196,12 @@ public class MemberDao {
 	public int updateMemberAccount(String memId) {
 		return sqlSessionTemplate.update("memberMapper.updateMemberAccount", memId);
 	}
-
+	
+	// 관리자 : 회원 계정 조치 해제
+	public int updateMemberAccountClear(String memId) {
+		return sqlSessionTemplate.update("memberMapper.updateMemberAccountClear", memId);
+	}
+	
 	// 관리자 : 회원 관리자 부여
 	public int updateMemberAdmin(String memId) {
 		return sqlSessionTemplate.update("memberMapper.updateMemberAdmin", memId);

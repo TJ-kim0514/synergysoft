@@ -108,35 +108,36 @@ a#kakao-login-btn{
 	<br>
 	<div id="loginForm">
 		<form action="login.do" method="post">
-			<label>아이디 : <input type="text" name="memId" id="memid" class="pos"></label>
+			<label>아이디 : <input type="text" name="memId" id="memid" class="pos" required></label>
 			<br>
-			<label>비밀번호 : <input type="password" name="memPw" id="memPw" class="pos"></label>
+			<label>비밀번호 : <input type="password" name="memPw" id="memPw" class="pos" required></label>
 			<br>
 			<center>
 				<input type="submit" value="로그인">
 			</center>
 			<br>
 		</form>
-		<ul class="list-unstyled">
-			<li>
-				<a href="${pageContext.servletContext.contextPath }/idSearchPage.do">아이디 찾기</a> | 
-				<a href="${pageContext.servletContext.contextPath }/pwSearchPage.do">비밀번호 찾기</a> | 
-				<c:url var="goEnroll" value="enrollPage.do" /> 
-				<a href="${ goEnroll }">회원가입</a></li>
-				<li>
-				<p>------------------- 또는 --------------------</p>
-				</li>
-				<li>
-				<!-- 소셜로그인 -->
-		 		<a href="javascript:loginWithKakao();"> 
-					 <img src="${pageContext.servletContext.contextPath }/resources/assets/img/Kakao.png" width="80" height="80" alt="카카오로고" />
-				</a>
-				  <a href="${ naverurl }">
-				  	<img width="80" height="80" src="${pageContext.servletContext.contextPath }/resources/assets/img/Naver.png"/>
-				  </a>
-		 		<a href="${ googleurl }">
-		 			<img width="80" height="80" src="${pageContext.servletContext.contextPath }/resources/assets/img/Google.png"/>
-		 		</a>
+			<div class="container my-4" align="right">
+			<a href="${pageContext.servletContext.contextPath }/idSearchPage.do">아이디 찾기</a> | 
+			<a href="${pageContext.servletContext.contextPath }/pwSearchPage.do">비밀번호 찾기</a> | 
+			<c:url var="goEnroll" value="enrollPage.do" /> 
+			<a href="${ goEnroll }">회원가입</a>
+			</div>
+			<div class="container my-4" align="center">
+			<p>------------------- 또는 --------------------</p>
+			<!-- 소셜로그인 -->
+	 		<a href="javascript:loginWithKakao();"> 
+				<img src="${pageContext.servletContext.contextPath }/resources/assets/img/Kakao.png" alt="카카오로고" />
+			</a>
+			<br>
+			<a href="${ naverurl }">
+				<img width="180" src="${pageContext.servletContext.contextPath }/resources/assets/img/Naver.png"/>
+			</a>
+			<br>
+	 		<a href="${ googleurl }">
+	 			<img src="${pageContext.servletContext.contextPath }/resources/assets/img/Google.png"/>
+	 		</a>
+	 		</div>
 		<br>
 	</div>
 	<footer>

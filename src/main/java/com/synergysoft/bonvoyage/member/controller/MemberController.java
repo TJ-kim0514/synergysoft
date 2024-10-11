@@ -2,10 +2,12 @@ package com.synergysoft.bonvoyage.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,6 +17,9 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.synergysoft.bonvoyage.common.Paging;
+import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.member.model.dto.MyComment;
 import com.synergysoft.bonvoyage.member.model.service.GoogleLoginAuth;
@@ -43,7 +49,7 @@ public class MemberController {
 	private MemberService memberService;
 
 //	@Autowired
-//	private JavaMailSenderImpl mailSender;
+	private JavaMailSender mailSender;
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
@@ -126,18 +132,16 @@ public class MemberController {
 
 		return "redirect:main.do";
 	}
-	
+
 	// 소셜 로그인 구현(네이버) | 2024. 10. 08 수정 및 테스트 성공
 	// jmoh03 (오정민)
-	@RequestMapping(value = "naverLogin.do", method = {RequestMethod.GET, RequestMethod.POST})
-	public String naverLogin(@RequestParam("code") String code,
-			@RequestParam("state") String state,
-			Model model, HttpSession session,
-			SessionStatus status) throws Exception {
-		
+	@RequestMapping(value = "naverLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String naverLogin(@RequestParam("code") String code, @RequestParam("state") String state, Model model,
+			HttpSession session, SessionStatus status) throws Exception {
+
 		logger.info("naverLogin.do 접근");
-	    
-	    logger.info("Code: {}\nState: {}\nSession : {}", code, state, session);
+
+		logger.info("Code: {}\nState: {}\nSession : {}", code, state, session);
 		// 1. 코드, 세션 및 상태를 사용하여 getAccessToken을 호출합니다.
 		OAuth2AccessToken node = naverloginAuth.getAccessToken(session, code, state);
 		logger.info("node = " + node);
@@ -159,10 +163,10 @@ public class MemberController {
 			JSONObject response_obj = (JSONObject) jsonObj.get("response");
 			String nickname = (String) response_obj.get("nickname");
 			String email = (String) response_obj.get("email");
-			
+
 			logger.info("nickname : " + nickname);
 			logger.info("email : " + email);
-			
+
 			// 유저 테이블에서 회원 정보 조회해 오기
 			Member loginUser = new Member();
 
@@ -172,12 +176,12 @@ public class MemberController {
 				loginUser.setMemNickNm(nickname);
 				loginUser.setMemSocial("NAVER");
 				if (memberService.insertSocialMember(loginUser) > 0) {
-					if(memberService.updateLoginLog(loginUser.getMemId()) > 0) {
+					if (memberService.updateLoginLog(loginUser.getMemId()) > 0) {
 						session.setAttribute("loginUser", loginUser);
 						status.setComplete();
-						return "redirect:main.do";						
+						return "redirect:main.do";
 					} else {
-						return "common/error";						
+						return "common/error";
 					}
 				} else {
 					return "common/error";
@@ -196,7 +200,7 @@ public class MemberController {
 	@RequestMapping(value = "googleLogin.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String moveGoogleLoginPage(@RequestParam String code, @RequestParam String state, Model model,
 			HttpSession session, SessionStatus status) throws Exception {
-		
+
 		OAuth2AccessToken node = googleloginAuth.getAccessToken(session, code, state);
 
 		if (node == null) {
@@ -220,12 +224,12 @@ public class MemberController {
 				loginUser.setMemNickNm(name);
 				loginUser.setMemSocial("GOOGLE");
 				if (memberService.insertSocialMember(loginUser) > 0) {
-					if(memberService.updateLoginLog(loginUser.getMemId()) > 0) {
+					if (memberService.updateLoginLog(loginUser.getMemId()) > 0) {
 						session.setAttribute("loginUser", loginUser);
 						status.setComplete();
 						return "redirect:main.do";
 					} else {
-						return "common/error";						
+						return "common/error";
 					}
 				} else {
 					return "common/error";
@@ -281,8 +285,8 @@ public class MemberController {
 			return "common/error";
 		}
 	} // 내 정보 조회 페이지 출력
-	
-	// 내가 쓴 댓글 전체 조회 페이지 출력
+
+	// 내가 쓴 댓글 전체 조회 페이지 출력 | 2024. 10. 10 구현 완료
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myAllComment.do")
 	public String moveMyinfoCommentAll(@RequestParam("memId") String memId, Model model,
@@ -290,7 +294,7 @@ public class MemberController {
 			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("내가 쓴 댓글 전체 조회 페이지 요청");
-		
+
 		// paging
 		// 기본세팅-----------------------------------------------------------------------
 		// 출력할 페이지(기본값 1페이지)
@@ -308,21 +312,21 @@ public class MemberController {
 		if (glimit != null) {
 			groupLimit = Integer.parseInt(glimit);
 		}
-		
+
 		int listCount = memberService.selectCommentAllCount(memId);
-		
+
 		// 페이징 처리 값생성
 		Paging paging = new Paging(listCount, limit, currentPage, "myAllComment.do", groupLimit);
 		paging.calculate();
-		
+
 		MyComment mycomment = new MyComment();
-		
+
 		mycomment.setMemId(memId);
 		mycomment.setStartRow(paging.getStartRow());
 		mycomment.setEndRow(paging.getEndRow());
-		
+
 		ArrayList<MyComment> commentList = memberService.selectCommentAll(mycomment);
-		
+
 		if (commentList != null && commentList.size() > 0) {
 			model.addAttribute("commentList", commentList);
 			model.addAttribute("paging", paging);
@@ -334,7 +338,7 @@ public class MemberController {
 		}
 	} // 내가 쓴 댓글 전체 조회 페이지 출력
 
-	// 내가 쓴 댓글(가이드게시판) 페이지 출력
+	// 내가 쓴 댓글(가이드게시판) 페이지 출력 | 2024. 10. 10 구현 완료
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myGuideBoardComment.do")
 	public String moveMyinfoCommentGuideBoard(@RequestParam("memId") String memId, Model model,
@@ -342,7 +346,7 @@ public class MemberController {
 			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("내가 쓴 댓글(가이드게시판) 페이지 요청");
-		
+
 		// paging
 		// 기본세팅-----------------------------------------------------------------------
 		// 출력할 페이지(기본값 1페이지)
@@ -360,21 +364,21 @@ public class MemberController {
 		if (glimit != null) {
 			groupLimit = Integer.parseInt(glimit);
 		}
-		
+
 		int listCount = memberService.selectCommentGuideBoardCount(memId);
-		
+
 		// 페이징 처리 값생성
 		Paging paging = new Paging(listCount, limit, currentPage, "myGuideBoardComment.do", groupLimit);
 		paging.calculate();
-		
+
 		MyComment mycomment = new MyComment();
-		
+
 		mycomment.setMemId(memId);
 		mycomment.setStartRow(paging.getStartRow());
 		mycomment.setEndRow(paging.getEndRow());
-		
+
 		ArrayList<MyComment> commentList = memberService.selectCommentGuideBoard(mycomment);
-		
+
 		if (commentList != null && commentList.size() > 0) {
 			model.addAttribute("commentList", commentList);
 			model.addAttribute("paging", paging);
@@ -386,7 +390,7 @@ public class MemberController {
 		}
 	} // 내가 쓴 댓글(가이드게시판) 페이지 출력
 
-	// 내가 쓴 댓글(경로게시판) 페이지 출력
+	// 내가 쓴 댓글(경로게시판) 페이지 출력 | 2024. 10. 10 구현 완료
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myRouteBoardComment.do")
 	public String moveMyinfoCommentRouteBoard(@RequestParam("memId") String memId, Model model,
@@ -394,7 +398,7 @@ public class MemberController {
 			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("내가 쓴 댓글(경로게시판) 페이지 요청");
-		
+
 		// paging
 		// 기본세팅-----------------------------------------------------------------------
 		// 출력할 페이지(기본값 1페이지)
@@ -412,19 +416,19 @@ public class MemberController {
 		if (glimit != null) {
 			groupLimit = Integer.parseInt(glimit);
 		}
-		
+
 		int listCount = memberService.selectCommentRouteBoardCount(memId);
-		
+
 		// 페이징 처리 값생성
 		Paging paging = new Paging(listCount, limit, currentPage, "myRouteBoardComment.do", groupLimit);
 		paging.calculate();
-		
+
 		MyComment mycomment = new MyComment();
-		
+
 		mycomment.setMemId(memId);
 		mycomment.setStartRow(paging.getStartRow());
 		mycomment.setEndRow(paging.getEndRow());
-		
+
 		ArrayList<MyComment> commentList = memberService.selectCommentRouteBoard(mycomment);
 
 		if (commentList != null && commentList.size() > 0) {
@@ -484,6 +488,319 @@ public class MemberController {
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 관리자 : 회원 목록 조회 페이지 출력
+
+	// 내가 쓴 댓글 전체 검색 조회 페이지 출력 | 2024. 10. 11 구현 완료
+	// jmoh03 (오정민)
+	@RequestMapping(value = "myAllCommentSearch.do")
+	public String moveMyinfoCommentAllSearch(@RequestParam("memId") String memId, Model model,
+			@RequestParam("action") String action, // 검색 기준 (title, commentContent)
+			@RequestParam("keyword") String keyword, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String slimit,
+			@RequestParam(name = "groupLimit", required = false) String glimit) {
+		logger.info("내가 쓴 댓글 전체 검색 조회 페이지 요청");
+
+		// paging
+		// 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 댓글 수 (10개)
+		int limit = 10;
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit = 5;
+		if (glimit != null) {
+			groupLimit = Integer.parseInt(glimit);
+		}
+
+		int listCount = 0;
+
+		MyComment commentCount = new MyComment();
+
+		if (action.equals("title")) {
+			commentCount.setAction(action);
+			commentCount.setKeyword(keyword);
+			commentCount.setMemId(memId);
+			listCount = memberService.selectCommentAllSearchCount(commentCount);
+		} else if (action.equals("commentContent")) {
+			commentCount.setAction(action);
+			commentCount.setKeyword(keyword);
+			commentCount.setMemId(memId);
+			listCount = memberService.selectCommentAllSearchCount(commentCount);
+		}
+
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "myAllComment.do", groupLimit);
+		paging.calculate();
+
+		commentCount.setAction(action);
+		commentCount.setKeyword(keyword);
+		commentCount.setMemId(memId);
+		commentCount.setStartRow(paging.getStartRow());
+		commentCount.setEndRow(paging.getEndRow());
+
+		ArrayList<MyComment> commentList = null;
+
+		if (action.equals("title")) {
+			commentList = memberService.selectCommentAllSearch(commentCount);
+		} else if (action.equals("commentContent")) {
+			commentList = memberService.selectCommentAllSearch(commentCount);
+		}
+
+		if (commentList != null && commentList.size() > 0) {
+			model.addAttribute("commentList", commentList);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("memId", memId);
+			model.addAttribute("action", action);
+			model.addAttribute("keyword", keyword);
+			return "member/myinfo/comment/all"; // 뷰의 이름을 반환
+		} else {
+			model.addAttribute("message", "목록 조회 실패!");
+			return "common/error"; // 에러 페이지 뷰의 이름 반환
+		}
+	} // 내가 쓴 댓글 전체 조회 페이지 출력
+
+	// 내가 쓴 댓글(가이드게시판) 검색 페이지 출력 | 2024. 10. 11 구현 완료
+	// jmoh03 (오정민)
+	@RequestMapping(value = "myGuideBoardCommentSearch.do")
+	public String moveMyinfoCommentGuideBoardSearch(@RequestParam("memId") String memId, Model model,
+			@RequestParam("action") String action, // 검색 기준 (title, commentContent)
+			@RequestParam("keyword") String keyword, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String slimit,
+			@RequestParam(name = "groupLimit", required = false) String glimit) {
+		logger.info("내가 쓴 댓글(가이드게시판) 검색 페이지 요청");
+
+		// paging
+		// 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 댓글 수 (10개)
+		int limit = 10;
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit = 5;
+		if (glimit != null) {
+			groupLimit = Integer.parseInt(glimit);
+		}
+
+		int listCount = 0;
+
+		MyComment commentCount = new MyComment();
+
+		if (action.equals("title")) {
+			commentCount.setAction(action);
+			commentCount.setKeyword(keyword);
+			commentCount.setMemId(memId);
+			listCount = memberService.selectCommentGuideBoardSearchCount(commentCount);
+		} else if (action.equals("commentContent")) {
+			commentCount.setAction(action);
+			commentCount.setKeyword(keyword);
+			commentCount.setMemId(memId);
+			listCount = memberService.selectCommentGuideBoardSearchCount(commentCount);
+		}
+
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "myGuideBoardCommentSearch.do", groupLimit);
+		paging.calculate();
+
+		MyComment myComment = new MyComment();
+
+		myComment.setAction(action);
+		myComment.setKeyword(keyword);
+		myComment.setMemId(memId);
+		myComment.setStartRow(paging.getStartRow());
+		myComment.setEndRow(paging.getEndRow());
+
+		ArrayList<MyComment> commentList = null;
+
+		if (action.equals("title")) {
+			commentList = memberService.selectCommentGuideBoardSearch(myComment);
+		} else if (action.equals("commentContent")) {
+			commentList = memberService.selectCommentGuideBoardSearch(myComment);
+		}
+
+		if (commentList != null && commentList.size() > 0) {
+			model.addAttribute("commentList", commentList);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("memId", memId);
+			model.addAttribute("action", action);
+			model.addAttribute("keyword", keyword);
+			return "member/myinfo/comment/guideBoard"; // 뷰의 이름을 반환
+		} else {
+			model.addAttribute("message", "목록 조회 실패!");
+			return "common/error"; // 에러 페이지 뷰의 이름 반환
+		}
+	} // 내가 쓴 댓글(가이드게시판) 검색 페이지 출력
+
+	// 내가 쓴 댓글(경로게시판) 검색 페이지 출력 | 2024. 10. 11 구현 완료
+	// jmoh03 (오정민)
+	@RequestMapping(value = "myRouteBoardCommentSearch.do")
+	public String moveMyinfoCommentRouteBoardSearch(@RequestParam("memId") String memId, Model model,
+			@RequestParam("action") String action, // 검색 기준 (title, commentContent)
+			@RequestParam("keyword") String keyword, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String slimit,
+			@RequestParam(name = "groupLimit", required = false) String glimit) {
+		logger.info("내가 쓴 댓글(경로게시판) 검색 페이지 요청");
+
+		// paging
+		// 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 댓글 수 (10개)
+		int limit = 10;
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit = 5;
+		if (glimit != null) {
+			groupLimit = Integer.parseInt(glimit);
+		}
+
+		int listCount = 0;
+
+		MyComment commentCount = new MyComment();
+
+		if (action.equals("title")) {
+			commentCount.setAction(action);
+			commentCount.setKeyword(keyword);
+			commentCount.setMemId(memId);
+			listCount = memberService.selectCommentRouteBoardSearchCount(commentCount);
+		} else if (action.equals("commentContent")) {
+			commentCount.setAction(action);
+			commentCount.setKeyword(keyword);
+			commentCount.setMemId(memId);
+			listCount = memberService.selectCommentRouteBoardSearchCount(commentCount);
+		}
+
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "myRouteBoardCommentSearch.do", groupLimit);
+		paging.calculate();
+
+		MyComment myComment = new MyComment();
+
+		myComment.setAction(action);
+		myComment.setKeyword(keyword);
+		myComment.setMemId(memId);
+		myComment.setStartRow(paging.getStartRow());
+		myComment.setEndRow(paging.getEndRow());
+
+		ArrayList<MyComment> commentList = null;
+
+		if (action.equals("title")) {
+			commentList = memberService.selectCommentRouteBoardSearch(myComment);
+		} else if (action.equals("commentContent")) {
+			commentList = memberService.selectCommentRouteBoardSearch(myComment);
+		}
+
+		if (commentList != null && commentList.size() > 0) {
+			model.addAttribute("commentList", commentList);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("memId", memId);
+			model.addAttribute("action", action);
+			model.addAttribute("keyword", keyword);
+			return "member/myinfo/comment/routeBoard"; // 뷰의 이름을 반환
+		} else {
+			model.addAttribute("message", "목록 조회 실패!");
+			return "common/error"; // 에러 페이지 뷰의 이름 반환
+		}
+	} // 내가 쓴 댓글(경로게시판) 검색 페이지 출력
+
+	// 관리자 : 회원 목록 검색 조회 페이지 출력 | 2024. 10. 11 구현 완료
+	// tsoh03 (오정민)
+	@RequestMapping(value = "memberListSearch.do")
+	public String moveMemberListSearch(Model model, 
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam("action") String action, // 검색 기준 (title, content)
+			@RequestParam("keyword") String keyword, @RequestParam(name = "limit", required = false) String slimit,
+			@RequestParam(name = "groupLimit", required = false) String glimit) {
+		logger.info("회원 목록 검색 조회 페이지 요청");
+
+		// paging
+		// 기본세팅-----------------------------------------------------------------------
+		// 출력할 페이지(기본값 1페이지)
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		// 한페이지에 출력할 회운 수 (20명)
+		int limit = 20;
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+		// 페이징 그룹 갯수 (기본값 5개 세팅)
+		int groupLimit = 5;
+		if (glimit != null) {
+			groupLimit = Integer.parseInt(glimit);
+		}
+		// 총 회원 수 조회
+		int listCount = 0;
+		
+		// 검색시 사용할 값 전송 객체생성 및 값 입력
+		Search searchCount = new Search();
+	    
+		if(action.equals("memId")) {
+			searchCount.setAction(action);
+			searchCount.setKeyword(keyword);
+	    	listCount = memberService.selectMemberListSearchCount(searchCount);
+	    } else if(action.equals("memNickNm")) {
+	    	
+	    	searchCount.setAction(action);
+			searchCount.setKeyword(keyword);
+	    	listCount = memberService.selectMemberListSearchCount(searchCount);
+	    } else if(action.equals("memName")) {
+	    	
+	    	searchCount.setAction(action);
+			searchCount.setKeyword(keyword);
+	    	listCount = memberService.selectMemberListSearchCount(searchCount);
+	    }
+		
+		// 페이징 처리 값생성
+		Paging paging = new Paging(listCount, limit, currentPage, "memberListSearch.do", groupLimit);
+		paging.calculate();
+		
+		Search search = new Search();
+		search.setAction(action);
+		search.setKeyword(keyword);
+		search.setStartRow(paging.getStartRow());
+	    search.setEndRow(paging.getEndRow());
+		
+	    ArrayList<Member> memberList = null;
+	    
+	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
+	    if(action.equals("title")) {
+	    	memberList = memberService.selectMemberSearch(search);
+	    } else if(action.equals("content")) {
+	    	memberList = memberService.selectMemberSearch(search);
+	    }
+
+		if (memberList != null && memberList.size() > 0) {
+			model.addAttribute("memberList", memberList);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("action", action);
+			model.addAttribute("keyword", keyword);
+			return "admin/memberList"; // 뷰의 이름을 반환
+		} else {
+			model.addAttribute("message", "목록 조회 실패!");
+			return "common/error"; // 에러 페이지 뷰의 이름 반환
+		}
+	} // 관리자 : 회원 목록 조회 검색 페이지 출력
 
 	// 관리자 : 회원 상세 조회 페이지 출력 | 2024. 10. 07 수정 및 구현 완료
 	// ejjung02 (정은지) => tsoh03 (오정민)
@@ -551,7 +868,7 @@ public class MemberController {
 
 	// 회원가입 기능 | 2024. 09. 28 작성 및 테스트 성공
 	// jmoh03 (오정민)
-	@RequestMapping(value = "enroll.do", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "enroll.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String enrollMethod(Member member, Model model, HttpServletRequest request) {
 		logger.info("enroll.do : " + member);
 
@@ -604,58 +921,58 @@ public class MemberController {
 
 	// 비밀번호 찾기 기능
 	// jmoh03 (오정민)
-//	@RequestMapping(value = "pwSearch.do", method = RequestMethod.POST)
-//	public String pwSearchMethod(Member member, Model model) {
-//		Member findUser = null;
-//		findUser = memberService.selectMemberByEmailId(member);
-//
-//		if (findUser != null) {
-//			// 소문자, 대문자, 숫자
-//			final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=";
-//
-//			SecureRandom rm = new SecureRandom();
-//			StringBuilder newPw = new StringBuilder();
-//
-//			for (int i = 0; i < 11; i++) {
-//				// 무작위로 문자열의 인덱스 반환
-//				int index = rm.nextInt(chars.length());
-//				// index의 위치한 랜덤값
-//				newPw.append(chars.charAt(index));
-//			}
-//
-//			// 이메일 보낼 양식
-//			String toMail = member.getMemId();
-//			String title = "임시 비밀번호 입니다.";
-//			String content = "임시 비밀번호는 " + newPw + " 입니다." + "<br>" + "해당 비밀번호로 로그인 해주세요.";
-//
-//			try {
-//				MimeMessage message = mailSender.createMimeMessage(); // Spring에서 제공하는 mail API
-//				MimeMessageHelper mailHelper = new MimeMessageHelper(message, "utf-8");
-//
-//				mailHelper.setFrom(setFrom);
-//				mailHelper.setTo(toMail);
-//				mailHelper.setSubject(title);
-//				mailHelper.setText(content, true);
-//				mailSender.send(message);
-//
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			logger.info("임시 비밀번호 : " + newPw);
-//
-//			member.setMemPw(bcryptPasswordEncoder.encode(newPw.toString()));
-//
-//			if (memberService.updateMemberPw(member) <= 0) {
-//				model.addAttribute("message", "비밀번호 업데이트 오류");
-//				return "common/error";
-//			}
-//			return "user/login";
-//		} else {
-//			model.addAttribute("message", "일치하는 사람 없음");
-//			return "common/error";
-//		}
-//
-//	} // 비밀번호 찾기 기능
+	@RequestMapping(value = "pwSearch.do", method = RequestMethod.POST)
+	public String pwSearchMethod(Member member, Model model) {
+		Member findUser = null;
+		findUser = memberService.selectMemberByEmailId(member);
+
+		if (findUser != null) {
+			// 소문자, 대문자, 숫자
+			final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+=";
+
+			SecureRandom rm = new SecureRandom();
+			StringBuilder newPw = new StringBuilder();
+
+			for (int i = 0; i < 11; i++) {
+				// 무작위로 문자열의 인덱스 반환
+				int index = rm.nextInt(chars.length());
+				// index의 위치한 랜덤값
+				newPw.append(chars.charAt(index));
+			}
+
+			// 이메일 보낼 양식
+			String toMail = member.getMemId();
+			String title = "임시 비밀번호 입니다.";
+			String content = "임시 비밀번호는 " + newPw + " 입니다." + "<br>" + "해당 비밀번호로 로그인 해주세요.";
+
+			try {
+				MimeMessage message = mailSender.createMimeMessage(); // Spring에서 제공하는 mail API
+				MimeMessageHelper mailHelper = new MimeMessageHelper(message, "utf-8");
+
+				mailHelper.setFrom(setFrom);
+				mailHelper.setTo(toMail);
+				mailHelper.setSubject(title);
+				mailHelper.setText(content, true);
+				mailSender.send(message);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			logger.info("임시 비밀번호 : " + newPw);
+
+			member.setMemPw(bcryptPasswordEncoder.encode(newPw.toString()));
+
+			if (memberService.updateMemberPw(member) <= 0) {
+				model.addAttribute("message", "비밀번호 업데이트 오류");
+				return "common/error";
+			}
+			return "member/loginPage";
+		} else {
+			model.addAttribute("message", "일치하는 사람 없음");
+			return "common/error";
+		}
+
+	} // 비밀번호 찾기 기능
 
 	// 내 정보 수정 기능 | 2024. 09. 30 작정 및 테스트 성공
 	// jmoh03 (오정민)
@@ -700,53 +1017,61 @@ public class MemberController {
 			return "common/error";
 		}
 	} // 회원 탈퇴 기능
-
+	
+	@Autowired
+    public MemberController(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+        if (this.mailSender == null) {
+            System.out.println("mailSender is not initialized.");
+        }
+    }
+	
 	// 이메일 인증 기능
 	// jmoh03 (오정민)
-//	@RequestMapping(value = "emailAuth.do", method = RequestMethod.POST)
-//	@ResponseBody
-//	public String emailAuthMethod(@RequestParam("userEmail") String email) {
-//		// 난수의 범위 111111 ~ 999999 (6자리 난수)
-//		Random random = new Random();
-//		int checkNum = random.nextInt(888888) + 111111;
-//
-//		// 이메일 보낼 양식
-//		String toMail = email;
-//		String title = "회원가입 인증 이메일 입니다.";
-//		String content = "인증 코드는 " + checkNum + " 입니다." + "<br>" + "해당 인증 코드를 인증 코드 확인란에 기입하여 주세요.";
-//
-//		try {
-//			MimeMessage message = mailSender.createMimeMessage(); // Spring에서 제공하는 mail API
-//			MimeMessageHelper mailHelper = new MimeMessageHelper(message, "utf-8");
-//
-//			mailHelper.setFrom(setFrom);
-//			mailHelper.setTo(toMail);
-//			mailHelper.setSubject(title);
-//			mailHelper.setText(content, true);
-//			mailSender.send(message);
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//
-//		logger.info("랜덤숫자 : " + checkNum);
-//
-//		JSONObject jOb = new JSONObject();
-//		jOb.put("authCode", checkNum);
-//
-//		return jOb.toJSONString();
-//	}
+	@RequestMapping(value = "emailAuth.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String emailAuthMethod(@RequestParam("memId") String memId) {
+		// 난수의 범위 111111 ~ 999999 (6자리 난수)
+		Random random = new Random();
+		int checkNum = random.nextInt(888888) + 111111;
+
+		// 이메일 보낼 양식
+		String toMail = memId;
+		String title = "회원가입 인증 이메일 입니다.";
+		String content = "인증 코드는 " + checkNum + " 입니다." + "<br>" + "해당 인증 코드를 인증 코드 확인란에 기입하여 주세요.";
+
+		try {
+			MimeMessage message = mailSender.createMimeMessage(); // Spring에서 제공하는 mail API
+			MimeMessageHelper mailHelper = new MimeMessageHelper(message, "utf-8");
+
+			mailHelper.setFrom(setFrom);
+			mailHelper.setTo(toMail);
+			mailHelper.setSubject(title);
+			mailHelper.setText(content, true);
+			mailSender.send(message);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		logger.info("랜덤숫자 : " + checkNum);
+
+		JSONObject jOb = new JSONObject();
+		jOb.put("authCode", checkNum);
+
+		return jOb.toJSONString();
+	}
 
 	// 관리자 : 회원 정보 수정 기능 | 2024. 10. 08 작정 및 테스트 성공
 	// ejjung02 (정은지) => jmoh03 (오정민)
 	@RequestMapping(value = "memberUpdate.do", method = RequestMethod.POST)
 	public String memberUpdateMethod(Member member, Model model, HttpServletRequest request) {
 		logger.info("memberUpdate.do 접근");
-		if(memberService.updateMember(member) > 0) {
-			logger.info(member.getMemName()+"님의 유저 정보 수정 완료.");
-			return "redirect:memberDetail.do?memId="+member.getMemId();			
+		if (memberService.updateMember(member) > 0) {
+			logger.info(member.getMemName() + "님의 유저 정보 수정 완료.");
+			return "redirect:memberDetail.do?memId=" + member.getMemId();
 		} else {
-			model.addAttribute("message", member.getMemName()+"님의 회원 정보 수정에 실패하였습니다.");
+			model.addAttribute("message", member.getMemName() + "님의 회원 정보 수정에 실패하였습니다.");
 			return "common/error";
 		}
 	} // 관리자 : 회원 정보 수정 기능
@@ -755,39 +1080,49 @@ public class MemberController {
 	// ejjung02 (정은지) => jmoh03 (오정민)
 	@RequestMapping(value = "memberAccountUpdate.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String memberAccountUpdateMethod(Member member, Model model, HttpServletRequest request) {
-		
-		if(memberService.updateMemberAccount(member.getMemId()) > 0) {
-			return "redirect:memberDetail.do?memId="+member.getMemId();			
+
+		if (memberService.updateMemberAccount(member.getMemId()) > 0) {
+			return "redirect:memberDetail.do?memId=" + member.getMemId();
 		} else {
 			model.addAttribute("message", "계정조치에 실패하였습니다.");
 			return "common/error";
 		}
 	} // 관리자 : 회원 계정 조치 기능
 
+	@RequestMapping(value = "memberAccountUpdateClear.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String memberAccountUpdateClearMethod(Member member, Model model, HttpServletRequest request) {
+		if (memberService.updateMemberAccountClear(member.getMemId()) > 0) {
+			return "redirect:memberDetail.do?memId=" + member.getMemId();
+		} else {
+			model.addAttribute("message", "계정정지 해제에 실패하였습니다.");
+			return "common/error";
+		}
+	}
+
 	// 관리자 : 회원 관리자 부여 기능 | 2024. 10. 08 작정 및 테스트 성공
 	// ejjung02 (정은지) => jmoh03 (오정민)
 	@RequestMapping(value = "memberAdmin.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String memberAdminMethod(Member member, Model model, HttpServletRequest request) {
-		
-		if(memberService.updateMemberAdmin(member.getMemId()) > 0) {
-			return "redirect:memberDetail.do?memId="+member.getMemId();			
+
+		if (memberService.updateMemberAdmin(member.getMemId()) > 0) {
+			return "redirect:memberDetail.do?memId=" + member.getMemId();
 		} else {
 			model.addAttribute("message", "관리자 부여에 실패하였습니다.");
 			return "common/error";
 		}
 	} // 관리자 : 회원 관리자 부여 기능
-	
+
 	// 관리자 : 회원 관리자 박탈 기능 | 2024. 10. 08 작성 및 테스트 성공
 	// tsoh03 (오정민)
-	@RequestMapping(value = "memberAdminDelete.do", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "memberAdminDelete.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String memberAdminDeleteMethod(Member member, Model model, HttpServletRequest request) {
-		
-		if(memberService.updateMemberAdminDelete(member.getMemId()) > 0) {
-			return "redirect:memberDetail.do?memId="+member.getMemId();
+
+		if (memberService.updateMemberAdminDelete(member.getMemId()) > 0) {
+			return "redirect:memberDetail.do?memId=" + member.getMemId();
 		} else {
 			model.addAttribute("message", "관리자 박탈에 실패하였습니다.");
 			return "common/error";
 		}
-		
+
 	}
 }

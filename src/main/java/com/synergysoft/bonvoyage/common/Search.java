@@ -3,7 +3,10 @@ package com.synergysoft.bonvoyage.common;
 import java.sql.Date;
 
 public class Search {
-
+	
+	// 회원에서 필요하여 선언
+	private String action;	// 검색할 카테고리 지정용
+	
 	private String keyword; // 제목, 내용 검색용
 	private int startRow;	// 한페이지에 출력할 목록의 시작행
 	private int endRow;		// 한페이지에 출력할 목록의 끝행
@@ -14,8 +17,16 @@ public class Search {
 	
 
 	public Search() {}
+	
+	public String getAction() { // 회원에서 필요하여 선언
+		return action;
+	}
 
-	public String getKeyword() {
+	public void setAction(String action) { // 회원에서 필요하여 선언
+		this.action = action;
+	}
+	
+	public String getKeyword() { 
 		return keyword;
 	}
 
@@ -65,7 +76,7 @@ public class Search {
 
 	@Override
 	public String toString() {
-		return "Search [keyword=" + keyword + ", startRow=" + startRow + ", endRow=" + endRow + ", begin=" + begin
+		return "Search [action=" + action + ",keyword=" + keyword + ", startRow=" + startRow + ", endRow=" + endRow + ", begin=" + begin
 				+ ", end=" + end + ", age=" + age + "]";
 	}
 
