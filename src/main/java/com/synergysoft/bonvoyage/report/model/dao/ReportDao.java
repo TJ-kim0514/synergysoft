@@ -16,69 +16,74 @@ public class ReportDao {
 
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
+	
+	// 관리자 : 전체 신고글 조회
+	public ArrayList<Report> selectReport(Paging paging) {
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport", paging);
+		return (ArrayList<Report>) list;
+	}
+	
+	// 유저 : 전체 신고글 조회
+	public ArrayList<Report> selectReportMe(Report report) {
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReportMe", report);
+		return (ArrayList<Report>) list;
+	}
+	
+	// 관리자 : 전체 신고글 검색 조회
+	public ArrayList<Report> selectReportSearch(Report report) {
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReportSearch", report);
+		return (ArrayList<Report>) list;
+	}
+	
+	// 유저 : 전체 신고글 검색 조회
+	public ArrayList<Report> selectReportMeSearch(Report report) {
+		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReportMeSearch", report);
+		return (ArrayList<Report>) list;
+	}
 
-	// 신고 상세 조회
+	// 관리자 : 신고글 검색 전체 갯수 조회
+	public int selectReportSearchCount(Report report) {
+		return sqlSessionTemplate.selectOne("reportMapper.selectReportSearchCount", report);
+	}
+
+	// 유저 : 신고글 검색 전체 갯수 조회
+	public int selectReportMeSearchCount(Report report) {
+		return sqlSessionTemplate.selectOne("reportMapper.selectReportMeSearchCount", report);
+	}
+
+	// 신고글 상세 조회
 	public Report selectReportDetail(String reportId) {
 		return sqlSessionTemplate.selectOne("reportMapper.selectReportDetail", reportId);
 	}
 
-	// 유저&관리자 : 신고 등록
+	// 관리자 : 신고글 전체 갯수 조회
+	public int selectReportListCount() {
+		return sqlSessionTemplate.selectOne("reportMapper.selectReportListCount");
+	}
+
+	// 유저 : 신고글 전체 갯수 조회
+	public int selectReportUserListCount(String memId) {
+		return sqlSessionTemplate.selectOne("reportMapper.selectReportUserListCount", memId);
+	}
+
+	// 신고글 등록
 	public int insertReport(Report report) {
 		return sqlSessionTemplate.insert("reportMapper.insertReport", report);
 	}
 
-	// 관리자 : 신고 처리
+	// 신고 처리
 	public int updateReportProcess(Report report) {
 		return sqlSessionTemplate.update("reportMapper.updateReportProcess", report);
 	}
 
-	// 관리자 : 신고 반려
+	// 신고 반려
 	public int updateReportReject(Report report) {
 		return sqlSessionTemplate.update("reportMapper.updateReportReject", report);
 	}
 
-	// 관리자 : 신고 삭제
+	// 신고 삭제
 	public int deleteReport(String reportId) {
 		return sqlSessionTemplate.delete("reportMapper.deleteReport", reportId);
-	}
-
-	public int selectReportAllListCount() {
-		return sqlSessionTemplate.selectOne("reportMapper.selectReportListCount");
-	}
-
-	// 회원이 신고한 글 갯수 조회
-	public int selectReportUserListCount(String reportId) {
-		return sqlSessionTemplate.selectOne("reportMapper.selectAllReportMe", reportId);
-	}
-
-	// 관리자 목록조회
-	public ArrayList<Report> selectList(Paging paging) {
-		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReport", paging);
-		return (ArrayList<Report>) list;
-	}
-
-	// 회원이 신고한 목록 조회
-	public ArrayList<Report> selectList(Search search) {
-		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectReportMe", search);
-		return (ArrayList<Report>) list;
-	}
-
-	public int selectSearchTitleListCount(String keyword) {
-return sqlSessionTemplate.selectOne("reportMapper.selectSearchTitleListCount",keyword );
-	}
-
-	public int selectSearchContentListCount(String keyword) {
-return sqlSessionTemplate.selectOne("reportMapper.selectSearchContentListCount",keyword);
-	}
-
-	public ArrayList<Report> selectSearchTitleReport(Search search) {
-		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectSearchTitleReport", search);
-		return (ArrayList<Report>)list;
-	}
-
-	public ArrayList<Report> selectSearchContentReport(Search search) {
-		List<Report> list = sqlSessionTemplate.selectList("reportMapper.selectSearchContentReport", search);
-		return (ArrayList<Report>)list;
 	}
 
 }
