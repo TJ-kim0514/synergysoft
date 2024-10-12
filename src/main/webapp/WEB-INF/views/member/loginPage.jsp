@@ -118,8 +118,72 @@ a#kakao-login-btn{
 			<br>
 		</form>
 			<div class="container my-4" align="right">
-			<a href="${pageContext.servletContext.contextPath }/idSearchPage.do">아이디 찾기</a> | 
-			<a href="${pageContext.servletContext.contextPath }/pwSearchPage.do">비밀번호 찾기</a> | 
+			<a href="${pageContext.servletContext.contextPath }/idSearchPage.do">이메일 찾기</a> | 
+			
+			<div id="findPw" class="modal fade">
+				<div class="modal-dialog modal-dialog-centered modal-login">
+					<div class="modal-content">
+						<div class="modal-body">
+		
+							<div class="container my-auto">
+								<div class="row">
+									<div class="card z-index-0 fadeIn3 fadeInBottom">
+										<div
+											class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+											<div
+												class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+												<h4
+													class="text-black font-weight-bolder text-center mt-2 mb-0">비밀번호 찾기</h4>
+											</div>
+										</div>
+										<div class="card-body">
+											<form role="form" class="text-start" action="/member/sendEmail"
+												method="post" name="sendEmail">
+												<p>입력한 이메일로 임시 비밀번호가 전송됩니다.</p>
+												<div class="input-group input-group-outline my-3">
+													<label class="form-label">Email</label>
+													<input type="text" id="memId" name="memId" class="form-control" required>
+												</div>
+												<div class="text-center">
+													<button type="button" class="btn bg-gradient-primary w-100 my-4 mb-2" id="checkEmail">비밀번호 발송</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button type="button" class="btn btn-link" data-bs-toggle="modal"
+				data-bs-target="#findPw">비밀번호 찾기</button>
+			<script>
+				$("#checkEmail").click(function () {
+			        const memId = $("#memId").val();
+			        const sendEmail = document.forms["loginPage.do"];
+			        $.ajax({
+			            type: 'post',
+			            url: 'pwSearch.do',
+			            data: {
+			                'memId': memId
+			            },
+			            dataType: "text",
+			            success: function (result) {
+			                if(result == "no"){
+			                    // 중복되는 것이 있다면 no == 일치하는 이메일이 있다!
+			                    alert('임시비밀번호를 전송 했습니다.');
+			                    sendEmail.submit();
+			                }else {
+			                    alert('가입되지 않은 이메일입니다.');
+			                }
+	
+			            },error: function () {
+			                console.log('에러 체크!!')
+			            }
+			        })
+			    });
+			</script> | 
 			<c:url var="goEnroll" value="enrollPage.do" /> 
 			<a href="${ goEnroll }">회원가입</a>
 			</div>
