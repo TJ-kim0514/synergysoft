@@ -21,5 +21,6 @@ public interface RouteService {
 	ArrayList<Route> selectSearchTitleRoute(Search search);
 	ArrayList<Route> selectSearchContentRoute(Search search);
 	ArrayList<Route> selectSearchUserIdRoute(Search search);
+	Route top1Route(String si);
 	
 }

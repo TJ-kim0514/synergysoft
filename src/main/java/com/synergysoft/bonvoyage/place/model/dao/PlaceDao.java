@@ -23,4 +23,8 @@ public class PlaceDao {
 		List<Place> list = sqlSessionTemplate.selectList("placeMapper.selectPlace", routeBoardId);
 		return (ArrayList<Place>)list;
 	}
+
+	public int placeCount(String si) {
+		return sqlSessionTemplate.selectOne("placeMapper.placeCount", si);
+	}
 }
