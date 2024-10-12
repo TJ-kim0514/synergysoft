@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%-- 현재 페이지 변수 생성 --%>
 <c:set var="nowpage" value="1" />
 <c:if test="${ !empty requestScope.currentPage }">
@@ -10,29 +10,16 @@
 </c:if>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>bonvoyage</title>
-<style>
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f8f9fa;
-}
-
-.report-table th, .report-table td {
-	vertical-align: middle;
-}
-
-footer {
-	text-align: center;
-	padding: 20px 0;
-	font-size: 0.9rem;
-	color: #666;
-	background-color: #f1f1f1;
-	margin-top: 30px;
-}
-</style>
+<title>Bon voyage</title>
+<!-- 부트스트랩 CSS 링크 -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
 
 <script type="text/javascript"
 	src="/first/resources/js/jquery-3.7.1.min.js"></script>
@@ -42,33 +29,33 @@ footer {
 	<c:import url="/WEB-INF/views/common/menubar.jsp" />
 	<div class="container">
 		<h1 align="center" class="text-center my-4">신고목록</h1>
-
+		
+		<%-- 항목별 검색기능 --%>
+		<form method="get" action="reportSearch.do" class="d-flex mb-2" id="ss"  style="float:left">
+			<select name="action" id="search" class="form-select w-auto">
+				<option value="reportingReason" id="reportingReason">제목</option>
+				<option value="detail" id="detail">내용</option>
+			</select>
+	
+			<input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
+			<button type="submit" class="btn btn-primary" style="background-color: #4ba483; color: white;">검색</button>
+		</form>
+		
 		<div class="text-end mb-3">
 			<button align="center" class="btn btn-primary"
 				style="background-color: #4ba483; color: white;"
 				onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/reportWrite.do';">
 				신고글 작성</button>
 		</div>
-		<%-- 항목별 검색기능 --%>
-		<%-- 따로 수정 예정 --%>
-		<form method="get" action="reportSearch.do"
-			class="d-flex justify-content-center mb-4" id="ss">
-			<select name="action" id="search" class="form-select w-auto">
-				<option value="reportingReason" id="reportingReason">제목</option>
-				<option value="detail" id="detail">내용</option>
-			</select> <input type="search" name="keyword" class="form-control mx-2" placeholder="검색어를 입력해주세요" size="50">
-			<button type="submit" class="btn btn-primary"
-				style="background-color: #4ba483; color: white;">검색</button>
-		</form>
 		<%-- 조회된 신고글 목록 출력 --%>
 		<div class="table-responsive">
-			<table class="table table-striped table-bordered report-table">
-				<thead class="table-primary">
+			<table class="table table-sm">
+				<thead class="table-success">
 					<tr class="text-center">
-						<th width="80px" style="background-color: #4ba483; color: white;">번호</th>
-						<th width="500px" style="background-color: #4ba483; color: white;">신고사유</th>
-						<th width="100px" style="background-color: #4ba483; color: white;">작성자</th>
-						<th width="100px" style="background-color: #4ba483; color: white;">날짜</th>
+						<th width="90px">No</th>
+						<th width="400px">신고사유</th>
+						<th width="200px">작성자</th>
+						<th width="100px">날짜</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -78,7 +65,7 @@ footer {
 							<td><a
 								href="${ pageContext.servletContext.contextPath }/reportDetail.do?reportId=${ r.reportId }"
 								class="text-dark text-decoration-none">${ r.reportingReason }</a></td>
-							<td class="text-center">${ r.reportUserId }</td>
+							<td class="text-center">${ r.memNickNm }</td>
 							<td class="text-center"><fmt:formatDate
 									value="${ r.reportDate }" pattern="yyyy-MM-dd" /></td>
 						</tr>
