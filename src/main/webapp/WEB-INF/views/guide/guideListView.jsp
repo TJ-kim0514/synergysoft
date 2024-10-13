@@ -49,6 +49,7 @@
         
         <!-- 목록 버튼을 검색 폼 오른쪽에 배치 -->
         <button class="btn btn-success" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button>
+        <button class="btn btn-success" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/chattingPage.do';">채팅</button>
     </div>
 </div>
 
