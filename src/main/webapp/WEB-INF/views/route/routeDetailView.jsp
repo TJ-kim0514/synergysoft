@@ -136,10 +136,20 @@
 
 
 <div class="container">
-	<h3 align="center">${ route.title }</h3>
-		<div class="text-end">
-			<h5><span class="badge text-bg-success" style="font-size: 14pt;">교통수단 : ${ route.transport }</span></h5>
+	<h2 align="center">${ route.title }</h2>
+		<div>
+		 	<div>
+		 		<button class="btn btn-success" onclick="javascript:location.href='${ routelikecount }'; return false;">추천</button>
+		 		<button class="btn btn-success" onclick="javascript:location.href='${ routeReport }'; return false;">신고</button>
+		 	</div>
+		 	<div class="text-end">
+				<h5><span class="badge text-bg-success" style="font-size: 14pt;">교통수단 : ${ route.transport }</span></h5>
+				<span class="badge text-bg-success" >조회수 : ${ route.readCount }</span>
+				<span class="badge text-bg-success">추천수 : ${ route.likeCount }</span>
+			</div>
 		</div>
+		 
+
 		 
 		 <div id="routePlace" class="d-flex">
 		 	<div>
@@ -148,9 +158,9 @@
 			 		<th colspan="2" class="text-center p-1">출발지</th>
 			 	</tr>
 			 	<tr>
-			 		<th width="100">주소</th><td class="text-center">${ place[0].address }</td>
+			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[0].address }</td>
 			 	</tr>
-			 	<tr><th class="py-2">이름</th><td class="text-center">${ place[0].placeName }</td>
+			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[0].placeName }</td>
 			 	</tr>
 			 	<tr><th colspan="2" class="text-center py-2">사진</th>
 			 	</tr>
@@ -166,7 +176,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2">소개</th><td>${ place[0].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td>${ place[0].placeContent }</td>
 			 	</tr>		 	
 			 </table>
 			 </div>
@@ -177,9 +187,9 @@
 			 		<th colspan="2" class="text-center p-1">출발지</th>
 			 	</tr>
 			 	<tr>
-			 		<th width="100">주소</th><td class="text-center">${ place[1].address }</td>
+			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[1].address }</td>
 			 	</tr>
-			 	<tr><th class="py-2">이름</th><td class="text-center">${ place[1].placeName }</td>
+			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[1].placeName }</td>
 			 	</tr>
 			 	<tr><th colspan="2" class="text-center py-2">사진</th>
 			 	</tr>
@@ -195,7 +205,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2">소개</th><td>${ place[1].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td>${ place[1].placeContent }</td>
 			 	</tr>		 	
 			 </table>
 			 </div>
@@ -206,9 +216,9 @@
 			 		<th colspan="2" class="text-center p-1">출발지</th>
 			 	</tr>
 			 	<tr>
-			 		<th width="100">주소</th><td class="text-center">${ place[2].address }</td>
+			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[2].address }</td>
 			 	</tr>
-			 	<tr><th class="py-2">이름</th><td class="text-center">${ place[2].placeName }</td>
+			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[2].placeName }</td>
 			 	</tr>
 			 	<tr><th colspan="2" class="text-center py-2">사진</th>
 			 	</tr>
@@ -224,7 +234,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2">소개</th><td>${ place[2].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td>${ place[2].placeContent }</td>
 			 	</tr>		 	
 			 </table>
 			 </div>
@@ -235,9 +245,9 @@
 			 		<th colspan="2" class="text-center p-1">출발지</th>
 			 	</tr>
 			 	<tr>
-			 		<th width="100">주소</th><td class="text-center">${ place[3].address }</td>
+			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[3].address }</td>
 			 	</tr>
-			 	<tr><th class="py-2">이름</th><td class="text-center">${ place[3].placeName }</td>
+			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[3].placeName }</td>
 			 	</tr>
 			 	<tr><th colspan="2" class="text-center py-2">사진</th>
 			 	</tr>
@@ -253,7 +263,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2">소개</th><td>${ place[3].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td>${ place[3].placeContent }</td>
 			 	</tr>		 	
 			 </table>
 			 </div>
@@ -264,9 +274,9 @@
 			 		<th colspan="2" class="text-center p-1">출발지</th>
 			 	</tr>
 			 	<tr>
-			 		<th width="100">주소</th><td class="text-center">${ place[4].address }</td>
+			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[4].address }</td>
 			 	</tr>
-			 	<tr><th class="py-2">이름</th><td class="text-center">${ place[4].placeName }</td>
+			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[4].placeName }</td>
 			 	</tr>
 			 	<tr><th colspan="2" class="text-center py-2">사진</th>
 			 	</tr>
@@ -282,7 +292,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2">소개</th><td>${ place[4].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td>${ place[4].placeContent }</td>
 			 	</tr>		 	
 			 </table>
 			 </div>
