@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -922,6 +921,7 @@ public class MemberController {
 	// 비밀번호 찾기 기능
 	// jmoh03 (오정민)
 	@RequestMapping(value = "pwSearch.do", method = RequestMethod.POST)
+	@ResponseBody
 	public String pwSearchMethod(Member member, Model model) {
 		Member findUser = null;
 		findUser = memberService.selectMemberByEmailId(member);
@@ -942,7 +942,7 @@ public class MemberController {
 
 			// 이메일 보낼 양식
 			String toMail = member.getMemId();
-			String title = "임시 비밀번호 입니다.";
+			String title = "[본보야지] 임시 비밀번호 입니다.";
 			String content = "임시 비밀번호는 " + newPw + " 입니다." + "<br>" + "해당 비밀번호로 로그인 해주세요.";
 
 			try {
@@ -966,10 +966,11 @@ public class MemberController {
 				model.addAttribute("message", "비밀번호 업데이트 오류");
 				return "common/error";
 			}
-			return "member/loginPage";
+
+			return "no";
 		} else {
 			model.addAttribute("message", "일치하는 사람 없음");
-			return "common/error";
+			return "failed";
 		}
 
 	} // 비밀번호 찾기 기능
@@ -1037,7 +1038,7 @@ public class MemberController {
 
 		// 이메일 보낼 양식
 		String toMail = memId;
-		String title = "회원가입 인증 이메일 입니다.";
+		String title = "[본보야지] 회원가입 인증 이메일 입니다.";
 		String content = "인증 코드는 " + checkNum + " 입니다." + "<br>" + "해당 인증 코드를 인증 코드 확인란에 기입하여 주세요.";
 
 		try {

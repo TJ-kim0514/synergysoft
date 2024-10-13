@@ -11,41 +11,52 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
+	var email_auth_cd = null; // 전역 변수로 선언
+	var email_auth_yn = false;
+	var dupIdCheckYn = false;
 	
-	const memIdAuthBtn = document.getElementById('memIdAuthBtn');
-	
-	function emailAuth(){   	 
-		 var memId = $('#memId').val();
+	function emailAuth() {   	 
+	    var memId = $('#memId').val();
 		 
-		 if(memId == ''){
-		 	alert("이메일을 입력해주세요.");
-		 	return false;
-		 }
+	    if (memId == '') {
+	        alert("이메일을 입력해주세요.");
+	        return false;
+	    }
 		 
-		 $.ajax({
-			type : "POST",
-			url : "emailAuth.do",
-			data : {memId : memId},
-			success: function(data){
-				alert("인증번호가 발송되었습니다.");
-				
-				email_auth_cd = data;
-			},
-			error: function(data){
-				alert("메일 발송에 실패했습니다.");
-			}
-		});
-		 return false;
+	    $.ajax({
+	        type: "POST",
+	        url: "emailAuth.do",
+	        data: { memId: memId },
+	        dataType: "json", // 응답 데이터를 JSON으로 지정
+	        success: function(data) {
+	            email_auth_cd = data.authCode; // authCode 값만 저장
+	            alert("인증번호가 발송되었습니다.");
+	            $('#memIdAuth').prop('disabled', false); // 인증 확인 버튼 활성화
+	        },
+	        error: function(data) {
+	            alert("메일 발송에 실패했습니다.");
+	        }
+	    });
+	    return false;
 	}
 	
-	function emailAuthChk(){
-		if($('#memIdAuth').val() != email_auth_cd){
-			alert("인증번호가 일치하지 않습니다.");
-			return false;
-		} else {
-			alert("이메일 인증에 성공하셨습니다.");
-			return true;
-		}
+	function emailAuthChk() {
+		
+	    if(parseInt($('#memIdAuth').val()) == ''){
+	    	alert("인증번호를 입력해주시기 바랍니다.");
+	    	return false;
+	    } else {
+		    // 사용자 입력값을 정수로 변환하여 비교
+		    if (parseInt($('#memIdAuth').val()) !== email_auth_cd) {
+		        alert("인증번호가 일치하지 않습니다.");
+		        email_auth_yn = false;
+		        return false;
+		    } else {
+		        alert("이메일 인증에 성공하셨습니다.");
+		        email_auth_yn = true;
+		        return true;
+		    }
+	    }
 	}
 
 
@@ -60,9 +71,11 @@
 				console.log('success : ' + data);
 				if (data == 'ok') {
 					alert('사용 가능한 아이디입니다.');
+					dupIdCheckYn = true;
 					$('#memPw').focus();
 				} else {
 					alert('이미 사용중인 아이디입니다.');
+					dupIdCheckYn = false;
 					$('#memId').select();
 				}
 			},
@@ -77,11 +90,20 @@
 	function validate() {
 		var pwdValue = document.getElementById('memPw').value;
 		var pwdValue2 = document.getElementById('memPw2').value;
+		if(!email_auth_yn){
+			alert('인증번호가 일치하지 않습니다.');
+			return false;
+		}
 		if (pwdValue !== pwdValue2) {
 			alert('암호와 암호확인이 일치하지 않습니다. 다시 입력하세요.');
 			document.getElementById('memPw').value = '';
 			document.getElementById('memPw2').value = '';
 			document.getElementById('memPw').focus();
+			return false;
+		}
+		if(!dupIdCheckYn){
+			alert('이미 사용중인 아이디입니다.');
+			$('#memId').select();
 			return false;
 		}
 		return true;
@@ -120,7 +142,7 @@
 				<td>
 					<input type="text" class="form-control" id="memIdAuth" required>
 					<input type="button" class="btn btn-primary mb-3" onclick="return emailAuth();" value="인증받기">
-					<input type="button" id="memIdAuthBtn" class="btn btn-primary mb-3" onclick="return emailAuthChk()" value="인증확인">
+					<input type="button" id="memIdAuthBtn" class="btn btn-primary mb-3" onclick="return emailAuthChk();" value="인증확인">
 				</td>
 			</tr>
 			<tr>
