@@ -69,7 +69,7 @@ public class PlaceController {
 		// 인기많은 1개 게시글 불러오기
 		Route top1Route = routeService.top1Route(si);
 		logger.info("top1Route : " + top1Route.toString());
-		
+		String context = top1Route.getContent().split("\\r?\\n")[0];
 		// 가져온 게시글 json put
 		if (top1Route.getRouteBoardId() != null) {
 		    sendJson.put("routeBoardId", URLEncoder.encode(top1Route.getRouteBoardId(), "utf-8"));
@@ -80,7 +80,7 @@ public class PlaceController {
 		}
 
 		if (top1Route.getContent() != null) {
-		    sendJson.put("content", URLEncoder.encode(top1Route.getContent(), "utf-8"));
+		    sendJson.put("content", URLEncoder.encode(context, "utf-8"));
 		}
 
 		if (top1Route.getTransport() != null) {

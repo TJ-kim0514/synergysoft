@@ -136,7 +136,7 @@ $.ajax({
 <br>
 <div class="container text-center">
   <div class="row">
-    <div class="col-8" style="height: 400px;" id="map" style="border: 1px solid black;">
+    <div class="col-8" style="height: 700px;" id="map" style="border: 1px solid black;">
     </div>
     <div class="col-4">
       <!-- <div style="display: flex; justify-content: space-between; align-items: center;">
