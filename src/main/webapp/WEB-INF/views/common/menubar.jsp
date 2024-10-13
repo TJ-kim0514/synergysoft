@@ -37,7 +37,7 @@
 						<a class="nav-link active" aria-current="page" href="sagBlog.do">지역소담이</a>
 					</li>
 					<li class="nav-item" style="width: 120px; text-align: center;">
-						<a class="nav-link active" aria-current="page" href="#">지도</a>
+						<a class="nav-link active" aria-current="page" href="movebmap.do">지도</a>
 					</li>
 					<li class="nav-item" style="width: 120px; text-align: center;">
 						<a class="nav-link active" aria-current="page" href="sanotice.do">공지사항</a>
