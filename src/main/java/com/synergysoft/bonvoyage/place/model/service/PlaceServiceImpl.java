@@ -24,4 +24,11 @@ public class PlaceServiceImpl implements PlaceService {
 		return placeDao.selectPlace(routeBoardId);
 	}
 
+	@Override
+	public int placeCount(String si) {
+		return placeDao.placeCount(si);
+	}
+
+
+
 }

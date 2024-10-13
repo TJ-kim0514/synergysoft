@@ -75,4 +75,8 @@ public class RouteDao {
 		List<Route> list = sqlSessionTemplate.selectList("routeMapper.selectSearchUserIdRoute", search);
 		return (ArrayList<Route>)list;
 	}
+
+	public Route top1Route(String si) {
+		return sqlSessionTemplate.selectOne("routeMapper.top1Route", si);
+	}
 }

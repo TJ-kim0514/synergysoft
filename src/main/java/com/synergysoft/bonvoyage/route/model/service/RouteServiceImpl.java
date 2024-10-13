@@ -85,5 +85,10 @@ public class RouteServiceImpl implements RouteService {
 	public ArrayList<Route> selectSearchUserIdRoute(Search search) {
 		return routeDao.selectSearchUserIdRoute(search);
 	}
-	
+
+	@Override
+	public Route top1Route(String si) {
+		return routeDao.top1Route(si);
+		
+	}
 }

@@ -540,7 +540,7 @@ public class NoticeController {
 		// 최근 등록된 공지글 10개 조회 요청함
 		ArrayList<Notice> list = noticeService.selectTopNotice();
 		
-		// 내보낼 값에 대해 response에 mimitype 설정
+		// 내보낼 값에 대해 response에 mimetype 설정
 		response.setContentType("application/json; charset=utf-8");
 		
 		// 리턴된 list 를 json 배열에 옮겨 기록하기
