@@ -69,7 +69,7 @@ public class PlaceController {
 		// 인기많은 1개 게시글 불러오기
 		Route top1Route = routeService.top1Route(si);
 		logger.info("top1Route : " + top1Route.toString());
-		String context = top1Route.getContent().split("\\r?\\n")[0];
+		String context = (top1Route.getContent().length() > 100 ? top1Route.getContent().substring(0, 100) : top1Route.getContent()) + "...";
 		// 가져온 게시글 json put
 		if (top1Route.getRouteBoardId() != null) {
 		    sendJson.put("routeBoardId", URLEncoder.encode(top1Route.getRouteBoardId(), "utf-8"));

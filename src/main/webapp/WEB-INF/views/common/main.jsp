@@ -76,6 +76,47 @@
 		})
 	}); */
 	
+	//경로추천 인기 게시글 3개 (top-N) 전송받아서 출력 처리
+	$.ajax({
+	    url: 'rtop3.do',  // 서버의 데이터 요청 URL
+	    type: 'post',
+	    dataType: 'json',
+	    success: function(data) {
+	        console.log(data);  // 응답 데이터 확인
+	        if (data.rlist && data.rlist.length > 0) {
+	            // 첫 번째 슬라이드 이미지와 링크 설정
+	            $('#carouselExampleIndicators2 .carousel-item:nth-child(1) a').attr('href', '${pageContext.servletContext.contextPath}/routedetail.do?no=' + data.rlist[0].routeBoardId);
+	            if(data.rlist[0].rFile1 != ""){
+	            	$('#carouselExampleIndicators2 .carousel-item:nth-child(1) img').attr('src', '${pageContext.servletContext.contextPath}/resources/route_upfiles/' + data.rlist[0].rFile1);
+	        	};		
+	            $('.carousel-item:nth-child(1) .carousel-caption h4').text(decodeURIComponent(data.rlist[0].title).replace(/\+/g, ' '));
+	            $('.carousel-item:nth-child(1) .carousel-caption h6').text(decodeURIComponent(data.rlist[0].transport).replace(/\+/g, ' '));
+	            console.log('첫 번째 포스트 제목:', data.rlist[0].title);  // 첫 번째 포스트의 제목 확인
+	            console.log('첫 번째 포스트 지역:', data.rlist[0].transport);  
+
+	            // 두 번째 슬라이드 이미지와 링크 설정
+	            $('#carouselExampleIndicators2 .carousel-item:nth-child(2) a').attr('href', '${pageContext.servletContext.contextPath}/routedetail.do?no=' + data.rlist[1].routeBoardId);
+	            if(data.rlist[1].rFile1 != ""){
+	            	$('#carouselExampleIndicators2 .carousel-item:nth-child(2) img').attr('src', '${pageContext.servletContext.contextPath}/resources/route_upfiles/' + data.rlist[1].rFile1);
+	            };
+	            $('.carousel-item:nth-child(2) .carousel-caption h4').text(decodeURIComponent(data.rlist[1].title).replace(/\+/g, ' '));
+	            $('.carousel-item:nth-child(2) .carousel-caption h6').text(decodeURIComponent(data.rlist[1].transport).replace(/\+/g, ' '));
+
+	            // 세 번째 슬라이드 이미지와 링크 설정
+	            $('#carouselExampleIndicators2 .carousel-item:nth-child(3) a').attr('href', '${pageContext.servletContext.contextPath}/routedetail.do?no=' + data.rlist[2].routeBoardId);
+	            if(data.rlist[1].rFile1 != ""){
+	            	$('#carouselExampleIndicators2 .carousel-item:nth-child(3) img').attr('src', '${pageContext.servletContext.contextPath}/resources/route_upfiles/' + data.rlist[2].rFile1);
+	            };
+	            $('.carousel-item:nth-child(3) .carousel-caption h4').text(decodeURIComponent(data.rlist[2].title).replace(/\+/g, ' '));
+	            $('.carousel-item:nth-child(3) .carousel-caption h6').text(decodeURIComponent(data.rlist[2].transport).replace(/\+/g, ' '));
+	        }
+	    },
+	    error: function(jqXHR, textStatus, errorThrown) {
+	        console.error('Error loading top blogs: ' + textStatus + ', ' + errorThrown);
+	    }
+	});
+	
+	
 	
 	//가이드게시판 인기 게시글 3개 (top-N) 전송받아서 출력 처리
 $.ajax({
@@ -110,6 +151,8 @@ $.ajax({
         console.error('Error loading top blogs: ' + textStatus + ', ' + errorThrown);
     }
 });
+
+	
 
 	
 	
@@ -171,11 +214,69 @@ $.ajax({
 	</table>
     </div>
   </div>
+  
+  
+  
+  
   <div class="row">
     <div class="col">
-      <h1>인기 경로추천 넣기</h1>
+
+  <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel">
+  	<div class="h4">경로추천 인기글</div>
+  	<div class="carousel-indicators">
+    	<button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    	<button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    	<button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  	</div>
+  
+  	<div class="carousel-inner">
+    <!-- 첫 번째 슬라이드 -->
+    <div class="carousel-item active">
+      <a href="#">
+        <img src="https://via.placeholder.com/300x150" class="d-block w-100" alt="게시글 이미지">
+      </a>
+      <div class="carousel-caption">
+        <h4>제목</h4>
+        <h6>교통수단</h6>
+      </div>
+    </div>
+
+    <!-- 두 번째 슬라이드 -->
+    <div class="carousel-item">
+      <a href="#">
+        <img src="https://via.placeholder.com/300x150" class="d-block w-100" alt="게시글 이미지">
+      </a>
+      <div class="carousel-caption">
+        <h4>제목</h4>
+        <h6>교통수단</h6>
+      </div>
+    </div>
+
+    <!-- 세 번째 슬라이드 -->
+    <div class="carousel-item">
+      <a href="#">
+        <img src="https://via.placeholder.com/300x150" class="d-block w-100" alt="게시글 이미지">
+      </a>
+      <div class="carousel-caption">
+        <h4>제목</h4>
+        <h6>교통수단</h6>
+      </div>
     </div>
   </div>
+  
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+</div>
+</div>  
+  
   
   
  <div class="row">
@@ -208,6 +309,7 @@ $.ajax({
 </style>
 
 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="h4">지역소담이 인기글</div>
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>

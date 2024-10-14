@@ -91,4 +91,9 @@ public class RouteServiceImpl implements RouteService {
 		return routeDao.top1Route(si);
 		
 	}
+
+	@Override
+	public ArrayList<Route> selectTop3() {
+		return routeDao.selectTop3();
+	}
 }
