@@ -100,12 +100,37 @@
         <textarea name="guideContent" id="guideContent" class="form-control" rows="8" placeholder="블로그 내용을 입력하세요" style="border: none; background-color: transparent;"></textarea>
       </div>
 
-    <div class="mb-3">
+<div class="mb-3">
     <label for="photofile" class="form-label">사진 첨부</label>
     <c:forEach var="i" begin="1" end="5">
-        <input type="file" id="photofile${i}" name="gmfiles" class="form-control mb-2">
+        <div>
+            <!-- 파일 선택 필드 -->
+            <input type="file" id="photofile${i}" name="gmfiles" class="form-control mb-2" onchange="previewImage(event, ${i})">
+            
+            <!-- 미리보기 이미지 -->
+            <div id="myphoto${i}" style="margin:0;width:150px;height:160px;padding:0;border:1px ;">
+                <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo${i}" 
+                    style="width:150px;height:160px;border:1px solid navy;display:block;margin:0;padding:0;" 
+                    alt="사진을 드래그 드롭하세요.">
+            </div>
+            <br>
+        </div>
     </c:forEach>
 </div>
+
+<script type="text/javascript">
+    function previewImage(event, index) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                // 선택한 파일을 미리보기 이미지에 할당
+                document.getElementById("photo" + index).src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]); // 파일을 base64로 읽어 img에 표시
+        }
+    }
+</script>
 
 
       <!-- 미리보기 이미지들이 추가되는 컨테이너 -->

@@ -7,5 +7,11 @@ public interface LikeCountService {
 	LikeCount selectLikeCount(LikeCount likeCount);
 
 	int insertLikeCount(LikeCount likeCount);
+	
+	
+
+	LikeCount gselectLikeCount(LikeCount likeCount);
+
+	int ginsertLikeCount(LikeCount likeCount);
 
 }

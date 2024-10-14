@@ -22,6 +22,8 @@ public interface GuideService {
 
 	int selectListCount();
 	
+	int readCount(String guidepostId);
+	
 	//검색용 메소드---------------------------------------------------------------------------------
 
 	int selectSearchTitleCount(String keyword);
@@ -37,6 +39,9 @@ public interface GuideService {
 	ArrayList<Guide> selectSearchLocation(Search search);
 
 	ArrayList<Guide> selectTop3();
+
+	int updateGuideLikeCount(String postId);
+
 
 
 

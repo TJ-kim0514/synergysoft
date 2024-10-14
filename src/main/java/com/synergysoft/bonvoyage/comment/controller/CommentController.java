@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.synergysoft.bonvoyage.comment.model.dto.Comment;
 import com.synergysoft.bonvoyage.comment.model.service.CommentService;
+import com.synergysoft.bonvoyage.guide.controller.GuideController;
 import com.synergysoft.bonvoyage.route.controller.RouteController;
 
 @Controller
 public class CommentController {
 	private static final Logger logger = LoggerFactory.getLogger(RouteController.class);
+	private static final Logger logger1 = LoggerFactory.getLogger(GuideController.class);
 	
 	@Autowired
 	private CommentService commentService;
@@ -84,6 +86,66 @@ public class CommentController {
 	}
 
 	
+	
+	// 가이드게시판 댓글 등록 메소드
+	@RequestMapping("guidecomment.do")
+	public String insertGuideCommentMethod(Comment comment, Model model,
+						@RequestParam("postId") String postId,
+						@RequestParam("userId") String userId,
+						HttpServletRequest request) {
+		logger.info("guidecomment.do : " + postId);
+		
+		if(commentService.insertGuideComment(comment) > 0) {
+			
+			comment.setUserId(userId);
+			comment.setPostId(postId);
+			
+			// 댓글작성 성공시 상세페이지로 이동
+			return "redirect:gdetail.do?guidepostId=" + postId;
+		}else {
+			model.addAttribute("message", "댓글 등록실패");
+			return "common/error";
+		}
+		
+	}
+	
+	// 가이드게시판 댓글 삭제 메소드
+	@RequestMapping("gcommentdelete.do")
+	public String deleteGuideCommentMethod(Model model,
+																	@RequestParam("postId") String guidepostId,
+																	@RequestParam("commentId") String commentId) {
+		
+		logger.info("commentId : " + commentId);
+		logger.info("postId : " + guidepostId);
+		
+		
+		if(commentService.deleteGuideComment(commentId) > 0) {
+			return "redirect:gdetail.do?guidepostId=" + guidepostId;
+		}else {
+			model.addAttribute("message", "댓글 삭제 실패");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping(value="guideCommentEdit.do", method=RequestMethod.POST)
+	@ResponseBody
+	public String guideCommentUpdateMethod(HttpServletResponse response,
+																	@RequestParam("commentId") String commentId,
+																	@RequestParam("content") String content) {
+		
+		try {
+			Comment comment = new Comment();
+			comment.setCommentId(commentId);
+			comment.setContent(content);
+			
+			commentService.updateGuideComment(comment);
+			return "Success";
+		} catch (Exception e) {
+			return "Error: " + e.getMessage();
+		}
+
+	}
+
 	
 	
 	

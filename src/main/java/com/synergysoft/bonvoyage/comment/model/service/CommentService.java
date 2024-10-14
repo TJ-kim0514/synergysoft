@@ -13,5 +13,13 @@ public interface CommentService {
 	int deleteRouteComment(String commentId);
 
 	int updateRouteComment(Comment comment);
+	
+	ArrayList<Comment> selectComment1(String guideBoardId);
+
+	int insertGuideComment(Comment comment);
+
+	int deleteGuideComment(String commentId);
+
+	int updateGuideComment(Comment comment);
 
 }

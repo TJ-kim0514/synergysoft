@@ -83,6 +83,14 @@ public class GuideServiceImpl implements GuideService{
 	public ArrayList<Guide> selectTop3() {
 		return guideDao.selectTop3();
 	}
+	@Override
+	public int readCount(String guidepostId) {
+		return guideDao.readCount(guidepostId);
+	}
+	@Override
+	public int updateGuideLikeCount(String postId) {
+		return guideDao.updateGuideLikeCount(postId);
+	}
 
 	
 
