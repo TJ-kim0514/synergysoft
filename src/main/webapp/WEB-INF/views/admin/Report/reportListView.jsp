@@ -8,7 +8,6 @@
 <c:if test="${ !empty requestScope.currentPage }">
 	<c:set var="nowpage" value="${requestScope.currentPage}" />
 </c:if>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -28,7 +27,7 @@
 <body>
 	<c:import url="/WEB-INF/views/common/menubar.jsp" />
 	<div class="container">
-		<h1 align="center" class="text-center my-4">신고목록</h1>
+		<h1 class="text-center my-4">신고목록</h1>
 		
 		<%-- 항목별 검색기능 --%>
 		<form method="get" action="reportSearch.do" class="d-flex mb-2" id="ss"  style="float:left">
@@ -36,24 +35,18 @@
 				<option value="reportingReason" id="reportingReason">제목</option>
 				<option value="detail" id="detail">내용</option>
 			</select>
-	
-			<input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
-			<button type="submit" class="btn btn-primary" style="background-color: #4ba483; color: white;">검색</button>
+			 <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
+        <button type="submit" class="btn btn-success">검색</button>
 		</form>
-		
-		<div class="text-end mb-3">
-			<button align="center" class="btn btn-primary"
-				style="background-color: #4ba483; color: white;"
-				onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/reportWrite.do';">
-				신고글 작성</button>
-		</div>
+			<br>
+			<br>
 		<%-- 조회된 신고글 목록 출력 --%>
-		<div class="table-responsive">
+		<div>
 			<table class="table table-sm">
 				<thead class="table-success">
 					<tr class="text-center">
-						<th width="90px">No</th>
-						<th width="400px">신고사유</th>
+						<th width="80px">No</th>
+						<th width="500px">신고사유</th>
 						<th width="200px">작성자</th>
 						<th width="100px">날짜</th>
 					</tr>

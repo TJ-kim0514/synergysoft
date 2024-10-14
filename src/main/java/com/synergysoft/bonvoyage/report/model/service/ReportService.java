@@ -3,8 +3,6 @@ package com.synergysoft.bonvoyage.report.model.service;
 import java.util.ArrayList;
 
 import com.synergysoft.bonvoyage.common.Paging;
-import com.synergysoft.bonvoyage.common.Search;
-import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 import com.synergysoft.bonvoyage.report.model.dto.Report;
 
 public interface ReportService {
