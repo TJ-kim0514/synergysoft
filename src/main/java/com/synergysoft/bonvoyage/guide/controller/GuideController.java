@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.synergysoft.bonvoyage.comment.model.dto.Comment;
+import com.synergysoft.bonvoyage.comment.model.service.CommentService;
 import com.synergysoft.bonvoyage.common.FileNameChange;
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.common.Search;
@@ -37,6 +39,31 @@ public class GuideController {
 	
 	@Autowired
 	private GuideService guideService;
+	
+	@Autowired
+	private CommentService commentService;
+	
+	// 신고글 작성 페이지 이동 메소드 : guideReport.do
+	@RequestMapping("guideReport.do")
+	public ModelAndView moveGuideReportPage(ModelAndView mv,
+			@RequestParam("guidepostId") String guidepostId,
+			@RequestParam("userId")String userId,
+			@RequestParam("title")String title) {
+		
+		//전송보낼 데이터를 담기위한 객체 생성
+		Guide guide = new Guide();
+		guide.setGuidepostId(guidepostId);
+		guide.setGuideUserId(userId);
+		guide.setGuideTitle(title);
+		
+		//전송 보낼 데이터를 담은 객체를 mv에 저장
+		mv.addObject(guide);
+		mv.setViewName("member/report/reportWriteView");
+		
+		return mv;
+		
+		
+	}
 	
 	// 조회수 많은 인기 게시글 top-3 요청 처리용
 	@RequestMapping(value = "gtop3.do", method = RequestMethod.POST)
@@ -252,22 +279,27 @@ public class GuideController {
 		logger.info("gdetail.do : " + guidepostId);
 		
 		//조회수 1증가처리용 
-		guideService.likeCount(guidepostId);
+		guideService.readCount(guidepostId);
 
 	    // 블로그 데이터를 guidepostId를 이용해 가져옴
 	    Guide guide = guideService.selectGuide(guidepostId);
+	    ArrayList<Comment> clist1 = commentService.selectComment1(guidepostId);
 
 	    if (guide != null) {
 	    	//세션에서 로그인한 사람정보 가져오기
 	    	Member loginUser = (Member)session.getAttribute("loginUser");
+	    	
+	    	 mv.addObject("guide", guide);  // guide 객체를 뷰에 전달
+		     mv.addObject("clist1", clist1);
+		     
 			if(loginUser != null && loginUser.getUserId().equals(guide.getGuideUserId())) {
 				mv.setViewName("guide/guideDetail");
 	        // 블로그 데이터가 있을 경우 상세보기 페이지로 이동
-	        mv.addObject("guide", guide);  // guide 객체를 뷰에 전달
-	        mv.setViewName("guide/guideDetail");  // guideDetailView로 이동
+	       
+	     
 	    } else {
 	    	// 작성자가 아니면 수정할 수 없는 페이지로 이동
-	    	 mv.addObject("guide", guide);
+	    	 
             mv.setViewName("guide/guideDetailView"); 
 	    }}
 			else {

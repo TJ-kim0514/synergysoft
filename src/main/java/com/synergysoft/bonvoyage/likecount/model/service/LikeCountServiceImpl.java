@@ -21,4 +21,16 @@ public class LikeCountServiceImpl implements LikeCountService{
 	public int insertLikeCount(LikeCount likeCount) {
 		return likeCountDao.insertLikeCount(likeCount);
 	}
+	
+	
+	//가이드 좋아요수 
+	@Override
+	public LikeCount gselectLikeCount(LikeCount likeCount) {
+		return likeCountDao.gselectLikeCount(likeCount);
+	}
+
+	@Override
+	public int ginsertLikeCount(LikeCount likeCount) {
+		return likeCountDao.ginsertLikeCount(likeCount);
+	}
 }

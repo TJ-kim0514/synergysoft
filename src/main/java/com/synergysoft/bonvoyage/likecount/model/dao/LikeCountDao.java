@@ -19,4 +19,12 @@ public class LikeCountDao {
 	public int insertLikeCount(LikeCount likeCount) {
 		return sqlSessionTemplate.insert("likecountMapper.insertLikeCount", likeCount);
 	}
+
+	public LikeCount gselectLikeCount(LikeCount likeCount) {
+		return sqlSessionTemplate.selectOne("likecountMapper.gselectLikeCount" , likeCount);
+	}
+
+	public int ginsertLikeCount(LikeCount likeCount) {
+		return sqlSessionTemplate.insert("likecountMapper.ginsertLikeCount", likeCount);
+	}
 }

@@ -32,4 +32,22 @@ public class CommentDao {
 		return sqlSessionTemplate.update("commentMapper.updateRouteComment", comment);
 	}
 
+	//가이드 게시판
+	public ArrayList<Comment> selectComment1(String guideBoardId) {
+		List<Comment> list = sqlSessionTemplate.selectList("commentMapper.selectComment", guideBoardId);
+		return (ArrayList<Comment>)list;
+	}
+
+	public int insertGuideComment(Comment comment) {
+		return sqlSessionTemplate.update("commentMapper.insertGuideComment", comment);
+	}
+
+	public int deleteGuideComment(String commentId) {
+		return sqlSessionTemplate.update("commentMapper.deleteGuideComment", commentId);
+	}
+
+	public int updateGuideComment(Comment comment) {
+		return sqlSessionTemplate.update("commentMapper.updateGuideComment", comment);
+	}
+
 }

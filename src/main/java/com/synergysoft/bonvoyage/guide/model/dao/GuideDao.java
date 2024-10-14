@@ -94,6 +94,16 @@ public class GuideDao {
 	}
 
 
+	public int readCount(String guidepostId) {
+		return sqlSessionTemplate.update("guideMapper.readCount", guidepostId);
+	}
+
+
+	public int updateGuideLikeCount(String postId) {
+		return sqlSessionTemplate.update("guideMapper.updateGuideLikeCount", postId);
+	}
+
+
 
 
 

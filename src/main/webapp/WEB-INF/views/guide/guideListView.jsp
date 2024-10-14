@@ -13,6 +13,10 @@
 <title>Bonvoyage</title>
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
@@ -50,6 +54,7 @@
         <!-- 목록 버튼을 검색 폼 오른쪽에 배치 -->
         <button class="btn btn-success" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button>
         <button class="btn btn-success" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/chattingPage.do';">채팅</button>
+        
     </div>
 </div>
 
@@ -80,7 +85,8 @@
                 <div class="card-body">
                     <h5 class="card-title">${g.guideTitle}</h5>
                     <p class="card-text">지역: ${g.guideLocation}</p>
-                    <p class="card-text">조회수: ${g.likeCount}</p>
+                    <p class="card-text">조회수: ${g.readCount}</p>
+                   <p class="card-text">좋아요: ${g.likeCount}</p>
                    
                     
     

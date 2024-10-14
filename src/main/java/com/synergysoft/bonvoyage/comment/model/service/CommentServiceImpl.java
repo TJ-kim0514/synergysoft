@@ -33,5 +33,25 @@ public 	class CommentServiceImpl implements CommentService {
 	public int updateRouteComment(Comment comment) {
 		return commentDao.updateRouteComment(comment);
 	}
+//가이드 게시판 댓글처리
+	@Override
+	public ArrayList<Comment> selectComment1(String guideBoardId) {
+		return commentDao.selectComment1(guideBoardId);
+	}
+
+	@Override
+	public int insertGuideComment(Comment comment) {
+		return commentDao.insertGuideComment(comment);
+	}
+
+	@Override
+	public int deleteGuideComment(String commentId) {
+		return commentDao.deleteGuideComment(commentId);
+	}
+
+	@Override
+	public int updateGuideComment(Comment comment) {
+		return commentDao.updateGuideComment(comment);
+	}
 
 }

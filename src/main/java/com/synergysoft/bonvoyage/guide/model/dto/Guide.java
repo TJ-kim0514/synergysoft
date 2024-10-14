@@ -25,12 +25,50 @@ public class Guide implements java.io.Serializable {
 	private String rFile3;//	RFILE3	VARCHAR2(500),
 	private String rFile4;//	RFILE4	VARCHAR2(500),
 	private String rFile5;//	RFILE5	VARCHAR2(500),
+	private int readCount;// READ_COUNT	NUMBER
 	
 	
 	public Guide() {
 		super();
 	
 		
+	}
+
+
+	public Guide(String guidepostId, String guideTitle, String guideContent, String guideLocation, Date guideCreatedAt,
+			Date guideUpdatedAt, String guideUserId, int likeCount, String oFile1, String oFile2, String oFile3,
+			String oFile4, String oFile5, String rFile1, String rFile2, String rFile3, String rFile4, String rFile5,
+			int readCount) {
+		super();
+		this.guidepostId = guidepostId;
+		this.guideTitle = guideTitle;
+		this.guideContent = guideContent;
+		this.guideLocation = guideLocation;
+		this.guideCreatedAt = guideCreatedAt;
+		this.guideUpdatedAt = guideUpdatedAt;
+		this.guideUserId = guideUserId;
+		this.likeCount = likeCount;
+		this.oFile1 = oFile1;
+		this.oFile2 = oFile2;
+		this.oFile3 = oFile3;
+		this.oFile4 = oFile4;
+		this.oFile5 = oFile5;
+		this.rFile1 = rFile1;
+		this.rFile2 = rFile2;
+		this.rFile3 = rFile3;
+		this.rFile4 = rFile4;
+		this.rFile5 = rFile5;
+		this.readCount = readCount;
+	}
+
+
+	public int getReadCount() {
+		return readCount;
+	}
+
+
+	public void setReadCount(int readCount) {
+		this.readCount = readCount;
 	}
 
 
@@ -275,7 +313,7 @@ public class Guide implements java.io.Serializable {
 				+ guideUpdatedAt + ", guideUserId=" + guideUserId + ", likeCount=" + likeCount + ", oFile1=" + oFile1
 				+ ", oFile2=" + oFile2 + ", oFile3=" + oFile3 + ", oFile4=" + oFile4 + ", oFile5=" + oFile5
 				+ ", rFile1=" + rFile1 + ", rFile2=" + rFile2 + ", rFile3=" + rFile3 + ", rFile4=" + rFile4
-				+ ", rFile5=" + rFile5 + "]";
+				+ ", rFile5=" + rFile5 + ", readCount=" + readCount + "]";
 	}
 	
 	
