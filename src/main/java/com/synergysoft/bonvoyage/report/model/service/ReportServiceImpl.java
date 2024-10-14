@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.synergysoft.bonvoyage.common.Paging;
-import com.synergysoft.bonvoyage.common.Search;
 import com.synergysoft.bonvoyage.report.model.dao.ReportDao;
 import com.synergysoft.bonvoyage.report.model.dto.Report;
 
