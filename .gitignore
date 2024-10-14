@@ -3,6 +3,7 @@
 .git
 target/
 *.class
+logs/*
 
 # Eclipse settings
 .classpath
