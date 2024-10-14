@@ -27,7 +27,7 @@
 </head>
 <body>
 	<c:import url="/WEB-INF/views/common/menubar.jsp" />
-	<hr>
+	<br>
 	<div class="container">
 		<h1 align="center">내 정보 보기 페이지</h1>
 		<br>

@@ -113,9 +113,10 @@
 <body>
 	<%-- 메뉴바 표시 --%>
 	<c:import url="/WEB-INF/views/common/menubar.jsp" />
-	<hr>
 
-	<h1 align="center">회원가입 페이지</h1>
+	<div id="loginBoxTitle" align="center">
+		<a href="main.do"style="font-family: Arial, sans-serif; font-size: 48px; font-weight: bold; color: #a0c9bb; text-decoration: none; text-shadow: 2px 2px 2px #4ba483; align: center;">Bon Voyage</a>
+	</div>
 	<br>
 	<form action="enroll.do" method="post" onsubmit="return validate();"
 		enctype="multipart/form-data">
@@ -180,7 +181,6 @@
 		</div>
 	</form>
 
-	<hr>
 	<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

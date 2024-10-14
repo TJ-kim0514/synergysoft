@@ -18,13 +18,15 @@
 <script type="text/javascript" src="/first/resources/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
+<nav>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
-<hr>
-<div class="container my-5">
+</nav>
+<br>
+<h1 align="center">회원 리스트</h1>
+<div class="container">
 	<c:if test="${ !empty sessionScope.loginUser and loginUser.memType eq 'ADMIN' }">
-		<h1 align="center">회원 리스트</h1>
-		<br><br>
-		<fieldset>
+		<br>
+		<fieldset align="center">
 			<form method="get" action="memberListSearch.do" class="d-flex mb-4" id="ss" style="float:left">
 		        <select name="action" id="searchItem" class="form-select w-auto">
 		            <option value="memId" id="memId">아이디</option>
@@ -35,6 +37,7 @@
 		        <button type="submit" class="btn btn-success">검색</button>
 		    </form>
 	    </fieldset>
+	    <div class="container">
 		<div class="row row-cols-1 row-cols-md-4 g-5">
 		<c:forEach items="${memberList}" var="memberList">
 			<div class="col">
@@ -48,6 +51,7 @@
 			</div>
 		</c:forEach>
 		</div>
+		</div>
 	</c:if>
 </div>
 
@@ -59,7 +63,9 @@
 	<% response.sendRedirect("main.do"); %>
 </c:if>
 <c:import url="/WEB-INF/views/common/pagingView.jsp"/>
-<hr>
+<br>
+<footer>
 <c:import url="/WEB-INF/views/common/footer.jsp" />
+</footer>
 </body>
 </html>
