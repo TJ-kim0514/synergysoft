@@ -18,7 +18,7 @@
 	<nav>
 		<c:import url="/WEB-INF/views/common/menubar.jsp"/>	
 	</nav>
-	<hr>
+	<br>
 	<h1 align="center">회원 상세 조회</h1>
 	<br>
 	<form action="memberUpdate.do" method="post">
@@ -141,7 +141,7 @@
 		</table>
 	</form>
 	
-	<hr>
+	<br>
 	<footer>
 		<c:import url="/WEB-INF/views/common/footer.jsp"/>	
 	</footer>

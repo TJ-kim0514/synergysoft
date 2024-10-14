@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,8 +105,14 @@ textarea {
 			<tr>
 				<td class="insert" >제목</td>
 				<td>
-				<input type="hidden" name="postId" value="${ report.postId }" readonly>
-				<input type="text" name="reportTitle" value="${report.title}" required>
+				<c:if test="${fn:contains(param.routeBoardId, 'route_')}">
+					<input type="hidden" name="postId" value="${ route.routeBoardId }" readonly>
+					<input type="text" value="${ route.title }" readonly>
+				</c:if>
+				<c:if test="${fn:contains(param.guideBoardId, 'guide_')}">
+					<input type="hidden" name="postId" value="${ guide.guideBoardId }" readonly>
+					<input type="text" value="${ guide.title }" readonly>
+				</c:if>
 				</td>
 			</tr>
 
@@ -119,12 +126,12 @@ textarea {
 			
 			<tr>
 				<td class="insert">신고내용</td>
-				<td><input type="text" name="detail" required></td>
+				<td><input type="text" name="reportingReason" required></td>
 			</tr>
 			
 			<tr>
 				<td class="insert">신고상세내용</td>
-				<td><textarea cols="100" rows="10" required></textarea></td>
+				<td><textarea name="detail" cols="100" rows="10" required></textarea></td>
 			</tr>
 			
 			<tr><td colspan="2" align="center"><input type="submit" value="입력"></td></tr>

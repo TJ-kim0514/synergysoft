@@ -46,55 +46,47 @@ h1 {
 	color: navy;
 }
 
-div#loginForm {
-	margin: auto;
-	width: 500px;
-	height: 400px;
-	border: 2px solid navy;
-	position: relative;
-}
-
-div#loginForm form {
-	font-size: 16pt;
-	color: navy;
-	font-weight: bold;
-	margin: 10px;
-	padding: 10px;
-}
-
-div#loginForm form input.pos {
-	position: absolute;
-	left: 120px;
-	width: 300px;
-	height: 25px;
-}
-
-div#loginForm form input[type=submit] {
-	margin: 10px;
-	width: 250px;
-	height: 40px;
-	position: absolute;
-	left: 120px;
-	background-color: navy;
-	color: white;
-	font-size: 16pt;
-	font-weight: bold;
-}
-
-div#loginForm label#forgotForm{
-	margin: 10px;
-	height: 40px;
-	position: absolute;
-	right: 0px;
-	font-size: 11pt;
-}
-
 a#kakao-login-btn{
 	margin: 10px;
 	width: 250px;
 	height: 20px;
 	position: absolute;
 	left: 120px;
+}
+
+#container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#loginBox {
+  width: 300px;
+  text-align: center;
+  background-color: #ffffff;
+}
+.input-form-box {
+  border: 0px solid #ff0000;
+  display: flex;
+  margin-bottom: 5px;
+}
+.input-form-box > span {
+  display: block;
+  text-align: left;
+  padding-top: 5px;
+  min-width: 65px;
+}
+.button-login-box {
+  margin: 10px 0;
+}
+#inputBox {
+  margin: 10px;
+}
+
+#inputBox button {
+  padding: 3px 5px;
 }
 </style>
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
@@ -103,51 +95,54 @@ a#kakao-login-btn{
 	<nav>
 	<c:import url="/WEB-INF/views/common/menubar.jsp"/>	
 	</nav>
-	<br>
-	<h1 align="center">본보야지 로그인 페이지</h1>
-	<br>
-	<div id="loginForm">
-		<form action="login.do" method="post">
-			<label>아이디 : <input type="text" name="memId" id="memid" class="pos" required></label>
+	<div id="container">
+		<div id="loginBox">
+			<div id="loginBoxTitle" align="center">
+				<a href="main.do"style="font-family: Arial, sans-serif; font-size: 48px; font-weight: bold; color: #a0c9bb; text-decoration: none; text-shadow: 2px 2px 2px #4ba483; align: center;">Bon Voyage</a>
+			</div>
 			<br>
-			<label>비밀번호 : <input type="password" name="memPw" id="memPw" class="pos" required></label>
-			<br>
-			<center>
-				<input type="submit" value="로그인">
-			</center>
-			<br>
-		</form>
+			<div class="container">
+				<form action="login.do" method="post">
+					<div class="input-form-box"><span>아이디 </span><input type="text" name="memId" id="memid" class="form-control" required></div>
+						<div class="input-form-box"><span>비밀번호 </span><input type="password" name="memPw" id="memPw" class="form-control" required></div>
+						<input type="submit" class="btn btn-primary btn-xs"  style="width:100%" value="로그인">
+					<br>
+				</form>
+			</div>
+		</div>
+	</div>
 			<div class="container my-4" align="right">
-			<a href="${pageContext.servletContext.contextPath }/idSearchPage.do">이메일 찾기</a> | 
+				<%-- <a href="${pageContext.servletContext.contextPath }/idSearchPage.do">이메일 찾기</a> | --%>
+				
+				<div id="findPw" class="modal fade">
+					<div class="modal-dialog modal-dialog-centered modal-login">
+						<div class="modal-content">
+							<div class="modal-body">
 			
-			<div id="findPw" class="modal fade">
-				<div class="modal-dialog modal-dialog-centered modal-login">
-					<div class="modal-content">
-						<div class="modal-body">
-		
-							<div class="container my-auto">
-								<div class="row">
-									<div class="card z-index-0 fadeIn3 fadeInBottom">
-										<div
-											class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+								<div class="container my-auto">
+									<div class="row">
+										<div class="card z-index-0 fadeIn3 fadeInBottom">
 											<div
-												class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
-												<h4
-													class="text-black font-weight-bolder text-center mt-2 mb-0">비밀번호 찾기</h4>
+												class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+												<div
+													class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+													<h4
+														class="text-black font-weight-bolder text-center mt-2 mb-0">비밀번호 찾기</h4>
+												</div>
 											</div>
-										</div>
-										<div class="card-body">
-											<form role="form" class="text-start" action="/member/sendEmail"
-												method="post" name="sendEmail">
-												<p>입력한 이메일로 임시 비밀번호가 전송됩니다.</p>
-												<div class="input-group input-group-outline my-3">
-													<label class="form-label">Email</label>
-													<input type="text" id="memId" name="memId" class="form-control" required>
-												</div>
-												<div class="text-center">
-													<button type="button" class="btn bg-gradient-primary w-100 my-4 mb-2" id="checkEmail">비밀번호 발송</button>
-												</div>
-											</form>
+											<div class="card-body">
+												<form role="form" class="text-start" action="/member/sendEmail"
+													method="post" name="sendEmail">
+													<p>입력한 이메일로 임시 비밀번호가 전송됩니다.</p>
+													<div class="input-group input-group-outline my-3">
+														<label class="form-label">Email</label>
+														<input type="text" id="memId" name="memId" class="form-control" required>
+													</div>
+													<div class="text-center">
+														<button type="button" class="btn btn-primary mb-3" id="checkEmail">비밀번호 발송</button>
+													</div>
+												</form>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -155,55 +150,59 @@ a#kakao-login-btn{
 						</div>
 					</div>
 				</div>
+				
+				
+				<div class="container my-4" align="center">
+					<button type="button" class="btn btn-link" data-bs-toggle="modal"
+						data-bs-target="#findPw">비밀번호 찾기</button>
+					<script>
+						$("#checkEmail").click(function () {
+					        const memId = $("#memId").val();
+					        const sendEmail = document.forms["loginPage.do"];
+					        $.ajax({
+					            type: 'post',
+					            url: 'pwSearch.do',
+					            data: {
+					                'memId': memId
+					            },
+					            dataType: "text",
+					            success: function (result) {
+					                if(result == "no"){
+					                    // 중복되는 것이 있다면 no == 일치하는 이메일이 있다!
+					                    alert('임시비밀번호를 전송 했습니다.');
+					                    sendEmail.submit();
+					                }else {
+					                    alert('가입되지 않은 이메일입니다.');
+					                }
+			
+					            },error: function () {
+					                console.log('에러 체크!!')
+					            }
+					        })
+					    });
+					</script> | 
+					<c:url var="goEnroll" value="enrollPage.do" /> 
+					<a href="${ goEnroll }">회원가입</a>
+				</div>
 			</div>
-			<button type="button" class="btn btn-link" data-bs-toggle="modal"
-				data-bs-target="#findPw">비밀번호 찾기</button>
-			<script>
-				$("#checkEmail").click(function () {
-			        const memId = $("#memId").val();
-			        const sendEmail = document.forms["loginPage.do"];
-			        $.ajax({
-			            type: 'post',
-			            url: 'pwSearch.do',
-			            data: {
-			                'memId': memId
-			            },
-			            dataType: "text",
-			            success: function (result) {
-			                if(result == "no"){
-			                    // 중복되는 것이 있다면 no == 일치하는 이메일이 있다!
-			                    alert('임시비밀번호를 전송 했습니다.');
-			                    sendEmail.submit();
-			                }else {
-			                    alert('가입되지 않은 이메일입니다.');
-			                }
-	
-			            },error: function () {
-			                console.log('에러 체크!!')
-			            }
-			        })
-			    });
-			</script> | 
-			<c:url var="goEnroll" value="enrollPage.do" /> 
-			<a href="${ goEnroll }">회원가입</a>
-			</div>
+			
+			
 			<div class="container my-4" align="center">
-			<p>------------------- 또는 --------------------</p>
-			<!-- 소셜로그인 -->
-	 		<a href="javascript:loginWithKakao();"> 
-				<img src="${pageContext.servletContext.contextPath }/resources/assets/img/Kakao.png" alt="카카오로고" />
-			</a>
-			<br>
-			<a href="${ naverurl }">
-				<img width="180" src="${pageContext.servletContext.contextPath }/resources/assets/img/Naver.png"/>
-			</a>
-			<br>
-	 		<a href="${ googleurl }">
-	 			<img src="${pageContext.servletContext.contextPath }/resources/assets/img/Google.png"/>
-	 		</a>
+				<p>------------------- 또는 --------------------</p>
+				<!-- 소셜로그인 -->
+		 		<a href="javascript:loginWithKakao();"> 
+					<img src="${pageContext.servletContext.contextPath }/resources/assets/img/Kakao.png" alt="카카오로고" />
+				</a>
+				<br>
+				<a href="${ naverurl }">
+					<img width="180" src="${pageContext.servletContext.contextPath }/resources/assets/img/Naver.png"/>
+				</a>
+				<br>
+		 		<a href="${ googleurl }">
+		 			<img src="${pageContext.servletContext.contextPath }/resources/assets/img/Google.png"/>
+		 		</a>
 	 		</div>
 		<br>
-	</div>
 	<footer>
 	<c:import url="/WEB-INF/views/common/footer.jsp"/>	
 	</footer>
