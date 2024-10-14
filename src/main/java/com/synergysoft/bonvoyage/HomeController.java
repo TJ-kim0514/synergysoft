@@ -40,4 +40,11 @@ public class HomeController {
 	public String forwardMain() {
 		return "common/main";
 	}
+	
+	@RequestMapping("test.do")
+	public String testMap() {
+		return "bmap/testMap";
+		
+	}
+	
 }

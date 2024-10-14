@@ -1,20 +1,25 @@
 package com.synergysoft.bonvoyage.route.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,7 +28,6 @@ import com.synergysoft.bonvoyage.comment.model.service.CommentService;
 import com.synergysoft.bonvoyage.common.FileNameChange;
 import com.synergysoft.bonvoyage.common.Paging;
 import com.synergysoft.bonvoyage.common.Search;
-import com.synergysoft.bonvoyage.notice.model.dto.Notice;
 import com.synergysoft.bonvoyage.place.model.dto.Place;
 import com.synergysoft.bonvoyage.place.model.service.PlaceService;
 import com.synergysoft.bonvoyage.route.model.dto.Route;
@@ -709,7 +713,48 @@ public class RouteController {
 	    }
 	}
 	
-	
+	// 추천수 많은 인기 게시글 top-3 요청 처리용
+	@RequestMapping(value = "rtop3.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String boardTop3Method(
+			HttpServletResponse response
+			) throws UnsupportedEncodingException {
+		
+		// 조회수 많은 게시글 3개 조회 요청
+		ArrayList<Route> list = routeService.selectTop3();
+		
+		// 내보낼 값에 대해 response 에 mime타입 설정
+		response.setContentType("application/json; charset=utf-8");
+		
+		// 리턴된 list를 json 배열에 옴겨 기록하기
+		JSONArray jarr = new JSONArray();
+		
+		for(Route route : list) {
+			JSONObject job = new JSONObject();
+			// 게시번호
+			job.put("routeBoardId", URLEncoder.encode(route.getRouteBoardId(),"utf-8"));
+			// 제목
+			job.put("title", URLEncoder.encode(route.getTitle(),"utf-8"));
+			// 교통수단
+			job.put("transport", URLEncoder.encode(route.getTransport(),"utf-8"));
+			
+			// 이미지
+			if (route.getRfile1() != null && !route.getRfile1().isEmpty()) {
+	            job.put("rFile1", URLEncoder.encode(route.getRfile1(),"utf-8"));
+	        } else {
+	            job.put("rFile1", "");  // 이미지가 없는 경우 빈 문자열
+	        }
+			
+			jarr.add(job); // 배열에 Json 객체 추가
+		}
+		
+		// 전송용 JSON 객체 생성
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("rlist", jarr);
+		
+		// 최종적으로 JSON 문자열로 변환하여 반환
+		return sendJson.toJSONString();
+	}
 
 
 

@@ -19,7 +19,7 @@
       <li class="nav-item"><a href="sanotice.do" class="nav-link px-2 text-body-secondary">공지사항</a></li>
       <li class="nav-item"><a href="saqna.do" class="nav-link px-2 text-body-secondary">QnA</a></li>
       <li class="nav-item"><a href="https://map.naver.com/p/entry/place/1137021076?c=15.00,0,0,0,dh" class="nav-link px-2 text-body-secondary">오시는길</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">만든사람들</a></li>
+      <li class="nav-item"><a href="test.do" class="nav-link px-2 text-body-secondary">만든사람들</a></li>
     </ul>
   </footer>
 </div>
