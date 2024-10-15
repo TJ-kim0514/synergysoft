@@ -8,7 +8,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>가이드블로그 상세보기</title>
+<title>가이드블로그 상세보기ㅎㅎ</title>
 
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -275,6 +275,8 @@
 	                 <c:param name="commentId" value="${ g.commentId }" />
 	                 <c:param name="postId" value="${ guide.guidepostId }" />
 	            </c:url>
+	            
+	            
 				<button class="btn btn-success" id="deleteBtn_${ status.index }" onclick="javascript:location.href='${ gcommentdelete }'; return false;">삭제</button>
 				<!-- 수정완료 버튼 -->
                 <button class="btn btn-success" id="saveBtn_${ status.index }" style="display: none;" onclick="saveEdit('${ status.index }', '${ g.commentId }'); return false;">수정완료</button>

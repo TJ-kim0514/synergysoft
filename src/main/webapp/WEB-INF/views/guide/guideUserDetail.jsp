@@ -7,7 +7,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>가이드블로그 상세보기</title>
+<title>가이드블로그 상세보기ㄴㄴ</title>
 
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -148,7 +148,7 @@
 
     <!-- 버튼 그룹 -->
     <div class="btn-group">
-        <button class="btn btn-custom" onclick="gmoveUpdatePage(); return false;">수정</button>
+        <button class="btn btn-custom" onclick="gmoveUpdatePage(); return false;">수정사랑해</button>
         <button class="btn btn-danger" onclick="requestDelete(); return false;">삭제</button>
         <button class="btn btn-secondary" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do'; return false;">목록</button>
         <button class="btn btn-outline-secondary" onclick="javascript:history.go(-1); return false;">이전 페이지로</button>

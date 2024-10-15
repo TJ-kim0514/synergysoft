@@ -84,9 +84,9 @@
                 </c:choose>
                 <div class="card-body">
                     <h5 class="card-title">${g.guideTitle}</h5>
-                    <p class="card-text">지역: ${g.guideLocation}</p>
-                    <p class="card-text">조회수: ${g.readCount}</p>
-                   <p class="card-text">좋아요: ${g.likeCount}</p>
+                    <p class="card-text">[지역] ${g.guideLocation}</p>
+                    <p class="card-text">조회수 ${g.readCount}</p>
+                   <p class="card-text">❤️ ${g.likeCount}</p>
                    
                     
     
