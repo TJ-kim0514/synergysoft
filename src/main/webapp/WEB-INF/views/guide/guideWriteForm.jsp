@@ -100,41 +100,46 @@
         <textarea name="guideContent" id="guideContent" class="form-control" rows="8" placeholder="블로그 내용을 입력하세요" style="border: none; background-color: transparent;"></textarea>
       </div>
 
-<div class="mb-3">
-    <label for="photofile" class="form-label">사진 첨부</label>
-    <c:forEach var="i" begin="1" end="5">
-        <div>
-            <!-- 파일 선택 필드 -->
-            <input type="file" id="photofile${i}" name="gmfiles" class="form-control mb-2" onchange="previewImage(event, ${i})">
-            
-            <!-- 미리보기 이미지 -->
-            <div id="myphoto${i}" style="margin:0;width:150px;height:160px;padding:0;border:1px ;">
-                <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo${i}" 
-                    style="width:150px;height:160px;border:1px solid navy;display:block;margin:0;padding:0;" 
-                    alt="사진을 드래그 드롭하세요.">
-            </div>
-            <br>
+      <!-- 파일 첨부 필드와 미리보기 이미지 -->
+      <div class="mb-3">
+        <label for="photofile1" class="form-label">사진 첨부 1</label>
+        <input type="file" id="photofile1" name="ofile1" class="form-control mb-2" onchange="previewImage(event, 1)">
+        <div id="myphoto1">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo1" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
         </div>
-    </c:forEach>
-</div>
+      </div>
 
-<script type="text/javascript">
-    function previewImage(event, index) {
-        var input = event.target;
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                // 선택한 파일을 미리보기 이미지에 할당
-                document.getElementById("photo" + index).src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]); // 파일을 base64로 읽어 img에 표시
-        }
-    }
-</script>
+      <div class="mb-3">
+        <label for="photofile2" class="form-label">사진 첨부 2</label>
+        <input type="file" id="photofile2" name="ofile2" class="form-control mb-2" onchange="previewImage(event, 2)">
+        <div id="myphoto2">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo2" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
+      </div>
 
+      <div class="mb-3">
+        <label for="photofile3" class="form-label">사진 첨부 3</label>
+        <input type="file" id="photofile3" name="ofile3" class="form-control mb-2" onchange="previewImage(event, 3)">
+        <div id="myphoto3">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo3" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
+      </div>
 
-      <!-- 미리보기 이미지들이 추가되는 컨테이너 -->
-      <div id="previewContainer"></div>
+      <div class="mb-3">
+        <label for="photofile4" class="form-label">사진 첨부 4</label>
+        <input type="file" id="photofile4" name="ofile4" class="form-control mb-2" onchange="previewImage(event, 4)">
+        <div id="myphoto4">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo4" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="photofile5" class="form-label">사진 첨부 5</label>
+        <input type="file" id="photofile5" name="ofile5" class="form-control mb-2" onchange="previewImage(event, 5)">
+        <div id="myphoto5">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo5" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
+      </div>
 
       <!-- Toast UI Editor -->
       <div id="editor" class="mb-3"></div>
@@ -155,7 +160,17 @@
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
   <script type="text/javascript">
-    let currentImgIndex = -1; // 현재 클릭된 이미지 인덱스 저장 변수
+    // 이미지 미리보기 처리 함수
+    function previewImage(event, index) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("photo" + index).src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
     // Toast UI Editor 설정
     const editor = new toastui.Editor({
@@ -163,42 +178,6 @@
       height: '400px',
       initialEditType: 'markdown',
       previewStyle: 'vertical'
-    });
-
-    // 파일 선택 시 동적으로 이미지를 미리보기 컨테이너에 추가
-    document.getElementById('photofile').addEventListener('change', function(event) {
-      const files = event.target.files;
-      const previewContainer = document.getElementById('previewContainer');
-
-      if (currentImgIndex === -1) {
-        // 각 파일을 순회하면서 이미지 미리보기를 생성
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const reader = new FileReader();
-
-          reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.dataset.index = i; // 인덱스를 데이터 속성으로 저장
-            img.addEventListener('click', function() {
-              currentImgIndex = img.dataset.index; // 클릭한 이미지의 인덱스를 저장
-              document.getElementById('photofile').click(); // 파일 선택창을 다시 열어줌
-            });
-            previewContainer.appendChild(img); // 이미지를 미리보기 컨테이너에 추가
-          };
-
-          reader.readAsDataURL(file); // 파일을 읽어서 이미지 URL로 변환
-        }
-      } else {
-        // 클릭한 이미지의 인덱스에 해당하는 파일을 새로운 파일로 교체
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = previewContainer.querySelector(`img[data-index="${currentImgIndex}"]`);
-          img.src = e.target.result; // 이미지를 새 파일로 변경
-        };
-        reader.readAsDataURL(files[0]); // 선택한 첫 번째 파일로 교체
-        currentImgIndex = -1; // 다시 초기화
-      }
     });
   </script>
 
