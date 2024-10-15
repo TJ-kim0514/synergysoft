@@ -132,6 +132,15 @@ public class ReportController {
 		if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
 			// 전체 신고글 목록 조회
 			list = reportService.selectReport(paging);
+			if (list != null && list.size() > 0) {
+				mv.addObject("list", list);
+				mv.addObject("paging", paging);
+				mv.addObject("currentPage", currentPage);
+				mv.setViewName("admin/report/reportListView");
+			} else {
+				mv.addObject("message", "신고 이력이 없습니다.");
+				mv.setViewName("common/error");
+			}
 		} else if (loginUser != null && loginUser.getMemType().equals("USER")) {
 			// 회원이 등록한 목록 조회
 			Report userReport = new Report();
@@ -139,20 +148,20 @@ public class ReportController {
 			userReport.setStartRow(paging.getStartRow());
 			userReport.setEndRow(paging.getEndRow());
 			list = reportService.selectReportMe(userReport);
-		}
-
-		if (list != null && list.size() > 0) {
-			mv.addObject("list", list);
-			mv.addObject("paging", paging);
-			mv.addObject("currentPage", currentPage);
-			mv.setViewName("admin/report/reportListView");
+			if (list != null && list.size() > 0) {
+				mv.addObject("list", list);
+				mv.addObject("paging", paging);
+				mv.addObject("currentPage", currentPage);
+				mv.setViewName("admin/report/reportListView");
+			} else {
+				mv.addObject("message", "신고 이력이 없습니다.");
+				mv.setViewName("common/error");
+			}
 		} else {
 			mv.addObject("message", "세션이 없습니다. 로그인 후 다시 이용해주시기 바랍니다.");
 			mv.setViewName("common/error");
 		}
-
 		return mv;
-
 	} // 신고글 전체 목록 보기
 
 	// 신고글 등록 기능

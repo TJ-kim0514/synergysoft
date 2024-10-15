@@ -197,7 +197,7 @@ public class GuideController {
 		    }
 		    
 		    // 파일 저장 경로 설정
-		    String savePath = "D:/ProjectWork/bonvoyage/src/main/webapp/resources/guide_upfiles";
+		    String savePath = request.getSession().getServletContext().getRealPath("resources/guide_upfiles");
 		    
 
 		    
@@ -351,7 +351,7 @@ public class GuideController {
 	    
 	    
 	    // 파일 저장 경로 설정
-	    String savePath = "D:/ProjectWork/bonvoyage/src/main/webapp/resources/guide_upfiles";
+	    String savePath = request.getSession().getServletContext().getRealPath("resources/guide_upfiles");
 
 	    // 파일 처리 변수 선언
 	    String[] ofiles = new String[5];

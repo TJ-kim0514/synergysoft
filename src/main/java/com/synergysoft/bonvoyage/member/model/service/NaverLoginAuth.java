@@ -1,4 +1,4 @@
-package com.synergysoft.bonvoyage.member.controller;
+package com.synergysoft.bonvoyage.member.model.service;
 
 import java.io.IOException;
 import java.util.UUID;

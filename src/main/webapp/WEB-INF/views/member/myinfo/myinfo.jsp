@@ -53,14 +53,16 @@
 							<input type="text" class="form-control" name="memId" id="memId" value="${ requestScope.member.memId }" readonly>
 						</td>
 					</tr>
-					<tr>
-						<th>비밀번호</th>
-						<td><input type="password" class="form-control" name="memPw" id="memPw"></td>
-					</tr>
-					<tr>
-						<th>비밀번호 확인</th>
-						<td><input type="password" class="form-control" id="memPwChk"></td>
-					</tr>
+					<c:if test="${ !empty sessionScope.loginUser and sessionScope.loginUser.memSocial eq 'COMMON' }">
+						<tr>
+							<th>비밀번호</th>
+							<td><input type="password" class="form-control" name="memPw" id="memPw"></td>
+						</tr>
+						<tr>
+							<th>비밀번호 확인</th>
+							<td><input type="password" class="form-control" id="memPwChk"></td>
+						</tr>
+					</c:if>
 					<tr>
 						<th>이름</th>
 						<td>
@@ -73,18 +75,20 @@
 							<input type="text" class="form-control" name="memNickNm" id="memNickNm" value="${ requestScope.member.memNickNm }">				
 						</td>
 					</tr>
-					<tr>
-						<th>생년월일</th>
-						<td>
-							<input type="date" class="form-control" name="memBirth" value="${ requestScope.member.memBirth }" readonly>
-						</td>
-					</tr>
-					<tr>
-						<th>전화번호</th>
-						<td>
-							<input type="tel" class="form-control" name="memPhone" value="${ requestScope.member.memPhone }">
-						</td>
-					</tr>
+					<c:if test="${ !empty sessionScope.loginUser and sessionScope.loginUser.memSocial eq 'COMMON' }">
+						<tr>
+							<th>생년월일</th>
+							<td>
+								<input type="date" class="form-control" name="memBirth" value="${ requestScope.member.memBirth }" readonly>
+							</td>
+						</tr>
+						<tr>
+							<th>전화번호</th>
+							<td>
+								<input type="tel" class="form-control" name="memPhone" value="${ requestScope.member.memPhone }">
+							</td>
+						</tr>
+					</c:if>
 					<tr>
 						<th colspan="2">
 							<input type="submit" class="btn btn-outline-success" value="수정하기"> &nbsp;
