@@ -47,4 +47,10 @@ public class HomeController {
 		
 	}
 	
+	@RequestMapping("chatbot.do")
+	public String chatbot() {
+		return "common/chatbot";
+		
+	}
+	
 }

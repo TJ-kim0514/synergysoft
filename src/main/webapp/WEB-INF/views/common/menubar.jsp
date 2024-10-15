@@ -15,6 +15,16 @@
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
+
+<%-- chatbot이동 --%>
+<script>
+	function openChatbotWindow(){
+		window.open(
+			'chatbot.do','chatbotWindow','width=500,height=650,scrollbars=yes'
+		);
+	}	
+</script>		
+
 </head>
 <body>
 	<nav class="navbar container navbar-expand-lg bg-body-tertiary">
@@ -57,19 +67,27 @@
 
 					<button type="button" class="btn btn-outline-success"
 						onclick="location.href='loginPage.do'">로그인</button> &nbsp;
-         <button type="button" class="btn btn-outline-success"
+         			<button type="button" class="btn btn-outline-success"
 						onclick="location.href='enrollPage.do'">회원가입</button>
 				</c:if>
 				<c:if test="${ !empty sessionScope.loginUser }">
 					<c:if test="${ sessionScope.loginUser.memType eq 'ADMIN' }">
 						<button type="button" class="btn btn-outline-success"
 							onclick="location.href='memberList.do?page=1'">관리자</button> &nbsp;
-      </c:if>
+      				</c:if>
 					<button type="button" class="btn btn-outline-success"
 						onclick="location.href='myinfo.do?memId=${loginUser.memId}'">마이페이지</button> &nbsp;
-         <button type="button" class="btn btn-outline-success"
+         			<button type="button" class="btn btn-outline-success"
 						onclick="location.href='logout.do'">로그아웃</button>
 				</c:if>
+    				<img src="${pageContext.servletContext.contextPath}/resources/images/chatbot.png" alt="Chatbot" 
+	    				style="
+	    				position: fixed;
+	    				right: 20px;
+	    				bottom: 40px;
+	    				width: 80px;
+	    				"
+    					onclick="openChatbotWindow()">
 			</div>
 		</div>
 	</nav>

@@ -32,7 +32,7 @@
         <button type="submit" class="btn btn-success">검색</button>
     </form>
     <%-- QnA 입력페이지 이동 --%>
-    <c:if test="${!empty sessionScope.loginUser }">
+    <c:if test="${!empty sessionScope.loginUser && loginUser.memType ne 'ADMIN'}">
         <div class="text-end">
             <button onclick="window.location.href='miqna.do'" class="btn btn-success">
                 Q&A 작성
