@@ -72,7 +72,7 @@ public class ReportController {
 		if ((report != null && report.getReportUserId().equals(loginUser.getMemId()))
 				|| loginUser.getMemType().equals("ADMIN")) {
 			mv.addObject("report", report);
-			mv.setViewName("admin/report/reportDetailView");
+			mv.setViewName("report/reportDetailView");
 		} else {
 			mv.addObject("message", reportId + "번 신고글 상세보기 요청 실패");
 			mv.setViewName("common/error");
@@ -136,7 +136,7 @@ public class ReportController {
 				mv.addObject("list", list);
 				mv.addObject("paging", paging);
 				mv.addObject("currentPage", currentPage);
-				mv.setViewName("admin/report/reportListView");
+				mv.setViewName("report/reportListView");
 			} else {
 				mv.addObject("message", "신고 이력이 없습니다.");
 				mv.setViewName("common/error");
@@ -152,7 +152,7 @@ public class ReportController {
 				mv.addObject("list", list);
 				mv.addObject("paging", paging);
 				mv.addObject("currentPage", currentPage);
-				mv.setViewName("admin/report/reportListView");
+				mv.setViewName("report/reportListView");
 			} else {
 				mv.addObject("message", "신고 이력이 없습니다.");
 				mv.setViewName("common/error");
@@ -340,7 +340,7 @@ public class ReportController {
 				model.addAttribute("action", action);
 				model.addAttribute("keyword", keyword);
 
-				return "admin/report/reportListView"; // 뷰의 이름을 반환
+				return "report/reportListView"; // 뷰의 이름을 반환
 			} else {
 				model.addAttribute("message", action + "에 대한 '" + keyword + "' 검색결과가 존재하지 않습니다.");
 				return "common/error"; // 에러 페이지 뷰의 이름 반환
@@ -389,7 +389,7 @@ public class ReportController {
 				model.addAttribute("action", action);
 				model.addAttribute("keyword", keyword);
 
-				return "admin/report/reportListView"; // 뷰의 이름을 반환
+				return "report/reportListView"; // 뷰의 이름을 반환
 			} else {
 				model.addAttribute("message", action + "에 대한 " + keyword + "검색결과가 존재하지 않습니다.");
 				return "common/error"; // 에러 페이지 뷰의 이름 반환

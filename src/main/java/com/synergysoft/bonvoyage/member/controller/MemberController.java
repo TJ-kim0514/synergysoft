@@ -505,7 +505,7 @@ public class MemberController {
 			model.addAttribute("memberList", memberList);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
-			return "admin/memberList"; // 뷰의 이름을 반환
+			return "member/admin/memberList"; // 뷰의 이름을 반환
 		} else {
 			model.addAttribute("message", "회원이 없습니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
@@ -820,7 +820,7 @@ public class MemberController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("action", action);
 			model.addAttribute("keyword", keyword);
-			return "admin/memberList"; // 뷰의 이름을 반환
+			return "member/admin/memberList"; // 뷰의 이름을 반환
 		} else {
 			model.addAttribute("message", "해당 키워드에 일치하는 회원이 없습니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
@@ -838,9 +838,9 @@ public class MemberController {
 			mv.addObject("member", member);
 			Member loginUser = (Member) session.getAttribute("loginUser");
 			if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
-				mv.setViewName("admin/memberDetail");
+				mv.setViewName("member/admin/memberDetail");
 			} else {
-				mv.setViewName("admin/memberDetail");
+				mv.setViewName("member/admin/memberDetail");
 			}
 
 		} else {
