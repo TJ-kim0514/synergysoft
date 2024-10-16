@@ -172,99 +172,126 @@ public class GuideController {
 	
 	
 	// 새 공지글 등록 요청 처리용 (파일 업로드 기능 추가)
-		@RequestMapping(value="ginsert.do", method=RequestMethod.POST)
-		public String guideInsertMethod(Guide guide, Model model, HttpServletRequest request,
-		    @RequestParam(name="gmfiles", required = false) MultipartFile[] gmfiles) {
-		    logger.info("ginsert.do : " + guide);
-		    
-		    // 세션에서 로그인된 사용자 정보 가져오기
-		    HttpSession session = request.getSession();
-		    Member loginUser = (Member) session.getAttribute("loginUser");
-		    
-		    // loginUser가 null이 아닌 경우에 guideUserId를 설정
-		    if (loginUser != null) {
-		        guide.setGuideUserId(loginUser.getMemId());  // guideUserId에 로그인한 사용자 ID 설정
-		    } else {
-		        model.addAttribute("message", "로그인 정보가 없습니다.");
-		        return "common/error";
-		    }
-		    
-		    
-		    // 파일 개수가 5개를 넘는지 확인
-		    if (gmfiles != null && gmfiles.length > 5) {
-		        model.addAttribute("message", "파일 개수는 최대 5개까지 가능합니다.");
-		        return "common/error"; // 오류 발생 시 해당 JSP로 이동
-		    }
-		    
-		    // 파일 저장 경로 설정
-		    String savePath = request.getSession().getServletContext().getRealPath("resources/guide_upfiles");
-		    
+	@RequestMapping(value="ginsert.do", method=RequestMethod.POST)
+	public String guideInsertMethod(Guide guide, Model model, HttpServletRequest request,
+	    @RequestParam(name="ofile1", required = false) MultipartFile gmfiles1,
+	    @RequestParam(name="ofile2", required = false) MultipartFile gmfiles2,
+	    @RequestParam(name="ofile3", required = false) MultipartFile gmfiles3,
+	    @RequestParam(name="ofile4", required = false) MultipartFile gmfiles4,
+	    @RequestParam(name="ofile5", required = false) MultipartFile gmfiles5){
 
-		    
-		    // 5개의 컬럼에 맞게 파일명을 저장하기 위한 변수 선언
-		    String[] ofiles = new String[5];
-		    String[] rfiles = new String[5];
+	    logger.info("ginsert.do : " + guide);
 
-		    int fileIndex = 0;
-		    
-		    // 파일 배열에서 각 파일 처리
-		    if (gmfiles != null) {
-		        for (MultipartFile file : gmfiles) {
-		            if (!file.isEmpty() && fileIndex < 5) {
-		                // 파일의 원본 이름을 가져옴
-		                String fileName = file.getOriginalFilename();
-		                String renameFileName = null;
-		                
-		                // 파일 이름 바꾸기 : 년월일시분초.확장자
-		                if (fileName != null && fileName.length() > 0) {
-		                    renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+	    String savePath = request.getSession().getServletContext().getRealPath("resources/guide_upfiles");
 
-		                    try {
-		                        // 실제 파일을 저장할 경로 지정
-		                    	file.transferTo( new File(savePath + "\\" + renameFileName));// 파일 저장
-		                    } catch (Exception e) {
-		                        e.printStackTrace();
-		                        model.addAttribute("message", "첨부파일 저장 실패!");
-		                        return "common/error";
-		                    }
+	    // 세션에서 로그인된 사용자 정보 가져오기
+	    HttpSession session = request.getSession();
+	    Member loginUser = (Member) session.getAttribute("loginUser");
 
-		                    // 배열에 원본 파일명과 변경된 파일명을 저장
-		                    ofiles[fileIndex] = fileName;
-		                    rfiles[fileIndex] = renameFileName;
+	    // loginUser가 null이 아닌 경우에 guideUserId를 설정
+	    if (loginUser != null) {
+	        guide.setGuideUserId(loginUser.getMemId());  // guideUserId에 로그인한 사용자 ID 설정
+	    } else {
+	        model.addAttribute("message", "로그인 정보가 없습니다.");
+	        return "common/error";
+	    }
 
-		                    // 다음 파일을 위한 인덱스 증가
-		                    fileIndex++;
-		                }
-		            }
-		        }
-		    }
+	    // 파일 배열에서 각 파일 처리
+	    logger.info("Guide Title: " + guide.getGuideTitle());
+	    logger.info("Guide Content: " + guide.getGuideContent());
+	    logger.info("Guide UserId: " + guide.getGuideUserId());
+	    logger.info("oFile1: " + guide.getoFile1());
+	    logger.info("rFile1: " + guide.getrFile1());
 
-		    // guide 객체에 각각의 파일명을 저장 (OFILE1 ~ OFILE5, RFILE1 ~ RFILE5)
-		    guide.setoFile1(ofiles[0]);
-		    guide.setoFile2(ofiles[1]);
-		    guide.setoFile3(ofiles[2]);
-		    guide.setoFile4(ofiles[3]);
-		    guide.setoFile5(ofiles[4]);
+	    // 첫 번째 파일 처리
+	    if (gmfiles1 != null && !gmfiles1.isEmpty()) {
+	        String fileName1 = gmfiles1.getOriginalFilename();
+	        String renameFileName1 = FileNameChange.change(fileName1, "yyyyMMddHHmmssSSS");
+	        logger.info("첨부파일명 확인 : " + renameFileName1);
+	        try {
+	            gmfiles1.transferTo(new File(savePath + "\\" + renameFileName1)); // 파일 저장
+	            guide.setoFile1(fileName1);
+	            guide.setrFile1(renameFileName1);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            model.addAttribute("message", "첨부파일 저장 실패!");
+	            return "common/error";
+	        }
+	    }
 
-		    guide.setrFile1(rfiles[0]);
-		    guide.setrFile2(rfiles[1]);
-		    guide.setrFile3(rfiles[2]);
-		    guide.setrFile4(rfiles[3]);
-		    guide.setrFile5(rfiles[4]);
-		    
-		
+	    // 두 번째 파일 처리
+	    if (gmfiles2 != null && !gmfiles2.isEmpty()) {
+	        String fileName2 = gmfiles2.getOriginalFilename();
+	        String renameFileName2 = FileNameChange.change(fileName2, "yyyyMMddHHmmssSSS");
+	        logger.info("첨부파일명 확인 : " + renameFileName2);
+	        try {
+	            gmfiles2.transferTo(new File(savePath + "\\" + renameFileName2)); // 파일 저장
+	            guide.setoFile2(fileName2);
+	            guide.setrFile2(renameFileName2);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            model.addAttribute("message", "첨부파일 저장 실패!");
+	            return "common/error";
+	        }
+	    }
 
-		    // 데이터베이스에 저장
-		   
-		    if (guideService.insertGuide(guide) > 0) {
-		        return "redirect:sagBlog.do"; // 성공 후 이동할 페이지
-		    } else {
-		        model.addAttribute("message", "블로그 등록 실패!");
-		        return "common/error"; // 실패 시 에러 페이지
-		    }
-		    
-		    
-		}
+	    // 세 번째 파일 처리
+	    if (gmfiles3 != null && !gmfiles3.isEmpty()) {
+	        String fileName3 = gmfiles3.getOriginalFilename();
+	        String renameFileName3 = FileNameChange.change(fileName3, "yyyyMMddHHmmssSSS");
+	        logger.info("첨부파일명 확인 : " + renameFileName3);
+	        try {
+	            gmfiles3.transferTo(new File(savePath + "\\" + renameFileName3)); // 파일 저장
+	            guide.setoFile3(fileName3);
+	            guide.setrFile3(renameFileName3);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            model.addAttribute("message", "첨부파일 저장 실패!");
+	            return "common/error";
+	        }
+	    }
+
+	    // 네 번째 파일 처리
+	    if (gmfiles4 != null && !gmfiles4.isEmpty()) {
+	        String fileName4 = gmfiles4.getOriginalFilename();
+	        String renameFileName4 = FileNameChange.change(fileName4, "yyyyMMddHHmmssSSS");
+	        logger.info("첨부파일명 확인 : " + renameFileName4);
+	        try {
+	            gmfiles4.transferTo(new File(savePath + "\\" + renameFileName4)); // 파일 저장
+	            guide.setoFile4(fileName4);
+	            guide.setrFile4(renameFileName4);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            model.addAttribute("message", "첨부파일 저장 실패!");
+	            return "common/error";
+	        }
+	    }
+
+	    // 다섯 번째 파일 처리
+	    if (gmfiles5 != null && !gmfiles5.isEmpty()) {
+	        String fileName5 = gmfiles5.getOriginalFilename();
+	        String renameFileName5 = FileNameChange.change(fileName5, "yyyyMMddHHmmssSSS");
+	        logger.info("첨부파일명 확인 : " + renameFileName5);
+	        try {
+	            gmfiles5.transferTo(new File(savePath + "\\" + renameFileName5)); // 파일 저장
+	            guide.setoFile5(fileName5);
+	            guide.setrFile5(renameFileName5);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            model.addAttribute("message", "첨부파일 저장 실패!");
+	            return "common/error";
+	        }
+	    }
+
+	    // 데이터베이스에 저장
+	    if (guideService.insertGuide(guide) > 0) {
+	        return "redirect:sagBlog.do"; // 성공 후 이동할 페이지
+	    } else {
+	        model.addAttribute("message", "블로그 등록 실패!");
+	        return "common/error"; // 실패 시 에러 페이지
+	    }
+	}
+
 	
 	
 	
@@ -288,6 +315,7 @@ public class GuideController {
 	    if (guide != null) {
 	    	//세션에서 로그인한 사람정보 가져오기
 	    	Member loginUser = (Member)session.getAttribute("loginUser");
+	    	
 	    	
 	    	 mv.addObject("guide", guide);  // guide 객체를 뷰에 전달
 		     mv.addObject("clist1", clist1);
@@ -337,96 +365,265 @@ public class GuideController {
 	// 공지글 수정 요청 처리용 (파일 업로드 기능 추가)
 	@RequestMapping(value = "gupdate.do", method = RequestMethod.POST)
 	public String guideUpdate(Guide guide, Model model, HttpServletRequest request, 
-	        @RequestParam(name = "deleteFlag1", required = false) String delFlag1,
-	        @RequestParam(name = "deleteFlag2", required = false) String delFlag2,
-	        @RequestParam(name = "deleteFlag3", required = false) String delFlag3,
-	        @RequestParam(name = "deleteFlag4", required = false) String delFlag4,
-	        @RequestParam(name = "deleteFlag5", required = false) String delFlag5,
-	        @RequestParam(name = "gmfiles", required = false) MultipartFile[] gmfiles) {
+			@RequestParam(name="deleteFlag1" , required=false) String delFlag1,
+			@RequestParam(name="ofile11", required = false) MultipartFile gmfiles1,
+			@RequestParam(name="deleteFlag2" , required=false) String delFlag2,
+		    @RequestParam(name="ofile22", required = false) MultipartFile gmfiles2,
+		    @RequestParam(name="deleteFlag3" , required=false) String delFlag3,
+		    @RequestParam(name="ofile33", required = false) MultipartFile gmfiles3,
+		    @RequestParam(name="deleteFlag4" , required=false) String delFlag4,
+		    @RequestParam(name="ofile44", required = false) MultipartFile gmfiles4,
+		    @RequestParam(name="deleteFlag5" , required=false) String delFlag5,
+		    @RequestParam(name="ofile55", required = false) MultipartFile gmfiles5){
 
 	    logger.info("gupdate.do : " + guide); // 전송된 값 확인
 	    
-	    logger.info("deleteFlag1 : " +  delFlag1);
-	    logger.info("gmfiles : " +  gmfiles.length);
+	    logger.info("guidepostId: " + guide.getGuidepostId());
+	    logger.info("guideTitle: " + guide.getGuideTitle());
+	    logger.info("guideContent: " + guide.getGuideContent());
+	    logger.info("guideUserId: " + guide.getGuideUserId());
+	    logger.info("rFile1: " + guide.getrFile1());
+	    logger.info("oFile1: " + guide.getoFile1());
+	    logger.info("rFile1: " + guide.getrFile2());
+	    logger.info("oFile1: " + guide.getoFile2());
 	    
-	    
-	    // 파일 저장 경로 설정
 	    String savePath = request.getSession().getServletContext().getRealPath("resources/guide_upfiles");
+	    
+	    //원래 첨부파일이 있는데 파일 삭제를 한 경우 또는 원래 첨부파일이 있는데 새로운 첨부파일로 변경 업로드 한 경우
+	    // 이전 파일과 파일 정보 삭제함
+	
+	    if ((guide.getoFile1() != null && delFlag1 != null && delFlag1.equals("yes")) || !gmfiles1.isEmpty()) {
+	        if (guide.getrFile1() != null) {  // rFile1이 null이 아닌지 확인
+	            new File(savePath + "\\" + guide.getrFile1()).delete();
+	        }
 
-	    // 파일 처리 변수 선언
-	    String[] ofiles = new String[5];
-	    String[] rfiles = new String[5];
-	    int fileIndex = 0;
-
-	    // 1. 개별 파일 삭제 처리 (논리 연산자의 우선순위를 명확히 하기 위해 괄호 사용)
-	    if (guide.getoFile1() != null && ((delFlag1 != null && delFlag1.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
-	        new File(savePath + "\\" + guide.getrFile1()).delete();
 	        guide.setoFile1(null);
 	        guide.setrFile1(null);
 	    }
+		
+		if ((guide.getoFile2() != null && delFlag2 != null && delFlag2.equals("yes")) || !gmfiles2.isEmpty()) {
+			//저장 폴더에서 이전 파일 삭제
+			 if (guide.getrFile2() != null) {
+			new File(savePath + "\\" + guide.getrFile2()).delete();
+			//guide 안의 파일 정보를 삭제함
+			}
+			guide.setoFile2(null);
+			guide.setrFile2(null);
+		}
+		if ((guide.getoFile3() != null && delFlag3 != null && delFlag3.equals("yes")) || !gmfiles3.isEmpty()) {
+			//저장 폴더에서 이전 파일 삭제
+			 if (guide.getrFile3() != null) {
+			new File(savePath + "\\" + guide.getrFile3()).delete();
+			//guide 안의 파일 정보를 삭제함
+			}
+			guide.setoFile3(null);
+			guide.setrFile3(null);
+		}
+		if ((guide.getoFile4() != null && delFlag4 != null && delFlag4.equals("yes")) || !gmfiles4.isEmpty()) {
+			//저장 폴더에서 이전 파일 삭제
+			 if (guide.getrFile4() != null) {
+			new File(savePath + "\\" + guide.getrFile4()).delete();
+			//guide 안의 파일 정보를 삭제함
+			}
+			guide.setoFile4(null);
+			guide.setrFile4(null);
+		}
+		if ((guide.getoFile5() != null && delFlag5 != null && delFlag5.equals("yes")) || !gmfiles5.isEmpty()) {
+			//저장 폴더에서 이전 파일 삭제
+			 if (guide.getrFile1() != null) {
+			new File(savePath + "\\" + guide.getrFile5()).delete();
+			 }
+			//guide 안의 파일 정보를 삭제함
+			guide.setoFile5(null);
+			guide.setrFile5(null);
+		}
 	    
-	    if (guide.getoFile2() != null && ((delFlag2 != null && delFlag2.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
-	        new File(savePath + "\\" + guide.getrFile2()).delete();
-	        guide.setoFile2(null);
-	        guide.setrFile2(null);
-	    }
 	    
-	    if (guide.getoFile3() != null && ((delFlag3 != null && delFlag3.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
-	        new File(savePath + "\\" + guide.getrFile3()).delete();
-	        guide.setoFile3(null);
-	        guide.setrFile3(null);
-	    }
-	    
-	    if (guide.getoFile4() != null && ((delFlag4 != null && delFlag4.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
-	        new File(savePath + "\\" + guide.getrFile4()).delete();
-	        guide.setoFile4(null);
-	        guide.setrFile4(null);
-	    }
-
-	    if (guide.getoFile5() != null && ((delFlag5 != null && delFlag5.equals("yes")) || (gmfiles != null && gmfiles.length > 0))) {
-	        new File(savePath + "\\" + guide.getrFile5()).delete();
-	        guide.setoFile5(null);
-	        guide.setrFile5(null);
-	    }
-
-	    // 2. 새로운 첨부파일이 있을 때 처리
-	    if (gmfiles != null && gmfiles.length > 0) {
-	        for (MultipartFile file : gmfiles) {
-	            logger.info("업로드된 파일 이름: " + file.getOriginalFilename());
-	            if (!file.isEmpty() && fileIndex < 5) {
-	                // 파일 원본 이름 및 변경된 파일명 생성
-	                String fileName = file.getOriginalFilename();
-	                String renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
-
-	                // 파일 저장
-	                try {
-	                    file.transferTo(new File(savePath + "\\" + renameFileName)); // 파일을 실제 경로에 저장
-	                } catch (Exception e) {
-	                    e.printStackTrace();
-	                    model.addAttribute("message", "파일 저장 실패!");
-	                    return "common/error";
-	                }
-
-	                // 파일명 배열에 저장
-	                ofiles[fileIndex] = fileName;
-	                rfiles[fileIndex] = renameFileName;
-	                fileIndex++;
-	            }
-	        }
-
-	        // 가이드 객체에 파일 정보 저장
-	        guide.setoFile1(ofiles[0]);
-	        guide.setoFile2(ofiles[1]);
-	        guide.setoFile3(ofiles[2]);
-	        guide.setoFile4(ofiles[3]);
-	        guide.setoFile5(ofiles[4]);
-
-	        guide.setrFile1(rfiles[0]);
-	        guide.setrFile2(rfiles[1]);
-	        guide.setrFile3(rfiles[2]);
-	        guide.setrFile4(rfiles[3]);
-	        guide.setrFile5(rfiles[4]);
-	    }
+		// 첨부파일 삭제
+		if(!gmfiles1.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + guide.getrFile1()).delete();
+			
+			// route 안의 파일정보 삭제
+			guide.setoFile1(null);
+			guide.setrFile1(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = gmfiles1.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					gmfiles1.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			guide.setoFile1(fileName);
+			guide.setrFile1(renameFileName);
+		}
+		
+		if(!gmfiles2.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + guide.getrFile2()).delete();
+			
+			// route 안의 파일정보 삭제
+			guide.setoFile2(null);
+			guide.setrFile2(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = gmfiles2.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					gmfiles2.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			guide.setoFile2(fileName);
+			guide.setrFile2(renameFileName);
+		}
+		
+		if(!gmfiles3.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + guide.getrFile3()).delete();
+			
+			// route 안의 파일정보 삭제
+			guide.setoFile3(null);
+			guide.setrFile3(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = gmfiles3.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					gmfiles3.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			guide.setoFile3(fileName);
+			guide.setrFile3(renameFileName);
+		}
+		
+		if(!gmfiles4.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + guide.getrFile4()).delete();
+			
+			// route 안의 파일정보 삭제
+			guide.setoFile4(null);
+			guide.setrFile4(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = gmfiles4.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					gmfiles4.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			guide.setoFile4(fileName);
+			guide.setrFile4(renameFileName);
+		}
+		
+		if(!gmfiles5.isEmpty()) {
+			// 저장폴더에서 이전파일 삭제
+			new File(savePath + "\\" + guide.getrFile5()).delete();
+			
+			// route 안의 파일정보 삭제
+			guide.setoFile5(null);
+			guide.setrFile5(null);
+			
+			// 새로운 첨부파일 저장처리
+			
+			// 전송온 파일이름 추출
+			String fileName = gmfiles5.getOriginalFilename();
+			String renameFileName = null;
+			
+			// 저장폴더에 변경된 이름으로 저장처리
+			// 파일이름 변경 : 년월일시분초.확장자
+			if(fileName != null && fileName.length() >0 ) {
+				
+				// 바꿀 파일명 문자열
+				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmssSSS");
+				
+				logger.info("첨부파일명 확인 : " + renameFileName);
+				
+				try {
+					// 저장폴더에 바뀐파일명으로 저장
+					gmfiles5.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일저장 실패");
+					return "common/error";
+				}
+			}
+			
+			guide.setoFile5(fileName);
+			guide.setrFile5(renameFileName);
+		}
 
 	    // 데이터베이스 업데이트 수행
 	    if (guideService.updateGuide(guide) > 0) { // 공지글 수정 성공시
@@ -436,6 +633,7 @@ public class GuideController {
 	        return "common/error";
 	    }
 	}
+
 
 	
 	//삭제하기

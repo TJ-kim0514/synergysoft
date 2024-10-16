@@ -76,6 +76,24 @@
         <form action="gupdate.do" method="post" class="post-form" enctype="multipart/form-data">
             <!-- 게시글 ID를 숨긴 필드로 넘김 -->
             <input type="hidden" name="guidepostId" value="${ guide.guidepostId }">
+               <input type="hidden" name="oFile1" value="${ guide.oFile1 }">
+		<input type="hidden" name="oFile2" value="${ guide.oFile2 }">
+		<input type="hidden" name="oFile3" value="${ guide.oFile3 }">
+		<input type="hidden" name="oFile4" value="${ guide.oFile4 }">
+		<input type="hidden" name="oFile5" value="${ guide.oFile5 }">
+		<input type="hidden" name="rFile1" value="${ guide.rFile1 }">
+		<input type="hidden" name="rFile2" value="${ guide.rFile2 }">
+		<input type="hidden" name="rFile3" value="${ guide.rFile3 }">
+		<input type="hidden" name="rFile4" value="${ guide.rFile4 }">
+		<input type="hidden" name="rFile5" value="${ guide.rFile5 }">
+            
+            
+            
+            
+            
+            
+            
+            
 
             <!-- 제목 입력 필드 -->
             <div class="form-group">
@@ -100,63 +118,66 @@
 <div class="form-group">
     <label for="guideImages">이미지 수정</label>
     <div id="imagePreview">
+    
+ 
         <!-- 기존 이미지 1 미리보기 -->
+      
         <c:if test="${ !empty guide.rFile1}">
             <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile1}" alt="이미지1" class="image-preview" id="currentImage1">
-            <input type="file" class="form-control-file" name="gmfiles" id="imageUpload1" accept="image/*" onchange="previewImage(event, 1)">
+            <input type="file" class="form-control-file" name="ofile11" id="imageUpload1" onchange="previewImage(event, 1)" >
             <label><input type="checkbox" name="deleteFlag1" value="yes"> 이미지 1 삭제</label><br>
         </c:if>
         <c:if test="${empty guide.rFile1}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="gmfiles" id="imageUpload1" accept="image/*" onchange="previewImage(event, 1)">
+            추가 : <input type="file" class="form-control-file" name="ofile11" id="imageUpload1" accept="image/*" onchange="previewImage(event, 1)">
             <img id="preview1" class="image-preview" style="display: none;">
         </c:if>
 
         <!-- 기존 이미지 2 미리보기 -->
         <c:if test="${ !empty guide.rFile2}">
             <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile2}" alt="이미지2" class="image-preview" id="currentImage2">
-            <input type="file" class="form-control-file" name="gmfiles" id="imageUpload2" accept="image/*" onchange="previewImage(event, 2)">
+            <input type="file" class="form-control-file" name="ofile22" id="imageUpload2" accept="image/*" onchange="previewImage(event, 2)">
             <label><input type="checkbox" name="deleteFlag2" value="yes"> 이미지 2 삭제</label><br>
         </c:if>
         <c:if test="${empty guide.rFile2}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="gmfiles" id="imageUpload2" accept="image/*" onchange="previewImage(event, 2)">
+            추가 : <input type="file" class="form-control-file" name="ofile22" id="imageUpload2" accept="image/*" onchange="previewImage(event, 2)">
             <img id="preview2" class="image-preview" style="display: none;">
         </c:if>
 
         <!-- 기존 이미지 3 미리보기 -->
         <c:if test="${ !empty guide.rFile3}">
             <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile3}" alt="이미지3" class="image-preview" id="currentImage3">
-            <input type="file" class="form-control-file" name="gmfiles" id="imageUpload3" accept="image/*" onchange="previewImage(event, 3)">
+            <input type="file" class="form-control-file" name="ofile33" id="imageUpload3" accept="image/*" onchange="previewImage(event, 3)">
             <label><input type="checkbox" name="deleteFlag3" value="yes"> 이미지 3 삭제</label><br>
         </c:if>
         <c:if test="${empty guide.rFile3}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="gmfiles" id="imageUpload3" accept="image/*" onchange="previewImage(event, 3)">
+            추가 : <input type="file" class="form-control-file" name="ofile33" id="imageUpload3" accept="image/*" onchange="previewImage(event, 3)">
             <img id="preview3" class="image-preview" style="display: none;">
         </c:if>
 
         <!-- 기존 이미지 4 미리보기 -->
         <c:if test="${ !empty guide.rFile4}">
             <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile4}" alt="이미지4" class="image-preview" id="currentImage4">
-            <input type="file" class="form-control-file" name="gmfiles" id="imageUpload4" accept="image/*" onchange="previewImage(event, 4)">
+            <input type="file" class="form-control-file" name="ofile44" id="imageUpload4" accept="image/*" onchange="previewImage(event, 4)">
             <label><input type="checkbox" name="deleteFlag4" value="yes"> 이미지 4 삭제</label><br>
         </c:if>
         <c:if test="${empty guide.rFile4}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="gmfiles" id="imageUpload4" accept="image/*" onchange="previewImage(event, 4)">
+            추가 : <input type="file" class="form-control-file" name="ofile44" id="imageUpload4" accept="image/*" onchange="previewImage(event, 4)">
             <img id="preview4" class="image-preview" style="display: none;">
         </c:if>
 
         <!-- 기존 이미지 5 미리보기 -->
         <c:if test="${ !empty guide.rFile5}">
             <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile5}" alt="이미지5" class="image-preview" id="currentImage5">
-            <input type="file" class="form-control-file" name="gmfiles" id="imageUpload5" accept="image/*" onchange="previewImage(event, 5)">
+            <input type="file" class="form-control-file" name="ofile55" id="imageUpload5" accept="image/*" onchange="previewImage(event, 5)">
             <label><input type="checkbox" name="deleteFlag5" value="yes"> 이미지 5 삭제</label><br>
         </c:if>
         <c:if test="${empty guide.rFile5}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="gmfiles" id="imageUpload5" accept="image/*" onchange="previewImage(event, 5)">
+            추가 : <input type="file" class="form-control-file" name="ofile55" id="imageUpload5" accept="image/*" onchange="previewImage(event, 5)">
             <img id="currentImage5" class="image-preview" style="display: none;">
         </c:if>
     </div>

@@ -7,7 +7,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>가이드블로그 상세보기</title>
+<title>지역소담이 여행후기블로그</title>
 
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -184,7 +184,7 @@
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 
 <div class="container" id="main">
-    <h1 class="text-center">가이드블로그 상세보기</h1>
+    <h1 class="text-center">가이드블로그 상세보기gg</h1>
     <br>
     
     <table class="table table-bordered">
@@ -257,11 +257,14 @@
     <!-- 버튼 그룹 -->
     <div class="btn-group">
     	
-    	<button class="btn btn-success" onclick="javascript:location.href='${ guidelikecount }'; return false;">추천</button>
+    	<button class="btn btn-success" onclick="javascript:location.href='${ guidelikecount }'; return false;">❤️</button>
         <button class="btn btn-custom me-md-2" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do';">목록</button>
         <button class="btn btn-secondary" onclick="javascript:history.go(-1);">이전 페이지로 이동</button>
         <button class="btn btn-success" onclick="commentShow(); return false;">댓글</button>
-        <button class="btn btn-success" onclick="javascript:location.href='${ guideReport }'; return false;">신고</button>
+       <%--  <button class="btn btn-success" onclick="javascript:location.href='${ guideReport }'; return false;">신고</button> --%>
+      <c:if test="${loginUser.memType eq 'ADMIN'}">
+        <button class="btn btn-danger" onclick="requestDelete(); return false;">삭제</button>
+    </c:if>
     </div>
 </div>
 
@@ -288,7 +291,7 @@
             <td align="center">${ g.createdAt }</td>
             <c:if test="${ g.userId eq loginUser.memId or loginUser.memType eq 'ADMIN' }">
 	            <td align="center">
-				<button class="btn btn-success" id="editBtn_${ status.index }" onclick="enableEdit('${ status.index }', 'content_${ status.index }'); return false;">수정</button>
+				<button class="btn btn-success" id="editBtn_${ status.index }" onclick="enableEdit('${ status.index }', 'content_${ status.index }'); return false;">수정싫어해</button>
 				<c:url var="gcommentdelete" value="gcommentdelete.do">
 	                 <c:param name="commentId" value="${ g.commentId }" />
 	                 <c:param name="postId" value="${ guide.guidepostId }" />
