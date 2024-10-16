@@ -109,9 +109,9 @@ textarea {
 					<input type="hidden" name="postId" value="${ route.routeBoardId }" readonly>
 					<input type="text" value="${ route.title }" readonly>
 				</c:if>
-				<c:if test="${fn:contains(param.guideBoardId, 'guide_')}">
-					<input type="hidden" name="postId" value="${ guide.guideBoardId }" readonly>
-					<input type="text" value="${ guide.title }" readonly>
+				<c:if test="${fn:contains(param.guidepostId, 'guide_')}">
+					<input type="hidden" name="postId" value="${ guide.guidepostId }" readonly>
+					<input type="text" value="${ guide.guideTitle }" readonly>
 				</c:if>
 				</td>
 			</tr>

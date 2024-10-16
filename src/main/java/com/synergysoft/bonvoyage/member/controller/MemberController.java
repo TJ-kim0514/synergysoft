@@ -36,6 +36,7 @@ import com.synergysoft.bonvoyage.member.model.dto.Member;
 import com.synergysoft.bonvoyage.member.model.dto.MyComment;
 import com.synergysoft.bonvoyage.member.model.service.GoogleLoginAuth;
 import com.synergysoft.bonvoyage.member.model.service.MemberService;
+import com.synergysoft.bonvoyage.member.model.service.NaverLoginAuth;
 
 @Controller
 public class MemberController {
@@ -78,7 +79,15 @@ public class MemberController {
 	public MemberController(NaverLoginAuth naverLoginAuth) {
 		this.naverloginAuth = naverLoginAuth;
 	}
-
+	
+	@Autowired
+    public MemberController(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+        if (this.mailSender == null) {
+            System.out.println("mailSender is not initialized.");
+        }
+    }
+	
 	// 로그인 페이지 출력 | 2024. 09. 28 작성 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping(value = "loginPage.do", method = { RequestMethod.GET, RequestMethod.POST })
@@ -293,46 +302,51 @@ public class MemberController {
 			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("내가 쓴 댓글 전체 조회 페이지 요청");
-
-		// paging
-		// 기본세팅-----------------------------------------------------------------------
-		// 출력할 페이지(기본값 1페이지)
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-		// 한페이지에 출력할 댓글 수 (10개)
-		int limit = 10;
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-		// 페이징 그룹 갯수 (기본값 5개 세팅)
-		int groupLimit = 5;
-		if (glimit != null) {
-			groupLimit = Integer.parseInt(glimit);
-		}
-
-		int listCount = memberService.selectCommentAllCount(memId);
-
-		// 페이징 처리 값생성
-		Paging paging = new Paging(listCount, limit, currentPage, "myAllComment.do", groupLimit);
-		paging.calculate();
-
-		MyComment mycomment = new MyComment();
-
-		mycomment.setMemId(memId);
-		mycomment.setStartRow(paging.getStartRow());
-		mycomment.setEndRow(paging.getEndRow());
-
-		ArrayList<MyComment> commentList = memberService.selectCommentAll(mycomment);
-
-		if (commentList != null && commentList.size() > 0) {
-			model.addAttribute("commentList", commentList);
-			model.addAttribute("paging", paging);
-			model.addAttribute("currentPage", currentPage);
-			return "member/myinfo/comment/all"; // 뷰의 이름을 반환
+		
+		if(memId != null) {
+			// paging
+			// 기본세팅-----------------------------------------------------------------------
+			// 출력할 페이지(기본값 1페이지)
+			int currentPage = 1;
+			if (page != null) {
+				currentPage = Integer.parseInt(page);
+			}
+			// 한페이지에 출력할 댓글 수 (10개)
+			int limit = 10;
+			if (slimit != null) {
+				limit = Integer.parseInt(slimit);
+			}
+			// 페이징 그룹 갯수 (기본값 5개 세팅)
+			int groupLimit = 5;
+			if (glimit != null) {
+				groupLimit = Integer.parseInt(glimit);
+			}
+	
+			int listCount = memberService.selectCommentAllCount(memId);
+	
+			// 페이징 처리 값생성
+			Paging paging = new Paging(listCount, limit, currentPage, "myAllComment.do", groupLimit);
+			paging.calculate();
+	
+			MyComment mycomment = new MyComment();
+	
+			mycomment.setMemId(memId);
+			mycomment.setStartRow(paging.getStartRow());
+			mycomment.setEndRow(paging.getEndRow());
+	
+			ArrayList<MyComment> commentList = memberService.selectCommentAll(mycomment);
+	
+			if (commentList != null && commentList.size() > 0) {
+				model.addAttribute("commentList", commentList);
+				model.addAttribute("paging", paging);
+				model.addAttribute("currentPage", currentPage);
+				return "member/myinfo/comment/all"; // 뷰의 이름을 반환
+			} else {
+				model.addAttribute("message", "댓글 작성 이력이 없습니다.");
+				return "common/error"; // 에러 페이지 뷰의 이름 반환
+			}
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "로그인 후 다시 이용해주시기 바랍니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 내가 쓴 댓글 전체 조회 페이지 출력
@@ -345,46 +359,51 @@ public class MemberController {
 			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("내가 쓴 댓글(가이드게시판) 페이지 요청");
-
-		// paging
-		// 기본세팅-----------------------------------------------------------------------
-		// 출력할 페이지(기본값 1페이지)
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-		// 한페이지에 출력할 댓글 수 (10개)
-		int limit = 10;
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-		// 페이징 그룹 갯수 (기본값 5개 세팅)
-		int groupLimit = 5;
-		if (glimit != null) {
-			groupLimit = Integer.parseInt(glimit);
-		}
-
-		int listCount = memberService.selectCommentGuideBoardCount(memId);
-
-		// 페이징 처리 값생성
-		Paging paging = new Paging(listCount, limit, currentPage, "myGuideBoardComment.do", groupLimit);
-		paging.calculate();
-
-		MyComment mycomment = new MyComment();
-
-		mycomment.setMemId(memId);
-		mycomment.setStartRow(paging.getStartRow());
-		mycomment.setEndRow(paging.getEndRow());
-
-		ArrayList<MyComment> commentList = memberService.selectCommentGuideBoard(mycomment);
-
-		if (commentList != null && commentList.size() > 0) {
-			model.addAttribute("commentList", commentList);
-			model.addAttribute("paging", paging);
-			model.addAttribute("currentPage", currentPage);
-			return "member/myinfo/comment/guideBoard"; // 뷰의 이름을 반환
+		
+		if(memId != null) {
+			// paging
+			// 기본세팅-----------------------------------------------------------------------
+			// 출력할 페이지(기본값 1페이지)
+			int currentPage = 1;
+			if (page != null) {
+				currentPage = Integer.parseInt(page);
+			}
+			// 한페이지에 출력할 댓글 수 (10개)
+			int limit = 10;
+			if (slimit != null) {
+				limit = Integer.parseInt(slimit);
+			}
+			// 페이징 그룹 갯수 (기본값 5개 세팅)
+			int groupLimit = 5;
+			if (glimit != null) {
+				groupLimit = Integer.parseInt(glimit);
+			}
+	
+			int listCount = memberService.selectCommentGuideBoardCount(memId);
+	
+			// 페이징 처리 값생성
+			Paging paging = new Paging(listCount, limit, currentPage, "myGuideBoardComment.do", groupLimit);
+			paging.calculate();
+	
+			MyComment mycomment = new MyComment();
+	
+			mycomment.setMemId(memId);
+			mycomment.setStartRow(paging.getStartRow());
+			mycomment.setEndRow(paging.getEndRow());
+	
+			ArrayList<MyComment> commentList = memberService.selectCommentGuideBoard(mycomment);
+	
+			if (commentList != null && commentList.size() > 0) {
+				model.addAttribute("commentList", commentList);
+				model.addAttribute("paging", paging);
+				model.addAttribute("currentPage", currentPage);
+				return "member/myinfo/comment/guideBoard"; // 뷰의 이름을 반환
+			} else {
+				model.addAttribute("message", "댓글 작성 이력이 없습니다.");
+				return "common/error"; // 에러 페이지 뷰의 이름 반환
+			}
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "로그인 후 다시 이용해주시기 바랍니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 내가 쓴 댓글(가이드게시판) 페이지 출력
@@ -397,46 +416,51 @@ public class MemberController {
 			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
 		logger.info("내가 쓴 댓글(경로게시판) 페이지 요청");
-
-		// paging
-		// 기본세팅-----------------------------------------------------------------------
-		// 출력할 페이지(기본값 1페이지)
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-		// 한페이지에 출력할 댓글 수 (10개)
-		int limit = 10;
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-		// 페이징 그룹 갯수 (기본값 5개 세팅)
-		int groupLimit = 5;
-		if (glimit != null) {
-			groupLimit = Integer.parseInt(glimit);
-		}
-
-		int listCount = memberService.selectCommentRouteBoardCount(memId);
-
-		// 페이징 처리 값생성
-		Paging paging = new Paging(listCount, limit, currentPage, "myRouteBoardComment.do", groupLimit);
-		paging.calculate();
-
-		MyComment mycomment = new MyComment();
-
-		mycomment.setMemId(memId);
-		mycomment.setStartRow(paging.getStartRow());
-		mycomment.setEndRow(paging.getEndRow());
-
-		ArrayList<MyComment> commentList = memberService.selectCommentRouteBoard(mycomment);
-
-		if (commentList != null && commentList.size() > 0) {
-			model.addAttribute("commentList", commentList);
-			model.addAttribute("paging", paging);
-			model.addAttribute("currentPage", currentPage);
-			return "member/myinfo/comment/routeBoard"; // 뷰의 이름을 반환
+		
+		if(memId != null) {
+			// paging
+			// 기본세팅-----------------------------------------------------------------------
+			// 출력할 페이지(기본값 1페이지)
+			int currentPage = 1;
+			if (page != null) {
+				currentPage = Integer.parseInt(page);
+			}
+			// 한페이지에 출력할 댓글 수 (10개)
+			int limit = 10;
+			if (slimit != null) {
+				limit = Integer.parseInt(slimit);
+			}
+			// 페이징 그룹 갯수 (기본값 5개 세팅)
+			int groupLimit = 5;
+			if (glimit != null) {
+				groupLimit = Integer.parseInt(glimit);
+			}
+	
+			int listCount = memberService.selectCommentRouteBoardCount(memId);
+	
+			// 페이징 처리 값생성
+			Paging paging = new Paging(listCount, limit, currentPage, "myRouteBoardComment.do", groupLimit);
+			paging.calculate();
+	
+			MyComment mycomment = new MyComment();
+	
+			mycomment.setMemId(memId);
+			mycomment.setStartRow(paging.getStartRow());
+			mycomment.setEndRow(paging.getEndRow());
+	
+			ArrayList<MyComment> commentList = memberService.selectCommentRouteBoard(mycomment);
+	
+			if (commentList != null && commentList.size() > 0) {
+				model.addAttribute("commentList", commentList);
+				model.addAttribute("paging", paging);
+				model.addAttribute("currentPage", currentPage);
+				return "member/myinfo/comment/routeBoard"; // 뷰의 이름을 반환
+			} else {
+				model.addAttribute("message", "댓글 작성 이력이 없습니다.");
+				return "common/error"; // 에러 페이지 뷰의 이름 반환
+			}
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "로그인 후 다시 이용해주시기 바랍니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 내가 쓴 댓글(경로게시판) 페이지 출력
@@ -481,9 +505,9 @@ public class MemberController {
 			model.addAttribute("memberList", memberList);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
-			return "admin/memberList"; // 뷰의 이름을 반환
+			return "member/admin/memberList"; // 뷰의 이름을 반환
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "회원이 없습니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 관리자 : 회원 목록 조회 페이지 출력
@@ -559,7 +583,7 @@ public class MemberController {
 			model.addAttribute("keyword", keyword);
 			return "member/myinfo/comment/all"; // 뷰의 이름을 반환
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "검색 결과가 없습니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 내가 쓴 댓글 전체 조회 페이지 출력
@@ -637,7 +661,7 @@ public class MemberController {
 			model.addAttribute("keyword", keyword);
 			return "member/myinfo/comment/guideBoard"; // 뷰의 이름을 반환
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "검색 결과가 없습니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 내가 쓴 댓글(가이드게시판) 검색 페이지 출력
@@ -715,7 +739,7 @@ public class MemberController {
 			model.addAttribute("keyword", keyword);
 			return "member/myinfo/comment/routeBoard"; // 뷰의 이름을 반환
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "검색 결과가 없습니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 내가 쓴 댓글(경로게시판) 검색 페이지 출력
@@ -782,9 +806,11 @@ public class MemberController {
 	    ArrayList<Member> memberList = null;
 	    
 	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
-	    if(action.equals("title")) {
+	    if(action.equals("memId")) {
 	    	memberList = memberService.selectMemberSearch(search);
-	    } else if(action.equals("content")) {
+	    } else if(action.equals("memNickNm")) {
+	    	memberList = memberService.selectMemberSearch(search);
+	    } else if(action.equals("memName")) {
 	    	memberList = memberService.selectMemberSearch(search);
 	    }
 
@@ -794,9 +820,9 @@ public class MemberController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("action", action);
 			model.addAttribute("keyword", keyword);
-			return "admin/memberList"; // 뷰의 이름을 반환
+			return "member/admin/memberList"; // 뷰의 이름을 반환
 		} else {
-			model.addAttribute("message", "목록 조회 실패!");
+			model.addAttribute("message", "해당 키워드에 일치하는 회원이 없습니다.");
 			return "common/error"; // 에러 페이지 뷰의 이름 반환
 		}
 	} // 관리자 : 회원 목록 조회 검색 페이지 출력
@@ -812,9 +838,9 @@ public class MemberController {
 			mv.addObject("member", member);
 			Member loginUser = (Member) session.getAttribute("loginUser");
 			if (loginUser != null && loginUser.getMemType().equals("ADMIN")) {
-				mv.setViewName("admin/memberDetail");
+				mv.setViewName("member/admin/memberDetail");
 			} else {
-				mv.setViewName("admin/memberDetail");
+				mv.setViewName("member/admin/memberDetail");
 			}
 
 		} else {
@@ -1019,14 +1045,6 @@ public class MemberController {
 		}
 	} // 회원 탈퇴 기능
 	
-	@Autowired
-    public MemberController(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-        if (this.mailSender == null) {
-            System.out.println("mailSender is not initialized.");
-        }
-    }
-	
 	// 이메일 인증 기능
 	// jmoh03 (오정민)
 	@RequestMapping(value = "emailAuth.do", method = RequestMethod.POST)
@@ -1089,7 +1107,9 @@ public class MemberController {
 			return "common/error";
 		}
 	} // 관리자 : 회원 계정 조치 기능
-
+	
+	// 관리자 : 회원 계정 조치 해제 기능 | 2024. 10. 12 작성 및 테스트 성공
+	// tsoh03 (오정민)
 	@RequestMapping(value = "memberAccountUpdateClear.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String memberAccountUpdateClearMethod(Member member, Model model, HttpServletRequest request) {
 		if (memberService.updateMemberAccountClear(member.getMemId()) > 0) {

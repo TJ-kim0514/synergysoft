@@ -396,6 +396,7 @@ public class GuideController {
 	        if (guide.getrFile1() != null) {  // rFile1이 null이 아닌지 확인
 	            new File(savePath + "\\" + guide.getrFile1()).delete();
 	        }
+
 	        guide.setoFile1(null);
 	        guide.setrFile1(null);
 	    }
