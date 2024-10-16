@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Bonvoyage</title>
+<title>Bon voyage</title>
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -21,8 +21,22 @@
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 
-<h1 class="text-center">가이드블로그 메인페이지</h1>
+<br>
+<br>
+<br>
 
+<h1 class="text-center"> ❝ 지역소담이 테마 블로그 ❞</h1>
+<br>
+<br>
+<br>
+
+<div style="text-align: center; padding-bottom: 20px;">
+<h4>지역소담이란 지역의 아름다움과 소소한 매력을 잘 소개해주는 사람이란 의미를 지닌 지역 투어가이드를 말합니다.</h4>
+<h4>예쁘고 정갈한 대한민국의 숨은 명소를 서로 공유해보세요!</h5>
+</div>
+
+<br>
+<br>
 
 
 
@@ -33,6 +47,7 @@
 <!-- 통합 검색 폼 -->
 <!-- <div style="display: flex; justify-content: flex-end;"> -->
 <!-- 목록 버튼은 폼 외부로 -->
+<div class="container my-5">
 <div class="row">
     <!-- 검색 폼을 왼쪽에 배치 -->
     <div class="col text-end">
@@ -47,23 +62,20 @@
                 <!-- 검색어 입력 -->
                 <input type="search" name="keyword" size="50" class="form-control d-inline-block" style="width: auto;" placeholder="제목 또는 내용 또는 지역을 입력해주세요.">
                 <!-- 검색 버튼 -->
-                <input type="submit" value="검색" class="btn btn-success">
+                <input type="submit" value="검색" class="btn btn-secondary">
             </fieldset>
         </form>
         
         <!-- 목록 버튼을 검색 폼 오른쪽에 배치 -->
-        <button class="btn btn-success" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button>
-        <button class="btn btn-success" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/chattingPage.do';">채팅</button>
-        
+       <br>
+      <br>
+        <button type="button" class="btn btn-outline-secondary mb-4" style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/sagBlog.do?page=1';">목록</button>
+        <button type="button" class="btn btn-outline-secondary mb-4"  style="border-radius: 50px; margin-right: 10px;" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/chattingPage.do';">채팅</button>
+
+    <!-- 블로그 쓰기 버튼 -->
+    <button  type="button" class="btn btn-outline-secondary mb-4" onclick="javascript:location.href='${pageContext.servletContext.contextPath}/gmoveWrite.do';">블로그 쓰기</button>
     </div>
 </div>
-
-
-	
-
-<div class="container my-5">
-    <!-- 블로그 쓰기 버튼 -->
-    <button class="btn btn-success mb-4" onclick="javascript:location.href='${pageContext.servletContext.contextPath}/gmoveWrite.do';">블로그 쓰기</button>
 
     <!-- 블로그 카드 목록 -->
 <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -84,13 +96,14 @@
                 </c:choose>
                 <div class="card-body">
                     <h5 class="card-title">${g.guideTitle}</h5>
-                    <p class="card-text">[지역] ${g.guideLocation}</p>
+                    <h6 class="card-text">[지역] ${g.guideLocation}</h6>
                     <p class="card-text">조회수 ${g.readCount}</p>
-                   <p class="card-text">❤️ ${g.likeCount}</p>
+                   <p class="card-text"> ❤️ ${g.likeCount}</p>
                    
                     
-    
+    				<div class="text-end">
                     <a href="${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=${g.guidepostId}" class="btn btn-dark">상세보기</a>
+                	</div>
                 </div>
             </div>
         </div>

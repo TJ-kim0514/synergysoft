@@ -180,13 +180,17 @@
 
 <div class="container" id="main">
     <!-- 제목 -->
-    <h1>${ guide.guideTitle }</h1>
+    
+    <h3 class="text-center">${ guide.guideTitle }</h3>
+    <br><br><br><br>
+   
 
     <!-- 작성자와 날짜 -->
     <div class="meta-info">
         <span>작성자: ${ guide.guideUserId }</span>
-        <span>등록날짜: <fmt:formatDate value="${ guide.guideCreatedAt }" pattern="yyyy-MM-dd" /></span>
+        <span class="float-end">등록날짜: <fmt:formatDate value="${ guide.guideCreatedAt }" pattern="yyyy-MM-dd" /></span>
     </div>
+    <br><br><br>
 
     <!-- 내용 -->
     <div class="content">
@@ -236,12 +240,14 @@
 
 
     <!-- 버튼 그룹 -->
+    <div class="d-flex justify-content-end">
     <div class="btn-group">
-        <button class="btn btn-custom" onclick="gmoveUpdatePage(); return false;">수정</button>
-        <button class="btn btn-danger" onclick="requestDelete(); return false;">삭제</button>
+        <button class="btn btn-secondary" onclick="gmoveUpdatePage(); return false;">수정</button>
+        <button class="btn btn-outline-secondary" onclick="requestDelete(); return false;">삭제</button>
         <button class="btn btn-secondary" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do'; return false;">목록</button>
         <button class="btn btn-outline-secondary" onclick="javascript:history.go(-1); return false;">이전 페이지로</button>
-        <button class="btn btn-success" onclick="commentShow(); return false;">댓글</button>
+        <button class="btn btn-outline-success" onclick="commentShow(); return false;">댓글</button>
+    </div>
     </div>
 </div>
 

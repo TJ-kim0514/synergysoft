@@ -5,6 +5,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Blog Post Edit</title>
@@ -20,9 +25,9 @@
             margin-top: 50px;
         }
         .post-header {
-            background-color: #343a40;
-            color: white;
-            padding: 20px;
+           
+            color: black;
+            padding: 1px;
             text-align: center;
             border-radius: 5px;
         }
@@ -64,12 +69,13 @@
     </style>
 </head>
 <body>
+<c:import url="/WEB-INF/views/common/menubar.jsp" />
 
     <!-- 컨테이너 시작 -->
     <div class="container">
         <!-- 게시글 수정 제목 -->
         <div class="post-header">
-            <h2>${ guide.guidepostId } 번 게시글 수정</h2>
+            <h4> ${ guide.guideUserId }님의 ${ guide.guidepostId } 번째 블로그 수정공간입니다</h4>
         </div>
 
         <!-- 게시글 수정 폼 -->
@@ -129,8 +135,10 @@
         </c:if>
         <c:if test="${empty guide.rFile1}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="ofile11" id="imageUpload1" accept="image/*" onchange="previewImage(event, 1)">
-            <img id="preview1" class="image-preview" style="display: none;">
+            추가 :     <input type="file" id="imageUpload1" name="ofile11" class="form-control-file" onchange="previewImage(event, 1)">
+        <div id="myphoto1">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="currentImage1" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
         </c:if>
 
         <!-- 기존 이미지 2 미리보기 -->
@@ -141,8 +149,10 @@
         </c:if>
         <c:if test="${empty guide.rFile2}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="ofile22" id="imageUpload2" accept="image/*" onchange="previewImage(event, 2)">
-            <img id="preview2" class="image-preview" style="display: none;">
+            추가 :     <input type="file" id="imageUpload2" name="ofile22" class="form-control-file" onchange="previewImage(event, 2)">
+        <div id="myphoto2">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="currentImage2" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
         </c:if>
 
         <!-- 기존 이미지 3 미리보기 -->
@@ -153,8 +163,10 @@
         </c:if>
         <c:if test="${empty guide.rFile3}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="ofile33" id="imageUpload3" accept="image/*" onchange="previewImage(event, 3)">
-            <img id="preview3" class="image-preview" style="display: none;">
+            추가 :     <input type="file" id="imageUpload3" name="ofile33" class="form-control-file" onchange="previewImage(event, 3)">
+        <div id="myphoto3">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="currentImage3" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
         </c:if>
 
         <!-- 기존 이미지 4 미리보기 -->
@@ -165,8 +177,10 @@
         </c:if>
         <c:if test="${empty guide.rFile4}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="ofile44" id="imageUpload4" accept="image/*" onchange="previewImage(event, 4)">
-            <img id="preview4" class="image-preview" style="display: none;">
+            추가 :     <input type="file" id="imageUpload4" name="ofile44" class="form-control-file" onchange="previewImage(event, 4)">
+        <div id="myphoto4">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="currentImage4" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
         </c:if>
 
         <!-- 기존 이미지 5 미리보기 -->
@@ -177,8 +191,11 @@
         </c:if>
         <c:if test="${empty guide.rFile5}">
             첨부 파일 없음<br>
-            추가 : <input type="file" class="form-control-file" name="ofile55" id="imageUpload5" accept="image/*" onchange="previewImage(event, 5)">
-            <img id="currentImage5" class="image-preview" style="display: none;">
+            추가 : 
+             <input type="file" id="imageUpload5" name="ofile55" class="form-control-file" onchange="previewImage(event, 5)">
+        <div id="myphoto5">
+          <img src="/bonvoyage/resources/images/noPhoto.jpg" id="currentImage5" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
+        </div>
         </c:if>
     </div>
 </div>
@@ -204,24 +221,22 @@
             <!-- 폼 하단의 버튼들 -->
             <div class="d-flex justify-content-between">
                 <div>
-                    <!-- 수정하기 버튼 -->
-                    <button type="submit" class="btn btn-primary">수정하기</button>
+                   
+                    <button type="submit" class="btn btn-outline-dark mb-4">수정하기</button>
                     <!-- 취소 버튼 (작성 내용 초기화) -->
-                    <input type="reset" class="btn btn-secondary" value="취소">
+                    <input type="reset" class="btn btn-outline-dark mb-4" value="취소">
                 </div>
                 <div>
                     <!-- 목록으로 이동 버튼 -->
-                    <a href="${pageContext.servletContext.contextPath}/sagBlog.do" class="btn btn-back">목록</a>
+                    <a href="${pageContext.servletContext.contextPath}/sagBlog.do" class="btn btn-outline-dark mb-4">목록</a>
                     <!-- 이전 페이지로 이동 버튼 -->
-                    <button class="btn btn-back" onclick="javascript:history.go(-1); return false;">이전 페이지</button>
+                    <button class="btn btn-outline-dark mb-4" onclick="javascript:history.go(-1); return false;">이전 페이지</button>
                 </div>
             </div>
         </form>
 
         <!-- 하단의 푸터 영역 -->
-        <footer>
-            <p>&copy; 2024 Bon voyage</p>
-        </footer>
+       <c:import url="/WEB-INF/views/common/footer.jsp" />
     </div>
 
     <!-- Bootstrap JS -->

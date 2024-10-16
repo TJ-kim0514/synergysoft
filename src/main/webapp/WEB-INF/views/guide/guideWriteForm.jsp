@@ -6,9 +6,14 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BonVoyage - 새 블로그 등록</title>
+  <title>BonVoyage - 지역소담이 블로그 작성</title>
 
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -24,7 +29,7 @@
     h1 {
       margin: 30px 0;
     }
-    .container {
+   #main {
       background: white;
       padding: 20px;
       border-radius: 8px;
@@ -75,8 +80,8 @@
   <!-- Navbar -->
   <c:import url="/WEB-INF/views/common/menubar.jsp" />
 
-  <div class="container mt-5">
-    <h1 class="text-center">새 블로그 등록</h1>
+  <div class="container mt-5" id=main>
+    <h3 class="text-center">지역소담이 블로그 작성</h3>
 
     <form action="ginsert.do" method="post" enctype="multipart/form-data">
       <div class="mb-3">
@@ -102,7 +107,7 @@
 
       <!-- 파일 첨부 필드와 미리보기 이미지 -->
       <div class="mb-3">
-        <label for="photofile1" class="form-label">사진 첨부 1</label>
+        
         <input type="file" id="photofile1" name="ofile1" class="form-control mb-2" onchange="previewImage(event, 1)">
         <div id="myphoto1">
           <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo1" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
@@ -110,7 +115,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="photofile2" class="form-label">사진 첨부 2</label>
+        
         <input type="file" id="photofile2" name="ofile2" class="form-control mb-2" onchange="previewImage(event, 2)">
         <div id="myphoto2">
           <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo2" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
@@ -118,7 +123,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="photofile3" class="form-label">사진 첨부 3</label>
+        
         <input type="file" id="photofile3" name="ofile3" class="form-control mb-2" onchange="previewImage(event, 3)">
         <div id="myphoto3">
           <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo3" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
@@ -126,7 +131,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="photofile4" class="form-label">사진 첨부 4</label>
+        
         <input type="file" id="photofile4" name="ofile4" class="form-control mb-2" onchange="previewImage(event, 4)">
         <div id="myphoto4">
           <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo4" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
@@ -134,7 +139,7 @@
       </div>
 
       <div class="mb-3">
-        <label for="photofile5" class="form-label">사진 첨부 5</label>
+       
         <input type="file" id="photofile5" name="ofile5" class="form-control mb-2" onchange="previewImage(event, 5)">
         <div id="myphoto5">
           <img src="/bonvoyage/resources/images/noPhoto.jpg" id="photo5" style="width:150px;height:160px;border:1px solid navy;" alt="사진을 선택하세요.">
@@ -145,8 +150,8 @@
       <div id="editor" class="mb-3"></div>
 
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <input type="submit" value="등록하기" class="btn btn-custom me-md-2">
-        <input type="reset" value="작성취소" class="btn btn-secondary">
+        <input type="submit" value="등록하기" class="btn btn-secondary me-md-2">
+        <input type="reset" value="작성취소" class="btn btn-custom">
         <input type="button" value="목록" class="btn btn-outline-secondary" onclick="javascript:history.go(-1); return false;">
       </div>
     </form>
@@ -171,15 +176,10 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+    
 
-    // Toast UI Editor 설정
-    const editor = new toastui.Editor({
-      el: document.querySelector('#editor'),
-      height: '400px',
-      initialEditType: 'markdown',
-      previewStyle: 'vertical'
-    });
+  
   </script>
-
+<c:import url="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>
