@@ -9,7 +9,6 @@
 <head>
 <meta charset="UTF-8">
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
-
 <script type="text/javascript">
 	// 검색어 입력받기
 	inputForm.addEventListener('submit',function(event) {

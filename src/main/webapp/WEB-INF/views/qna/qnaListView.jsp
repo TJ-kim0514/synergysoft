@@ -12,7 +12,10 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <%-- jQuery --%>
 <script type="text/javascript" src="/first/resources/js/jquery-3.7.1.min.js"></script>
-
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
@@ -41,7 +44,6 @@
     </c:if>    
 
     <%-- QnA 전체 테이블 --%>
-    <div class="container">
         <table class="table table-sm">
             <thead class="table-success">
                 <tr class="text-center">
@@ -91,14 +93,11 @@
                 </c:forEach>
             </tbody>
         </table>
-    </div>
 
     <%-- 페이징 출력 뷰 포함 처리 --%>
     <c:import url="/WEB-INF/views/common/pagingView.jsp" />
 
 </div>
-
-<hr>
 
 <c:import url="/WEB-INF/views/common/footer.jsp" />
 

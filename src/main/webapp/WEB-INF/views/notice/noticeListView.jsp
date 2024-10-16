@@ -79,8 +79,6 @@
 
 </div>
 
-<hr>
-
     <c:import url="/WEB-INF/views/common/footer.jsp" />
 
 <!-- 부트스트랩 JS 링크 -->

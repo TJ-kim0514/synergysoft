@@ -21,6 +21,10 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
 </head>
 <body>
 <%-- 1. 목록 페이징 처리 : 검색에 대한 목록이 아닌경우 --%>
