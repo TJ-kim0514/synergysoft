@@ -256,13 +256,13 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	// 관리자 : 회원 목록 검색 조회
-	public ArrayList<Member> selectMemberSearch(Search search) {
+	public ArrayList<Member> selectMemberSearch(Member search) {
 		return memberDao.selectMemberSearch(search);
 	}
 
 	@Override
 	// 회원 목록 검색 수 조회
-	public int selectMemberListSearchCount(Search search) {
+	public int selectMemberListSearchCount(Member search) {
 		return memberDao.selectMemberListSearchCount(search);
 	}
 
