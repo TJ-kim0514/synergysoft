@@ -184,7 +184,7 @@
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 
 <div class="container" id="main">
-    <h1 class="text-center">가이드블로그 상세보기gg</h1>
+     <h3 class="text-center">${ guide.guideTitle }</h3>
     <br>
     
     <table class="table table-bordered">
@@ -255,16 +255,18 @@
     </table>
 
     <!-- 버튼 그룹 -->
+    <div class="d-flex justify-content-end">
     <div class="btn-group">
     	
-    	<button class="btn btn-success" onclick="javascript:location.href='${ guidelikecount }'; return false;">❤️</button>
-        <button class="btn btn-custom me-md-2" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do';">목록</button>
+    	<button class="btn btn-outline-secondary" onclick="javascript:location.href='${ guidelikecount }'; return false;">❤️좋아요</button>
+        <button class="btn btn-outline-secondary" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do';">목록</button>
         <button class="btn btn-secondary" onclick="javascript:history.go(-1);">이전 페이지로 이동</button>
-        <button class="btn btn-success" onclick="commentShow(); return false;">댓글</button>
+        <button class="btn btn-secondary" onclick="commentShow(); return false;">댓글</button>
        <%--  <button class="btn btn-success" onclick="javascript:location.href='${ guideReport }'; return false;">신고</button> --%>
       <c:if test="${loginUser.memType eq 'ADMIN'}">
         <button class="btn btn-danger" onclick="requestDelete(); return false;">삭제</button>
     </c:if>
+    </div>
     </div>
 </div>
 
