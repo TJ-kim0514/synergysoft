@@ -54,7 +54,7 @@
 				<tbody>
 					<c:forEach items="${ requestScope.list }" var="r">
 						<tr>
-							<td class="text-center">${ r.reportId }</td>
+							<td class="text-center">${ r.reportNum }</td>
 							<td><a
 								href="${ pageContext.servletContext.contextPath }/reportDetail.do?reportId=${ r.reportId }"
 								class="text-dark text-decoration-none">${ r.reportingReason }</a></td>

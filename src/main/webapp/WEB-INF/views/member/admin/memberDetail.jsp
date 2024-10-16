@@ -8,6 +8,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Bonvoyage</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -49,6 +53,9 @@
 					<input type="submit" class="btn btn-outline-success" value="수정하기"> &nbsp;
 					
 					<c:url var="memberAccountUpdate" value="memberAccountUpdate.do">
+						<c:param name="memId" value="${ requestScope.member.memId }" />
+					</c:url>
+					<c:url var="memberAccountUpdateClear" value="memberAccountUpdateClear.do">
 						<c:param name="memId" value="${ requestScope.member.memId }" />
 					</c:url>
 					<button type="button" class="btn btn-outline-success" onclick="location.href='${memberAccountUpdate}'">계정조치</button> &nbsp;

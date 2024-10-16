@@ -44,7 +44,7 @@
 	<c:import url="/WEB-INF/views/common/menubar.jsp" />
 	<c:if test="${ loginUser.memType eq 'ADMIN' || loginUser.memId eq report.reportUserId }">
 		<hr>
-		<h2 align="center">${ report.reportId }번 신고 사유 상세보기</h2>
+		<h2 align="center">신고 사유 상세보기</h2>
 		<br>
 		<input type="hidden" name="postId" value="${ report.postId }">
 		<input type="hidden" name="title" value="${ report.title }">

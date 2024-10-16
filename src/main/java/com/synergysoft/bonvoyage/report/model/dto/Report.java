@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class Report implements java.io.Serializable {
 	private static final long serialVersionUID = 4468055390785996667L;
-
+	
+	private int reportNum;
 	private String reportId;
 	private String postId;
 	private String title; // 2024-10-07 추가
@@ -181,6 +182,14 @@ public class Report implements java.io.Serializable {
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public int getReportNum() {
+		return reportNum;
+	}
+
+	public void setReportNum(int reportNum) {
+		this.reportNum = reportNum;
 	}
 
 }
