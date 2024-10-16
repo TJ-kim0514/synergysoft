@@ -89,7 +89,7 @@ public class RouteController {
 		
 		// 전송보낼 데이터를 담은 객체 mv 에 저장
 		mv.addObject(route);
-		mv.setViewName("member/report/reportWriteView");
+		mv.setViewName("report/reportWriteView");
 		
 		return mv;
 	}

@@ -187,7 +187,7 @@
 		 	<div>
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">출발지</th>
+			 		<th colspan="2" class="text-center p-1">경유지</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[1].address }</td>
@@ -216,7 +216,7 @@
 		 	<div>
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">출발지</th>
+			 		<th colspan="2" class="text-center p-1">경유지</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[2].address }</td>
@@ -245,7 +245,7 @@
 		 	<div>
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">출발지</th>
+			 		<th colspan="2" class="text-center p-1">경유지</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[3].address }</td>
@@ -274,7 +274,7 @@
 		 	<div>
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">출발지</th>
+			 		<th colspan="2" class="text-center p-1">도착지</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[4].address }</td>

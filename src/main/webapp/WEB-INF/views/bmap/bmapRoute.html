@@ -511,8 +511,8 @@ function setEnd() {
             pointObj.endPoint = { lat, lng };
             map.setCenter(new kakao.maps.LatLng(lat, lng));
 
-            // CustomOverlay에 사용될 내용
-            var overlayContent = `<div style="padding:10px; background-color:#ffe6e6; border:1px solid #ddd; border-radius:5px; box-shadow: 0 4px 8px grey;">
+             // CustomOverlay에 사용될 내용
+             var overlayContent = `<div style="padding:10px; background-color:#ffe6e6; border:1px solid #ddd; border-radius:5px; box-shadow: 0 4px 8px grey;">
                                     <strong>${endPointName.value}</strong>
                                   </div>`;
 
@@ -521,11 +521,12 @@ function setEnd() {
                 position: new kakao.maps.LatLng(lat, lng),
                 content: overlayContent,
                 xAnchor: 0.5,
-                yAnchor: 1.2
+                yAnchor: 1.2 
             });
 
             // CustomOverlay 지도에 표시
-            customOverlay.setMap(map);
+             customOverlay.setMap(map);
+            
 
             // 삭제 버튼 클릭 시 이벤트 리스너 추가
             deleteEnd.addEventListener('click', function() {
@@ -555,6 +556,21 @@ function setEnd() {
             // 검색창 초기화
             document.getElementById('searchInput').value = ''; // 검색창 초기화
             document.getElementById('searchAddress').value = ''; // 주소 초기화
+/*             
+            // 인포윈도우를 생성
+            var endName = document.getElementById('endPointName').value;
+            var iwContent = `
+                <div style="padding:10px; font-size:14px; color:#333; border:1px solid #ddd; background-color:#f9f9f9; border-radius:8px;">
+                <strong>${endName}</strong>
+            </div>
+        `;
+            var iwPosition = new kakao.maps.LatLng(lat, lng);
+            infowindow = new kakao.maps.InfoWindow({
+                position: iwPosition,
+                content: iwContent
+            });
+            infowindow.open(map, endPointMarker); // 마커에 인포윈도우 표시 */
+            
         } else {
             alert('정확한 주소를 입력해주세요.');
         }
