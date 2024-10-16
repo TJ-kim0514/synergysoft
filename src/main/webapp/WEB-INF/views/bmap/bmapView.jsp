@@ -9,178 +9,169 @@
 <title>Bon voyage</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5cc86f31dc51c7974b7eaa99b903eea0&libraries=services,drawing,clusterer"></script>
-<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/bmap.js"></script>
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
-    <style type="text/css">
-        /* 검색창 스타일 */
-        #searchInput {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
 
-        /* 드롭다운 리스트 스타일 */
-        #suggestions {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            max-height: 200px;
-            overflow-y: auto;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            z-index: 1000;
-            display: none;
-        }
-        
-         #suggestions.show {
-            display: block; /* 검색 결과가 있을 때만 드롭다운을 표시 */
-        }
-
-        #suggestions li {
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        #suggestions li:last-child {
-            border-bottom: none;
-        }
-
-        #suggestions li:hover {
-            background-color: #f2f2f2;
-        }
-
-        /* 드롭다운 리스트의 스크롤바 스타일 */
-        #suggestions::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        #suggestions::-webkit-scrollbar-thumb {
-            background-color: #ccc;
-            border-radius: 3px;
-        }
-    </style>
-
-<script type="text/javascript">
-var map;  // 전역 변수로 선언
-
-window.onload = function() {
-    var mapContainer = document.getElementById('map'); 
-    if (mapContainer) {
-        var mapOption = { 
-            center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울시청 좌표 
-            level: 3 
-        };
-        map = new kakao.maps.Map(mapContainer, mapOption); 
-    } else {
-        console.error("Map container not found");
-    }
-    
-    // 출발지와 목적지 설정
-    var startPosition = new kakao.maps.LatLng(37.5665, 126.9780); // 서울시청
-    var endPosition = new kakao.maps.LatLng(37.5149, 127.0364);   // 강남역
-
-    // 지도에 마커 표시
-    var startMarker = new kakao.maps.Marker({
-        position: startPosition,
-    });
-
-    var endMarker = new kakao.maps.Marker({
-        position: endPosition,
-    });
-
-    startMarker.setMap(map);
-    endMarker.setMap(map);
-
-    // 경로 탐색 API 호출
-    async function getRoute() {
-        const apiKey = '0a6131ba188f75547a53032b153a4c12';  // 발급받은 REST API 키
-        const originLng = startPosition.getLng();
-        const originLat = startPosition.getLat();
-        const destinationLng = endPosition.getLng();
-        const destinationLat = endPosition.getLat();
-
-        // 좌표값 로그로 확인
-        console.log("출발지 경도:", originLng, "출발지 위도:", originLat);
-        console.log("목적지 경도:", destinationLng, "목적지 위도:", destinationLat);
-
-        // 좌표값이 제대로 설정되었는지 확인
-        if (!originLng || !originLat || !destinationLng || !destinationLat) {
-            console.error("출발지 또는 목적지 좌표가 유효하지 않습니다.");
-            return;
-        }
-
-        const url = `https://apis-navi.kakaomobility.com/v1/directions?origin=startPosition&destination=endPosition`;
-		console.log("url : ", url)
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    Authorization: `KakaoAK ${apiKey}`,  // 템플릿 리터럴 수정
-                    'Content-Type': 'application/json'
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            console.log("API 응답 데이터:", data);
-            return data;
-
-        } catch (error) {
-            console.error("경로 탐색 중 에러 발생:", error);
-            return null;
-        }
-    }
-
-    // 경로를 지도에 표시
-    getRoute().then(data => {
-        if (data && data.routes && data.routes.length > 0) {
-            const path = data.routes[0].sections[0].roads.map(road => {
-                return new kakao.maps.LatLng(road.y, road.x);
-            });
-
-            const polyline = new kakao.maps.Polyline({
-                path: path,
-                strokeWeight: 5,
-                strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
-                strokeStyle: 'solid'
-            });
-
-            polyline.setMap(map);
-        } else {
-            console.error("경로 탐색 결과가 없습니다.");
-        }
-    });
-};
-
-
-
-
-</script>
 </head>
 <body>
 <nav>
 	<c:import url="/WEB-INF/views/common/menubar.jsp"/>
 </nav>
 
-	<div id="map" class="container text-center" style="width: 100%; height: 700px;"></div>
+   <script>
+/*
+            var map;
+            var startPointMarker = null;
+            var endPointMarker = null;
+            var wayPointMarker = null;
+            var pointObj = {
+                startPoint: { lat: null, lng: null },
+                endPoint: { lat: null, lng: null },
+                wayPoint: { lat: null, lng: null }
+            };
 
-	<div class="container">
-    <input type="text" id="searchInput" placeholder="장소나 주소를 입력하세요" onkeyup="handleKeyPress(event)" autocomplete="off" />
-    <input type="text" id="address" />
-    </div>
-    
-    <div class="container">
-    <ul id="suggestions"></ul>
-	</div>
+
+            let waypoints = [];  // 경유지 좌표를 저장할 배열
+
+            // 경유지를 설정하는 함수
+            async function setWaypoint() {
+                waypoints = []; // 새로 시작할 때 경유지 배열 초기화
+                for (let i = 1; i <= searchIndex; i++) {
+                    const address = document.getElementById(`addressInput${i}`).value;
+                    if (!address) {
+                        alert('목적지 주소를 입력하세요.');
+                        return;
+                    }
+
+                    // 주소를 좌표로 변환하는 작업을 비동기 처리
+                    await addWaypoint(address, i);
+                }
+                console.log("모든 경유지: ", waypoints);
+                // 여기서 waypoints 배열을 사용해 다중 경유지 경로 요청을 할 수 있습니다.
+            }
+
+            // 경유지 좌표를 추가하는 비동기 함수
+            function addWaypoint(address, index) {
+                return new Promise((resolve, reject) => {
+                    const geocoder = new kakao.maps.services.Geocoder();
+
+                    geocoder.addressSearch(address, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            const lat = result[0].y;
+                            const lng = result[0].x;
+
+                            // 경유지 마커 표시
+                            const wayPointMarker = new kakao.maps.Marker({
+                                position: new kakao.maps.LatLng(lat, lng)
+                            });
+                            wayPointMarker.setMap(map);
+
+                            // 경유지 좌표를 waypoints 배열에 추가
+                            waypoints.push({
+                                viaPoint: { location: `${lng},${lat}` }
+                            });
+                            console.log(`경유지 ${index} : ${lng}, ${lat}`);
+
+                            resolve();  // 비동기 작업 완료
+                        } else {
+                            alert('정확한 주소를 입력해주세요.');
+                            reject();  // 비동기 작업 실패
+                        }
+                    });
+                });
+            }
+
+            // 경로 조회 (다중 경유지 기능)
+            async function getCarDirection() {
+                const REST_API_KEY = '5490ba4a232feea77f50bc7e61096d1d'; // 실제 API 키로 교체
+                const url = 'https://apis-navi.kakaomobility.com/v1/waypoints/directions';
+
+                if (!pointObj.startPoint.lat || !pointObj.endPoint.lat) {
+                    alert('출발지와 목적지를 모두 설정해주세요.');
+                    return;
+                }
+
+                const origin = `${pointObj.startPoint.lng},${pointObj.startPoint.lat}`;
+                const destination = `${pointObj.endPoint.lng},${pointObj.endPoint.lat}`;
+
+                const headers = {
+                    Authorization: `KakaoAK ${REST_API_KEY}`,
+                    'Content-Type': "application/json"
+                };
+
+                // 경로 요청에 필요한 본문 (origin, destination, waypoints)
+                const body = JSON.stringify({
+                    origin: origin,
+                    destination: destination,
+                    waypoints: waypoints
+                });
+
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: headers,
+                        body: body
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+
+                    // 경로를 지도에 그리기
+                    drawRouteOnMap(data);
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('result').textContent = 'Error: ' + error;
+                }
+            }
+
+            let polyline = null;  // Polyline을 저장할 전역 변수
+
+            // 경로 그리기 함수
+            function drawRouteOnMap(data) {
+                // 기존에 그려진 경로가 있으면 삭제
+                if (polyline) {
+                    polyline.setMap(null);  // 기존 경로를 지도에서 제거
+                }
+
+                const linePath = [];
+                data.routes[0].sections[0].roads.forEach(road => {
+                    road.vertexes.forEach((vertex, index) => {
+                        if (index % 2 === 0) {
+                            linePath.push(new kakao.maps.LatLng(road.vertexes[index + 1], road.vertexes[index]));
+                        }
+                    });
+                });
+
+                // 새로운 Polyline 객체 생성
+                polyline = new kakao.maps.Polyline({
+                    path: linePath,
+                    strokeWeight: 5,
+                    strokeColor: '#007aff',  // 선 색상
+                    strokeOpacity: 0.7,
+                    strokeStyle: 'solid'
+                });
+
+                // 새롭게 생성된 Polyline을 지도에 표시
+                polyline.setMap(map);
+
+                // 지도 범위를 경로에 맞게 설정
+                map.setBounds(new kakao.maps.LatLngBounds(linePath[0], linePath[linePath.length - 1]));
+            } */
+        </script>
+
+
+
+<!-- 검색창 추가 버튼 -->
+<!-- <div class="container">
+    <button class="btn btn-primary" onclick="addSearchInput(); return false;">추가</button>
+</div> -->
+
+
+
+<c:import url="/WEB-INF/views/bmap/bmapRoute.html" charEncoding="utf-8"></c:import>
 
 
 <footer>
