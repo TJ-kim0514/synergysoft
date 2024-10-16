@@ -41,12 +41,6 @@ public class HomeController {
 		return "common/main";
 	}
 	
-	@RequestMapping("test.do")
-	public String testMap() {
-		return "bmap/testMap";
-		
-	}
-	
 	@RequestMapping("chatbot.do")
 	public String chatbot() {
 		return "common/chatbot";

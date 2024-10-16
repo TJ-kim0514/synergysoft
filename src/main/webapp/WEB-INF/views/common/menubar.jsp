@@ -24,7 +24,10 @@
 		);
 	}	
 </script>		
-
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
 </head>
 <body>
 	<nav class="navbar container navbar-expand-lg bg-body-tertiary">
@@ -39,7 +42,7 @@
 				<a href="main.do"
 					style="font-family: Arial, sans-serif; font-size: 30px; font-weight: bold; color: #a0c9bb; text-decoration: none; text-shadow: 2px 2px 2px #4ba483; margin-left: 20px;">
 					Bon Voyage </a>
-				<ul class="navbar-nav me-auto mx-auto ">
+				<ul class="navbar-nav me-auto mx-auto">
 					<li class="nav-item" style="width: 120px; text-align: center;">
 						<a class="nav-link active" aria-current="page" href="routeall.do">경로추천</a>
 					</li>
