@@ -1112,6 +1112,7 @@ public class MemberController {
 	// tsoh03 (오정민)
 	@RequestMapping(value = "memberAccountUpdateClear.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String memberAccountUpdateClearMethod(Member member, Model model, HttpServletRequest request) {
+		logger.info("memberAccountUpdateClear.do 요청");
 		if (memberService.updateMemberAccountClear(member.getMemId()) > 0) {
 			return "redirect:memberDetail.do?memId=" + member.getMemId();
 		} else {
