@@ -58,6 +58,29 @@
         margin-top: 20px;
         text-align: right;
     }
+       /* 이미지 배치를 위한 그리드 설정 */
+        .image-grid {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(3, 1fr); /* 세 개의 열을 생성 */
+        }
+
+        /* 첫 번째, 다섯 번째 이미지를 3열로 차지하는 스타일 */
+        .large-image {
+            grid-column: span 3;
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin : 0 auto;
+        }
+
+        /* 작은 이미지 스타일 */
+        .image-grid img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
 </style>
 </head>
 
@@ -185,75 +208,58 @@
 
 <div class="container" id="main">
      <h3 class="text-center">${ guide.guideTitle }</h3>
-    <br>
+    <br><br><br><br>
     
-    <table class="table table-bordered">
-        <tr>
-            <th>제 목</th>
-            <td>${ guide.guideTitle }</td>
-        </tr>
-        <tr>
-            <th>작성자</th>
-            <td>${ guide.guideUserId }</td>
-        </tr>
-        <tr>
-            <th>등록날짜</th>
-            <td><fmt:formatDate value="${ guide.guideCreatedAt }" pattern="yyyy-MM-dd" /></td>
-        </tr>
-        <tr>
-            <th>내 용</th>
-            <td>${ guide.guideContent }</td>
-        </tr>
-        <tr>
-        	<th>좋아요수</th>
-        	<td>${ guide.likeCount }</td>
-        </tr>
-        
-        <tr>
-    <th>이미지</th>
-    <td>
-        <c:choose>
-            <c:when test="${not empty guide.rFile1 || not empty guide.rFile2 || not empty guide.rFile3 || not empty guide.rFile4 || not empty guide.rFile5}">
-                <div class="image-preview">
-                    <!-- rFile1 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile1}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile1}" alt="첨부된 이미지 1" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+    <!-- 작성자 -->
+    <div>
+        <strong>지역소담이 : </strong> ${ guide.guideUserId }
+    </div><br><br>
 
-                    <!-- rFile2 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile2}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile2}" alt="첨부된 이미지 2" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+    <!-- 등록날짜 -->
+    <div>
+        <strong>등록날짜 : </strong> <fmt:formatDate value="${ guide.guideCreatedAt }" pattern="yyyy-MM-dd" />
+    </div><br><br>
+    <!-- 좋아요 수 -->
+    <div>
+        <strong>좋아요수 : </strong> ${ guide.likeCount }
+    </div><br><br><br>
 
-                    <!-- rFile3 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile3}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile3}" alt="첨부된 이미지 3" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+    <!-- 내용 -->
+    <div>
+    <h4 class="text-left"> 내용 : ${ guide.guideContent }</h4>
+            </div><br>
+<!-- 이미지 그리드 -->
+    <div class="image-grid">
+        <!-- rFile1 이미지 출력 -->
+        <c:if test="${not empty guide.rFile1}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile1}" alt="이미지 1" class="large-image">
+        </c:if>
 
-                    <!-- rFile4 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile4}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile4}" alt="첨부된 이미지 4" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+        <!-- rFile2 이미지 출력 -->
+        <c:if test="${not empty guide.rFile2}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile2}" alt="이미지 2">
+        </c:if>
 
-                    <!-- rFile5 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile5}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile5}" alt="첨부된 이미지 5" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <p>첨부된 이미지가 없습니다.</p>
-            </c:otherwise>
-        </c:choose>
-    </td>
-</tr>
+        <!-- rFile3 이미지 출력 -->
+        <c:if test="${not empty guide.rFile3}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile3}" alt="이미지 3">
+        </c:if>
+
+        <!-- rFile4 이미지 출력 -->
+        <c:if test="${not empty guide.rFile4}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile4}" alt="이미지 4">
+        </c:if>
+
+        <!-- rFile5 이미지 출력 -->
+        <c:if test="${not empty guide.rFile5}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile5}" alt="이미지 5" class="large-image">
+        </c:if>
+    </div>
 
         
         
         
-        
-    </table>
-
+  
     <!-- 버튼 그룹 -->
     <div class="d-flex justify-content-end">
     <div class="btn-group">
@@ -276,7 +282,7 @@
 	
 		
 		
-		</div>
+		
 
 <div class="container" style="display: none;" id="commentSection">
 	<table class="table">
@@ -293,11 +299,13 @@
             <td align="center">${ g.createdAt }</td>
             <c:if test="${ g.userId eq loginUser.memId or loginUser.memType eq 'ADMIN' }">
 	            <td align="center">
-				<button class="btn btn-success" id="editBtn_${ status.index }" onclick="enableEdit('${ status.index }', 'content_${ status.index }'); return false;">수정싫어해</button>
+				<button class="btn btn-success" id="editBtn_${ status.index }" onclick="enableEdit('${ status.index }', 'content_${ status.index }'); return false;">수정</button>
 				<c:url var="gcommentdelete" value="gcommentdelete.do">
 	                 <c:param name="commentId" value="${ g.commentId }" />
 	                 <c:param name="postId" value="${ guide.guidepostId }" />
 	            </c:url>
+	            
+	            
 				<button class="btn btn-success" id="deleteBtn_${ status.index }" onclick="javascript:location.href='${ gcommentdelete }'; return false;">삭제</button>
 				<!-- 수정완료 버튼 -->
                 <button class="btn btn-success" id="saveBtn_${ status.index }" style="display: none;" onclick="saveEdit('${ status.index }', '${ g.commentId }'); return false;">수정완료</button>
@@ -331,6 +339,7 @@
 	</div>
 </c:if>
 </div> 
+</div>
 
 
 
