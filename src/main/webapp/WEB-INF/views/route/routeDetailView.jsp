@@ -317,7 +317,7 @@
 			<button class="btn btn-success" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveUpdateRoute.do?no=${ route.routeBoardId }'; return false;">수정하기</button> &nbsp;
 			<button class="btn btn-success" onclick="javascript:location.href='${ delroute }'; return false;">삭제하기</button> &nbsp;
 		</c:if>
-		<button class="btn btn-success" onclick="commentShow(); return false;">댓글</button>
+		<button class="btn btn-success" onclick="commentShow(); return false;">댓글&nbsp;(${ route.commentCount })</button>
 		</table>
 		</div>
 
@@ -325,8 +325,8 @@
 	<table class="table">
     <tr>
 		<th style="text-align: center;" width="100">작성자</th>
-        <th style="text-align: center;" width="900">내 용</th>
-        <th style="text-align: center;" width="100">작성일자</th>
+        <th style="text-align: center;" width="800">내 용</th>
+        <th style="text-align: center;" width="150">작성일자</th>
         <th></th>
     </tr>
        <c:forEach items="${ requestScope.clist }" var="c" varStatus="status">

@@ -40,12 +40,7 @@ logs/*
 *.dat
 *.properties
 *.state
-*.html
-*.css
-*.js
 *.woff
-*.png
-*.gif
 .metadata/.plugins/org.eclipse.jdt.core/assumedExternalFilesCache
 .metadata/.plugins/org.eclipse.jdt.core/externalFilesCache
 .metadata/.plugins/org.eclipse.jdt.core/nonChainingJarsCache

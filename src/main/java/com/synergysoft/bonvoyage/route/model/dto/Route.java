@@ -15,6 +15,7 @@ public class Route implements java.io.Serializable {
 	private int likeCount;			// 좋아요 수
 	private int totalDuration;		// 총 소요시간
 	private String routeName;		// 추천 경로 이름
+	private int commentCount;
 	private String ofile1;
 	private String ofile2;
 	private String ofile3;
@@ -41,9 +42,9 @@ public class Route implements java.io.Serializable {
 	}
 
 	public Route(String routeBoardId, String userId, String title, String content, String transport, Date createdAt,
-			Date updatedAt, int likeCount, int totalDuration, String routeName, String ofile1, String ofile2,
-			String ofile3, String ofile4, String ofile5, String rfile1, String rfile2, String rfile3, String rfile4,
-			String rfile5, String readCount) {
+			Date updatedAt, int likeCount, int totalDuration, String routeName, int commentCount, String ofile1,
+			String ofile2, String ofile3, String ofile4, String ofile5, String rfile1, String rfile2, String rfile3,
+			String rfile4, String rfile5, String readCount) {
 		super();
 		this.routeBoardId = routeBoardId;
 		this.userId = userId;
@@ -55,6 +56,7 @@ public class Route implements java.io.Serializable {
 		this.likeCount = likeCount;
 		this.totalDuration = totalDuration;
 		this.routeName = routeName;
+		this.commentCount = commentCount;
 		this.ofile1 = ofile1;
 		this.ofile2 = ofile2;
 		this.ofile3 = ofile3;
@@ -243,13 +245,25 @@ public class Route implements java.io.Serializable {
 		this.readCount = readCount;
 	}
 
+	
+	
+	public int getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+
 	@Override
 	public String toString() {
 		return "Route [routeBoardId=" + routeBoardId + ", userId=" + userId + ", title=" + title + ", content="
 				+ content + ", transport=" + transport + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
 				+ ", likeCount=" + likeCount + ", totalDuration=" + totalDuration + ", routeName=" + routeName
-				+ ", ofile1=" + ofile1 + ", ofile2=" + ofile2 + ", ofile3=" + ofile3 + ", ofile4=" + ofile4
-				+ ", ofile5=" + ofile5 + ", rfile1=" + rfile1 + ", rfile2=" + rfile2 + ", rfile3=" + rfile3
-				+ ", rfile4=" + rfile4 + ", rfile5=" + rfile5 + ", readCount=" + readCount + "]";
+				+ ", commentCount=" + commentCount + ", ofile1=" + ofile1 + ", ofile2=" + ofile2 + ", ofile3=" + ofile3
+				+ ", ofile4=" + ofile4 + ", ofile5=" + ofile5 + ", rfile1=" + rfile1 + ", rfile2=" + rfile2
+				+ ", rfile3=" + rfile3 + ", rfile4=" + rfile4 + ", rfile5=" + rfile5 + ", readCount=" + readCount + "]";
 	}
+
+	
 }
