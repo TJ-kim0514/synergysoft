@@ -6,8 +6,19 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>bonvoyage</title>
+<title>Bon voyage</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
+<style type="text/css">
+.card:hover {
+    transform: scale(1.05); /* 살짝 확대 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+</style>
 </head>
 <body>
 <nav>
@@ -21,6 +32,7 @@
 
 
 <br>
+<div class="row">
     <%-- 항목별 검색기능 --%>
     <form method="get" action="sroute.do" class="d-flex mb-2" id="ss" style="float:left">
         <select name="action" id="search" class="form-select w-auto">
@@ -30,15 +42,61 @@
         </select>
         <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
         <button type="submit" class="btn btn-success">검색</button>
+        <%-- 글쓰기 버튼 - 로그인시 표시 --%>
     </form>
-    
-    <c:if test="${ !empty loginUser }">
-		<div class="text-end">
-	    	<button class="btn btn-success" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveWriteRoute.do';">글쓰기</button>
-	    </div>
-    </c:if>
+         <div class="col text-end float-end">
+	    	<c:if test="${ !empty loginUser }">
+		    		<button class="btn btn-success" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveWriteRoute.do';">글쓰기</button>
+			</c:if>
+		</div>
+</div>
 <br>
-<table class="table table-sm">
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+	<c:forEach items="${ requestScope.list }" var="r">
+		<div class="col">
+			<div class="card h-100" onclick="location.href='${ pageContext.servletContext.contextPath }/routedetail.do?no=${ r.routeBoardId }'; return false;" style="cursor: pointer;">
+				<c:choose>
+					<c:when test="${ not empty r.rfile1 }">
+						<img src="${ pageContext.servletContext.contextPath }/resources/route_upfiles/${ r.rfile1 }">
+					</c:when>
+					<c:otherwise>
+						<img src="${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg" style="max-width: 100%; height: auto;">
+					</c:otherwise>
+				</c:choose>
+				<div	class="card-body">
+					<h5 calss="card-title">${ r.title }</h5>
+					<p class="card-text">교통수단 ${ r.transport }</p>
+					<p class="card-text">작성자 ${ r.userId }</p>
+					<p class="card-text">조회수 ${ r.readCount }</p>
+					<p class="card-text">추천수 ${ r.likeCount }</p>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%-- <table class="table table-sm">
 	<thead class="table-success">
     <tr class="text-center">
         <th width="70">순 번</th>
@@ -59,7 +117,8 @@
         </tr>
     </c:forEach>
     </tbody>
-</table>
+</table> --%>
+
 </div>
     <%-- 페이징 출력 뷰 포함 처리 --%>
     <c:import url="/WEB-INF/views/common/pagingView.jsp" />

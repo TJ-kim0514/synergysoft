@@ -5,7 +5,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>bonvoyage</title>
+<title>Bon voyage</title>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5cc86f31dc51c7974b7eaa99b903eea0&libraries=services,drawing,clusterer"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/bmap.js"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
 <style type="text/css">
  	#routePlace {
 		overflow-x: auto;
@@ -17,14 +20,97 @@
 		width: 300px;
 	}
 </style>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/routeFilePreview.js"></script>
+<style type="text/css">
+        /* 드롭다운 리스트 스타일 */
+        .suggestions {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            z-index: 2;
+            display: none;
+            position: fixed;
+        }
+        
+         .suggestions.show {
+            display: block; /* 검색 결과가 있을 때만 드롭다운을 표시 */
+        }
+
+        .suggestions li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .suggestions li:last-child {
+            border-bottom: none;
+        }
+
+        .suggestions li:hover {
+            background-color: #f2f2f2;
+        }
+
+        /* 드롭다운 리스트의 스크롤바 스타일 */
+        .suggestions::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .suggestions::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 3px;
+        }
+</style>
+<script type="text/javascript">
+window.onload = function() {
+    // 파일 입력 필드와 이미지 미리보기 요소들을 매핑
+    var files = [
+        {input: "routePlacePhoto1", image: "photo1"},
+        {input: "routePlacePhoto2", image: "photo2"},
+        {input: "routePlacePhoto3", image: "photo3"},
+        {input: "routePlacePhoto4", image: "photo4"},
+        {input: "routePlacePhoto5", image: "photo5"}
+    ];
+
+    files.forEach(function(file) {
+        var photofile = document.getElementById(file.input);
+        var myphoto = document.getElementById(file.image);
+
+        // 기본 이미지 설정
+        const defaultImageSrc = '${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg';
+        myphoto.src = defaultImageSrc;
+
+        // 파일이 변경될 때 미리보기 이미지 업데이트
+        photofile.addEventListener('change', function(event) {
+            const fileData = event.target.files[0];
+            if (fileData) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    myphoto.src = e.target.result;
+                };
+                reader.readAsDataURL(fileData);
+            } else {
+                // 파일이 없을 경우 기본 이미지로 복구
+                myphoto.src = defaultImageSrc;
+            }
+        });
+    });
+};
+
+
+</script>
+
+
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>
 <br>
 <div>
 	<h2 align="center">추천 경로 작성</h2>
-	<form class="container" action="inroute.do" method="post" enctype="multipart/form-data">
+	<form class="container" action="inroute.do" method="post" enctype="multipart/form-data" onkeydown="if(event.keyCode==13) return false">
 		<input type="hidden" name="userId" value="${ sessionScope.loginUser.memId }">
 <!-- 		<fieldset>
 			<legend>제목</legend>
@@ -33,7 +119,8 @@
 		<table>
 			<tr>
 				<th width="150">제목</th>
-				<td><textarea cols="120" rows="1" name="title" style="font-size: 14pt;"></textarea></td>
+				<!-- <td><textarea cols="110" rows="1" name="title" style="font-size: 14pt;"></textarea></td> -->
+				<td><input type="text" style="width: 1100px; font-size: 14pt;" name="title"></td>
 				<td>
 					<select name="transport" id="transport" class="form-select w-auto">
 						<option value="대중교통" id="publicTransport">대중교통</option>
@@ -54,7 +141,8 @@
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress1" name="routePlaceAddress[]" class="routeInput">
+			 			<input type="text" id="routePlaceAddress1" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off" >
+			 			<ul id="suggestions1" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -86,11 +174,12 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">경유지</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress2" name="routePlaceAddress[]" class="routeInput">
+			 			<input type="text" id="routePlaceAddress2" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<ul id="suggestions2" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -122,11 +211,12 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">경유지</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress3" name="routePlaceAddress[]" class="routeInput">
+			 			<input type="text" id="routePlaceAddress3" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<ul id="suggestions3" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -158,11 +248,12 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">경유지</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress4" name="routePlaceAddress[]" class="routeInput">
+			 			<input type="text" id="routePlaceAddress4" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<ul id="suggestions4" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -194,11 +285,12 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">도착지</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress5" name="routePlaceAddress[]" class="routeInput">
+			 			<input type="text" id="routePlaceAddress5" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<ul id="suggestions5" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -245,7 +337,8 @@
 	</form>
 	
 </div>
-<br>	
-<%-- <c:import url="/WEB-INF/views/common/footer.jsp"/> --%>
+<br>
+
+<c:import url="/WEB-INF/views/common/footer.jsp"/>
 </body>
 </html>

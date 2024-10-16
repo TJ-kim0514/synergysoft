@@ -7,7 +7,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Bon voyage</title>
-
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style type="text/css">
+* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
+</style>
 <style type="text/css">
  	#routePlace {
 		overflow-x: auto;
@@ -301,7 +304,7 @@
 		 <fieldset>
 		 <legend>상세내용</legend>
 		 <div>
-		 	<textarea readonly rows="20" cols="160" name="content" style="font-size: 13pt;">${ route.content }</textarea>
+		 	<textarea readonly rows="20" cols="142" name="content" style="font-size: 13pt;">${ route.content }</textarea>
 		 </div>
 		 </fieldset>
 		 <br>
