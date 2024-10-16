@@ -47,4 +47,9 @@ public class HomeController {
 		
 	}
 	
+	@RequestMapping("movebmap.do")
+	public String bMap() {
+		return "bmap/bmapView";
+	}
+	
 }
