@@ -14,6 +14,10 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6c21cf4a0f3f4a8aa848524ff9fe27db"></script>
 <%-- 지도 실제구현 --%>
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/mainMarkerMap.js"></script>
+<%-- 공지사항 css --%>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 <script type="text/javascript">
 
 	//공지사항 top10
@@ -32,10 +36,16 @@
 				values = '';
 				for(var i in json.nlist){
 					
-					values += '<tr><td>' + decodeURIComponent(json.nlist[i].noticeId).substring(7)
+/* 					values += '<tr><td>' + decodeURIComponent(json.nlist[i].noticeId).substring(7)
 					+'</td><td align="left">&nbsp;<a class="truncate" href="msnotice.do?noticeId='+ json.nlist[i].noticeId +'">'
 					+ decodeURIComponent(json.nlist[i].title).replace(/\+/gi,' ')
-					+'</a></td><td class="truncate">'+json.nlist[i].createAt + '</td></tr>';
+					+'</a></td><td class="truncate">'+json.nlist[i].createAt + '</td></tr>'; */
+					
+					var noticeHTML = '<p>' + decodeURIComponent(json.nlist[i].noticeId).substring(7)
+									+'</p><p><a class="truncate" style="text-decoration:none;color:black;font-weight: normal;" href="msnotice.do?noticeId='+ json.nlist[i].noticeId +'">'
+									+ decodeURIComponent(json.nlist[i].title).replace(/\+/gi,' ')
+									+ '</a></p><p>' + decodeURIComponent(json.nlist[i].createAt).replace(/\+/gi,' ') + '</p>';
+					$('.main_notice .swiper-slide:nth-child(' + (parseInt(i) + 1) + ') .new_notice').html(noticeHTML);
 				}
 				
 				$('#topnotice').html($('#topnotice').html()+values);
@@ -43,8 +53,20 @@
 			error:function(jqXHR, textStatus, errorThrown){
 				console.log('error : ' + jqXHR + ', ' + textStatus + ', ' + errorThrown);
 			}
-		})
+		});
+		
+		let mainNoticeSwiper = new Swiper('.main_notice .swiper-container', {
+	        direction: 'vertical',
+	         autoplay: {
+	            delay: 3500,
+	            disableOnInteraction: false,
+	        },
+	        speed: 700,
+	        loop: true, 
+	    });
 	});
+	
+	
 	
 	//경로추천 인기 게시글 3개 (top-N) 전송받아서 출력 처리
 	$.ajax({
@@ -85,6 +107,7 @@
 	        console.error('Error loading top blogs: ' + textStatus + ', ' + errorThrown);
 	    }
 	});
+	
 	
 	
 	
@@ -157,7 +180,7 @@ $.ajax({
     background-color: rgba(0, 0, 0, 0.5); /* 배경을 반투명하게 */
     padding: 10px;
     border-radius: 5px;
-  }
+	}
     #topnotice th:nth-child(1) {
         width: 10%;  /* No 열 */
     }
@@ -167,14 +190,147 @@ $.ajax({
     #topnotice th:nth-child(3) {
         width: 25%;  /* 등록일 열 */
     }
+    
+    /* main_notice */
+	.main_notice {width: 90%; max-width: 1280px;}
+	.main_notice_top {width: 100%; box-sizing: border-box; padding: 0 10px; display: flex; justify-content: space-between; align-items: center;}
+	.main_notice_top > p:nth-child(1) {font-weight: bold; font-size: 36px;}
+	.main_notice_top > p > a {color: #ff5f2c; font-size: 16px; font-weight: bold;}
+	.main_notice_top > p > a > span {position: relative; left: 0; transition: all 0.3s;}
+	.main_notice_top > p > a:hover > span {left: 10px;}
+	/* main_notice_top end */
+	
+	.main_notice .swiper-container {width: 100%; height: 41px;overflow:hidden; border-top: 2px solid #4ba483; border-bottom: 2px solid #4ba483;}
+	.main_notice .swiper-wrapper {width: 100%;}
+	.main_notice .swiper-slide {height: 37px !important; line-height: 37px;}
+	
+	.new_notice {width: 100%; height: 100%; display: flex; align-items: center;box-sizing:border-box;}
+	.new_notice > p {text-align: center;margin-bottom:0px;}
+	.new_notice > p:nth-child(1) {width: 10%;}
+	.new_notice > p:nth-child(2) {width: 70%; font-weight: bold;}
+	.new_notice > p:nth-child(2):hover {color: #ff5f2c;}
+	.new_notice > p:nth-child(3) {width: 20%;}
+	
+	@media all and (max-width: 1280px) {
+	    .main_notice_top > p:nth-child(1) {font-size: 24px;}
+	    .new_notice > p {font-size: 14px;}
+	    .new_notice > p:nth-child(2) {box-sizing: border-box; padding: 0 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+	}
 </style>
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>	
 <div class="container text-center">
 
+<%-- 공지사항 --%>
+  <div class="row my-3">
+  	<div class="col">
+	<!-- <div class="col-8">
+		<div class="carousel">
+			<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+			    <div class="h4 float-start">&nbsp; ▶ 공지사항</div>
+			    <div>
+			        <a href="sanotice.do" style="text-decoration:none; color:black;">더보기</a>
+			    </div>
+			</div>
+	      	<table class="table table-sm" id="topnotice" style="width: 100%;">
+				<tr class="table-success">
+					<th>No</th>
+					<th>제목</th>
+					<th>등록일</th>
+				</tr>
+			</table>
+		</div>
+    </div> -->
+    
+	    <div class="carousel main_notice">
+	    	<div class="main_notice_top">
+	    		<div class="h4 float-start">▶ 공지사항</div>
+	    		<P>
+	    			<a href="sanotice.do" style="text-decoration:none; color:black;">더보기</a>
+	    		</P>
+	    	</div>
+	    	
+	    	<div class="swiper-container">
+	    		<div class="swiper-wrapper">
+	    			<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice1">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice2">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice3">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice4">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice5">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice6">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice7">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice8">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice9">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+					<div class="swiper-slide">
+	    				<div class="new_notice" id="new_notice10">
+							<p></p><!-- 번호 -->
+							<p></p><!-- 제목 -->
+							<p></p><!-- 등록날짜 -->
+						</div>
+					</div>
+				</div>
+			</div>
+	    </div>
+  	</div>
+  </div>
+
 <%-- 경로추천 인기글 top3 --%>
-  <div class="row mt-3 mb-5">
+  <div class="row mt-5 mb-5">
     <div class="col">
       <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel">
   		<div class="h4 float-start">&nbsp; ▶ 경로추천 인기글 TOP3</div>
@@ -302,30 +458,6 @@ $.ajax({
     	</div>
     </div>
   </div>
-    
-
-
-<%-- 공지사항 --%>
-  <div class="row my-5">
-	<div class="col-8">
-		<div class="carousel">
-			<div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-			    <div class="h4 float-start">&nbsp; ▶ 공지사항</div>
-			    <div>
-			        <a href="sanotice.do" style="text-decoration:none; color:black;">더보기</a>
-			    </div>
-			</div>
-	      	<table class="table table-sm" id="topnotice" style="width: 100%;">
-				<tr class="table-success">
-					<th>No</th>
-					<th>제목</th>
-					<th>등록일</th>
-				</tr>
-			</table>
-		</div>
-    </div>
-  </div>    
-    
 
 </div>
 <c:import url="/WEB-INF/views/common/footer.jsp"/>

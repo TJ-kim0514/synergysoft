@@ -798,7 +798,7 @@ window.onload = function() {
 	}
 	
 	// 지도의 범위를 재설정
-	map.setBounds(bounds);
+	// map.setBounds(bounds);
 	
 //	// 클릭 이벤트 리스너 생성
 //	function makeClickListener(marker, index) {
@@ -886,7 +886,7 @@ window.onload = function() {
 				        
 				        pop += '</div>';                    	
                     } else{
-                    	pop = '<div style="padding:10px;">여행지 등록수 : '+placeCount+'<br>'+error+'</div>';                    	
+                    	pop = '<div style="padding:10px;width:200px;">여행지 등록수 : '+placeCount+'<br>'+error+'</div>';                    	
                     }
                     
                     // 인포윈도우 생성 및 열기
