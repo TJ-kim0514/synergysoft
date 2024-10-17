@@ -8,10 +8,6 @@
 <meta charset="UTF-8">
 <title>Bon voyage</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<style type="text/css">
-* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
-</style>
 <style type="text/css">
 .card:hover {
     transform: scale(1.05); /* 살짝 확대 */
@@ -34,6 +30,7 @@
 <br>
 <div class="row">
     <%-- 항목별 검색기능 --%>
+    <div class="col">
     <form method="get" action="sroute.do" class="d-flex mb-2" id="ss" style="float:left">
         <select name="action" id="search" class="form-select w-auto">
             <option value="title" id="title">제목</option>
@@ -41,16 +38,16 @@
             <option value="userId" id="userId">작성자</option>
         </select>
         <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
-        <button type="submit" class="btn btn-success">검색</button>
+        <button type="submit" class="btn btn-success" style="width: 70px;">검색</button>
         <%-- 글쓰기 버튼 - 로그인시 표시 --%>
     </form>
-         <div class="col text-end float-end">
+    </div>
+         <div class="col text-end align-middle">
 	    	<c:if test="${ !empty loginUser }">
-		    		<button class="btn btn-success" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveWriteRoute.do';">글쓰기</button>
+		    		<button class="btn btn-success align-middle" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveWriteRoute.do';">글쓰기</button>
 			</c:if>
 		</div>
 </div>
-<br>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
 	<c:forEach items="${ requestScope.list }" var="r">
@@ -65,11 +62,11 @@
 					</c:otherwise>
 				</c:choose>
 				<div	class="card-body">
-					<h5 calss="card-title">${ r.title }</h5>
-					<p class="card-text">교통수단 ${ r.transport }</p>
-					<p class="card-text">작성자 ${ r.userId }</p>
-					<p class="card-text">조회수 ${ r.readCount }</p>
-					<p class="card-text">추천수 ${ r.likeCount }</p>
+					<h5 class="card-title">${ r.title }</h5>
+					<p class="card-text"><strong>[교통수단]</strong> ${ r.transport }</p>
+					<p class="card-text"><strong>[작성자]</strong> ${ r.userId }</p>
+					<p class="card-text"><strong>[조회수]</strong> ${ r.readCount }</p>
+					<p class="card-text"><strong>[추천수]</strong> ${ r.likeCount }</p>
 				</div>
 			</div>
 		</div>
