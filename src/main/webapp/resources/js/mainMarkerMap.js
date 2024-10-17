@@ -6,7 +6,7 @@ window.onload = function() {
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = { 
 	        center: new kakao.maps.LatLng(37.501300, 127.025141), // 지도의 중심좌표
-	        level: 5, // 지도의 확대 레벨
+	        level: 8, // 지도의 확대 레벨
 	    };
 	
 	var map = new kakao.maps.Map(mapContainer, mapOption);// 지도를 생성합니다
@@ -695,11 +695,11 @@ window.onload = function() {
 		'김천시',
 		'경주시',
 		'포항시',
-		'광주시',
-		'대구시',
-		'대전시',
-		'부산시',
-		'세종시',
+		'광주',
+		'대구',
+		'대전',
+		'부산',
+		'세종',
 		'울산시',
 		'신안군',
 		'진도군',
@@ -765,7 +765,7 @@ window.onload = function() {
 		'제천시',
 		'충주시',
 		'청주시',
-		'인천시'
+		'인천'
 	];
 	
 	// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
@@ -832,7 +832,7 @@ window.onload = function() {
                 	const jsonData=JSON.parse(decodeURIComponent(response));
                 	console.log("jsonData : ",jsonData);
 					// 변수지정
-					let local, placeCount, error, routeBoardId, title, content, transport, ofile1, rfile1;
+					let local, placeCount, error, routeBoardId, title, transport, ofile1, rfile1;
 					
 					if (jsonData.local != null) {
 					    local = jsonData.local.replace(/\+/gi, ' ');
@@ -854,9 +854,6 @@ window.onload = function() {
 					    title = jsonData.title.replace(/\+/gi, ' ');
 					}
 					
-					if (jsonData.content != null) {
-					    content = jsonData.content.replace(/\+/gi, ' ');
-					}
 					if (jsonData.transport != null) {
 					    transport = jsonData.transport.replace(/\+/gi, ' ');
 					}
@@ -875,8 +872,7 @@ window.onload = function() {
                      
                     // 오류가 있는지 확인
                     if (error==""){
-                		console.log("content : ",content);
-                    	pop = '<div style="padding:10px;display: flex; justify-content: space-between; align-items: flex-start;">여행지 등록수 : '+placeCount+'<br>'+title+'<br>'+transport+'<br>'+content;
+                    	pop = '<div style="padding:10px;display: flex; justify-content: space-between; align-items: flex-start;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;text-align: left;">여행지 등록수 : '+placeCount+'<br>제목 : '+title+'<br>교통수단 : '+transport;
             	        // ofile1과 rfile1이 있을 경우 이미지 태그 추가
 				        if (rfile1) {
 				            let imgTag = '<br><img src="'+contextPath+'/resources/route_upfiles/' + rfile1 + '" alt="' + ofile1 + '" style="width:200px;height:auto;float:right;">';
