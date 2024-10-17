@@ -876,10 +876,10 @@ window.onload = function() {
                     // 오류가 있는지 확인
                     if (error==""){
                 		console.log("content : ",content);
-                    	pop = '<div style="padding:10px;">여행지 등록수 : '+placeCount+'<br>'+title+'<br>'+transport+'<br>'+content;
+                    	pop = '<div style="padding:10px;display: flex; justify-content: space-between; align-items: flex-start;">여행지 등록수 : '+placeCount+'<br>'+title+'<br>'+transport+'<br>'+content;
             	        // ofile1과 rfile1이 있을 경우 이미지 태그 추가
 				        if (rfile1) {
-				            let imgTag = '<br><img src="'+contextPath+'/resources/route_upfiles/' + rfile1 + '" alt="' + ofile1 + '" style="width:200px;height:auto;">';
+				            let imgTag = '<br><img src="'+contextPath+'/resources/route_upfiles/' + rfile1 + '" alt="' + ofile1 + '" style="width:200px;height:auto;float:right;">';
 				            console.log(imgTag);
 				            pop += imgTag;
 				        }
