@@ -156,9 +156,10 @@
 		 
 		 <div id="routePlace" class="d-flex">
 		 	<div>
+		 	<c:if test="${ !empty place[0].address }">
 			 <table class="table loat-start me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">출발지</th>
+			 		<th colspan="2" class="text-center p-1">장소</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[0].address }</td>
@@ -179,15 +180,17 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td>${ place[0].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[0].placeContent }</textarea></td>
 			 	</tr>		 	
 			 </table>
+			 </c:if>
 			 </div>
 			 
 		 	<div>
+		 	<c:if test="${ !empty place[1].address }">
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">경유지</th>
+			 		<th colspan="2" class="text-center p-1">장소</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[1].address }</td>
@@ -208,15 +211,17 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td>${ place[1].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[1].placeContent }</textarea></td>
 			 	</tr>		 	
 			 </table>
+			 </c:if>
 			 </div>
 			 
 		 	<div>
+		 	<c:if test="${ !empty place[2].address }">
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">경유지</th>
+			 		<th colspan="2" class="text-center p-1">장소</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[2].address }</td>
@@ -237,15 +242,17 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td>${ place[2].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[2].placeContent }</textarea></td>
 			 	</tr>		 	
 			 </table>
+			 </c:if>
 			 </div>
 			 
 		 	<div>
+		 	<c:if test="${ !empty place[3].address }">
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">경유지</th>
+			 		<th colspan="2" class="text-center p-1">장소</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[3].address }</td>
@@ -266,15 +273,17 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td>${ place[3].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[3].placeContent }</textarea></td>
 			 	</tr>		 	
 			 </table>
+			 </c:if>
 			 </div>
 			 
 		 	<div>
+		 	<c:if test="${ !empty place[4].address }">
 			 <table class="table me-5" style="width: 400px;">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1">도착지</th>
+			 		<th colspan="2" class="text-center p-1">장소</th>
 			 	</tr>
 			 	<tr>
 			 		<th width="70" class="text-center">주소</th><td class="text-center">${ place[4].address }</td>
@@ -295,9 +304,10 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td>${ place[4].placeContent }</td>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[4].placeContent }</textarea></td>
 			 	</tr>		 	
 			 </table>
+			 </c:if>
 			 </div>
 		 </div>
 				 		 		 

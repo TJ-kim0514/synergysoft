@@ -12,7 +12,6 @@
 * {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
 </style>
 <script type="text/javascript" src="${pageContext.servletContext.contextPath }/resources/js/jquery-3.7.1.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/routeFilePreview.js"></script>
 
 <style type="text/css">
  	#routePlace {
@@ -26,6 +25,83 @@
 	}
 </style>
 
+<!-- <script type="text/javascript">
+window.onload = function() {
+    // 파일 입력 필드와 이미지 미리보기 요소들을 매핑
+    var files = [
+        {input: "routePlacePhoto1", image: "photo1"},
+        {input: "routePlacePhoto2", image: "photo2"},
+        {input: "routePlacePhoto3", image: "photo3"},
+        {input: "routePlacePhoto4", image: "photo4"},
+        {input: "routePlacePhoto5", image: "photo5"}
+    ];
+
+    files.forEach(function(file) {
+        var photofile = document.getElementById(file.input);
+        var myphoto = document.getElementById(file.image);
+
+        // 기본 이미지 설정
+        const defaultImageSrc = '${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg';
+        myphoto.src = defaultImageSrc;
+
+        // 파일이 변경될 때 미리보기 이미지 업데이트
+        photofile.addEventListener('change', function(event) {
+            const fileData = event.target.files[0];
+            if (fileData) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    myphoto.src = e.target.result;
+                };
+                reader.readAsDataURL(fileData);
+            } else {
+                // 파일이 없을 경우 기본 이미지로 복구
+                myphoto.src = defaultImageSrc;
+            }
+        });
+    });
+};
+</script> -->
+
+<script type="text/javascript">
+window.onload = function() {
+    // 파일 입력 필드와 이미지 미리보기 요소들을 매핑
+    var files = [
+        {input: "routePlacePhoto1", image: "photo1"},
+        {input: "routePlacePhoto2", image: "photo2"},
+        {input: "routePlacePhoto3", image: "photo3"},
+        {input: "routePlacePhoto4", image: "photo4"},
+        {input: "routePlacePhoto5", image: "photo5"}
+    ];
+
+    files.forEach(function(file) {
+        var photofile = document.getElementById(file.input);
+        var myphoto = document.getElementById(file.image);
+
+        // 기본 이미지 설정
+        const defaultImageSrc = '${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg';
+        
+        // 미리보기 이미지가 없으면 기본 이미지로 설정
+        if (myphoto.src === "") {
+            myphoto.src = defaultImageSrc;
+        }
+
+        // 파일이 변경될 때 미리보기 이미지 업데이트
+        photofile.addEventListener('change', function(event) {
+            const fileData = event.target.files[0];
+            if (fileData) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    myphoto.src = e.target.result; // 미리보기 이미지 업데이트
+                };
+                reader.readAsDataURL(fileData); // 파일을 읽어서 데이터 URL로 변환
+            } else {
+                // 파일이 없을 경우 기본 이미지로 복구
+                myphoto.src = defaultImageSrc;
+            }
+        });
+    });
+};
+</script>
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp"/>
@@ -49,7 +125,8 @@
 		<table>
 			<tr>
 				<th width="150">제목</th>
-				<td><textarea cols="120" rows="1" name="title" style="font-size: 14pt;">${ route.title }</textarea></td>
+				<%-- <td><textarea cols="120" rows="1" name="title" style="font-size: 14pt;">${ route.title }</textarea></td> --%>
+				<td><input type="text" style="width: 1100px; font-size: 14pt;" name="title" value="${ route.title }"></td>
 				<td>
 					<select name="transport" id="transport" class="form-select w-auto">
 						<option value="대중교통" id="publicTransport">대중교통</option>
@@ -66,7 +143,7 @@
 		 	<div>
 			 <table class="float-start me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">장소</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
@@ -87,7 +164,12 @@
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
+			 		<c:if test="${ empty route.rfile1 }">
 			 		<img id="photo1" src="${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg" style="width: 400px; height: 400px;">
+			 		</c:if>
+			 		<c:if test="${ !empty route.rfile1 }">
+			 		<img id="photo1" src="${ pageContext.servletContext.contextPath }/resources/route_upfiles/${ route.rfile1 }" style="width: 400px; height: 400px;">
+			 		</c:if>
 			 	</div>
 			 	</td>
 			 	</tr>
@@ -102,7 +184,7 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">장소</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
@@ -123,7 +205,12 @@
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
+			 		<c:if test="${ empty route.rfile2 }">
 			 		<img id="photo2" src="${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg" style="width: 400px; height: 400px;">
+			 		</c:if>
+			 		<c:if test="${ !empty route.rfile2 }">
+			 		<img id="photo2" src="${ pageContext.servletContext.contextPath }/resources/route_upfiles/${ route.rfile2 }" style="width: 400px; height: 400px;">
+			 		</c:if>
 			 	</div>
 			 	</td>
 			 	</tr>
@@ -138,7 +225,7 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">장소</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
@@ -159,7 +246,12 @@
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
+			 		<c:if test="${ empty route.rfile3 }">
 			 		<img id="photo3" src="${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg" style="width: 400px; height: 400px;">
+			 		</c:if>
+			 		<c:if test="${ !empty route.rfile3 }">
+			 		<img id="photo3" src="${ pageContext.servletContext.contextPath }/resources/route_upfiles/${ route.rfile3 }" style="width: 400px; height: 400px;">
+			 		</c:if>
 			 	</div>
 			 	</td>
 			 	</tr>
@@ -174,7 +266,7 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">장소</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
@@ -195,7 +287,12 @@
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
+			 		<c:if test="${ empty route.rfile4 }">
 			 		<img id="photo4" src="${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg" style="width: 400px; height: 400px;">
+			 		</c:if>
+			 		<c:if test="${ !empty route.rfile4 }">
+			 		<img id="photo4" src="${ pageContext.servletContext.contextPath }/resources/route_upfiles/${ route.rfile4 }" style="width: 400px; height: 400px;">
+			 		</c:if>
 			 	</div>
 			 	</td>
 			 	</tr>
@@ -210,7 +307,7 @@
 			 <div>
 			 <table class="me-5">
 			 	<tr >
-			 		<th colspan="2" class="text-center p-1" width="300">출발지</th>
+			 		<th colspan="2" class="text-center p-1" width="300">장소</th>
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
@@ -231,7 +328,12 @@
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
+			 		<c:if test="${ empty route.rfile5 }">
 			 		<img id="photo5" src="${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg" style="width: 400px; height: 400px;">
+			 		</c:if>
+			 		<c:if test="${ !empty route.rfile5 }">
+			 		<img id="photo5" src="${ pageContext.servletContext.contextPath }/resources/route_upfiles/${ route.rfile5 }" style="width: 400px; height: 400px;">
+			 		</c:if>
 			 	</div>
 			 	</td>
 			 	</tr>
