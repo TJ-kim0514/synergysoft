@@ -79,9 +79,10 @@ public class PlaceController {
 		    sendJson.put("title", URLEncoder.encode(top1Route.getTitle(), "utf-8"));
 		}
 
-		if (top1Route.getContent() != null) {
-		    sendJson.put("content", URLEncoder.encode(context, "utf-8"));
-		}
+		/*
+		 * if (top1Route.getContent() != null) { sendJson.put("content",
+		 * URLEncoder.encode(context, "utf-8")); }
+		 */
 
 		if (top1Route.getTransport() != null) {
 		    sendJson.put("transport", URLEncoder.encode(top1Route.getTransport(), "utf-8"));
