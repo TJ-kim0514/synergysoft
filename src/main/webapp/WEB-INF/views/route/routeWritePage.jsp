@@ -110,7 +110,7 @@ window.onload = function() {
 <br>
 <div>
 	<h2 align="center">추천 경로 작성</h2>
-	<form class="container" action="inroute.do" method="post" enctype="multipart/form-data" onkeydown="if(event.keyCode==13) return false">
+	<form class="container" action="inroute.do" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="userId" value="${ sessionScope.loginUser.memId }">
 <!-- 		<fieldset>
 			<legend>제목</legend>
@@ -141,7 +141,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress1" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off" >
+			 			<input type="text" id="routePlaceAddress1" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off"  style="placeholder: 장소나 주소를 입력하세요." onkeydown="if(event.keyCode==13) return false">
 			 			<ul id="suggestions1" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
@@ -178,7 +178,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress2" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<input type="text" id="routePlaceAddress2" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off"  style="placeholder: 장소나 주소를 입력하세요." onkeydown="if(event.keyCode==13) return false">
 			 			<ul id="suggestions2" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
@@ -215,7 +215,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress3" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<input type="text" id="routePlaceAddress3" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off" style="placeholder: 장소나 주소를 입력하세요." onkeydown="if(event.keyCode==13) return false">
 			 			<ul id="suggestions3" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
@@ -252,7 +252,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress4" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<input type="text" id="routePlaceAddress4" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off" style="placeholder: 장소나 주소를 입력하세요." onkeydown="if(event.keyCode==13) return false">
 			 			<ul id="suggestions4" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
@@ -289,7 +289,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress5" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off">
+			 			<input type="text" id="routePlaceAddress5" name="routePlaceAddress[]" class="routeInput" onkeyup="handleKeyPress(event)" autocomplete="off" style="placeholder: 장소나 주소를 입력하세요." onkeydown="if(event.keyCode==13) return false">
 			 			<ul id="suggestions5" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
