@@ -19,6 +19,10 @@ public class Member implements java.io.Serializable {
 	private Date memLogoutLog;
 	private Date memStatusDate;
 	private Date memPwUpdate;
+	private String action;
+	private String keyword; // 제목, 내용 검색용
+	private int startRow;	// 한페이지에 출력할 목록의 시작행
+	private int endRow;		// 한페이지에 출력할 목록의 끝행
 
 	public Member() {
 		super();
@@ -168,6 +172,38 @@ public class Member implements java.io.Serializable {
 				+ memBirth + ", memSocial=" + memSocial + ", memStatus=" + memStatus + ", memLoginLog=" + memLoginLog
 				+ ", memLogoutLog=" + memLogoutLog + ", memStatusDate=" + memStatusDate + ", memPwUpdate=" + memPwUpdate
 				+ "]";
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public int getStartRow() {
+		return startRow;
+	}
+
+	public void setStartRow(int startRow) {
+		this.startRow = startRow;
+	}
+
+	public int getEndRow() {
+		return endRow;
+	}
+
+	public void setEndRow(int endRow) {
+		this.endRow = endRow;
 	}
 
 }

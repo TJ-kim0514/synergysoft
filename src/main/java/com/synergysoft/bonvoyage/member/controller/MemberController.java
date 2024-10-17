@@ -749,6 +749,7 @@ public class MemberController {
 	@RequestMapping(value = "memberListSearch.do")
 	public String moveMemberListSearch(Model model, 
 			@RequestParam(name = "page", required = false) String page,
+			@RequestParam("memStatus") String memStatus, // 검색 기준 (ACTIVE, BLOCKED, INACTIVE)
 			@RequestParam("action") String action, // 검색 기준 (title, content)
 			@RequestParam("keyword") String keyword, @RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "groupLimit", required = false) String glimit) {
@@ -775,29 +776,25 @@ public class MemberController {
 		int listCount = 0;
 		
 		// 검색시 사용할 값 전송 객체생성 및 값 입력
-		Search searchCount = new Search();
+		Member searchCount = new Member();
 	    
-		if(action.equals("memId")) {
+		if(
+			(memStatus.equals("INACTIVE") || memStatus.equals("BLOCKED") || memStatus.equals("ACTIVE") || memStatus.equals("ALL")) 
+				&& 
+			(action.equals("memId") || action.equals("memNickNm") || action.equals("memName"))
+			) {
+			searchCount.setMemStatus(memStatus);
 			searchCount.setAction(action);
 			searchCount.setKeyword(keyword);
 	    	listCount = memberService.selectMemberListSearchCount(searchCount);
-	    } else if(action.equals("memNickNm")) {
-	    	
-	    	searchCount.setAction(action);
-			searchCount.setKeyword(keyword);
-	    	listCount = memberService.selectMemberListSearchCount(searchCount);
-	    } else if(action.equals("memName")) {
-	    	
-	    	searchCount.setAction(action);
-			searchCount.setKeyword(keyword);
-	    	listCount = memberService.selectMemberListSearchCount(searchCount);
-	    }
+		}
 		
 		// 페이징 처리 값생성
 		Paging paging = new Paging(listCount, limit, currentPage, "memberListSearch.do", groupLimit);
 		paging.calculate();
 		
-		Search search = new Search();
+		Member search = new Member();
+		search.setMemStatus(memStatus);
 		search.setAction(action);
 		search.setKeyword(keyword);
 		search.setStartRow(paging.getStartRow());
@@ -806,11 +803,9 @@ public class MemberController {
 	    ArrayList<Member> memberList = null;
 	    
 	    // 서비스를 목록 조회 요청하고 결과 받기(페이징 처리)
-	    if(action.equals("memId")) {
-	    	memberList = memberService.selectMemberSearch(search);
-	    } else if(action.equals("memNickNm")) {
-	    	memberList = memberService.selectMemberSearch(search);
-	    } else if(action.equals("memName")) {
+	    if((memStatus.equals("INACTIVE") || memStatus.equals("BLOCKED") || memStatus.equals("ACTIVE") || memStatus.equals("ALL")) 
+				&& 
+			(action.equals("memId") || action.equals("memNickNm") || action.equals("memName"))) {
 	    	memberList = memberService.selectMemberSearch(search);
 	    }
 

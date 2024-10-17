@@ -33,8 +33,8 @@ public interface MemberService {
 	int selectCommentAllSearchCount(MyComment mycomment);
 	int selectCommentRouteBoardSearchCount(MyComment mycomment);
 	int selectCommentGuideBoardSearchCount(MyComment mycomment);
-	ArrayList<Member> selectMemberSearch(Search search);
-	int selectMemberListSearchCount(Search search);
+	ArrayList<Member> selectMemberSearch(Member search);
+	int selectMemberListSearchCount(Member searchCount);
 	Member selectMemberDetail(String memId);
 	int selectCheckId(String memId);
 	Member selectMemberByEmailId(Member member);

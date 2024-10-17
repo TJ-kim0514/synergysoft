@@ -32,6 +32,12 @@
 		<br>
 		<fieldset align="center">
 			<form method="get" action="memberListSearch.do" class="d-flex mb-4" id="ss" style="float:left">
+		        <select name="memStatus" id="searchItem" class="form-select w-auto">
+		            <option value="ALL" id="all">전체회원</option>
+		            <option value="ACTIVE" id="active">활동회원</option>
+		            <option value="BLOCKED" id="blocked">정지회원</option>
+		            <option value="INACTIVE" id="inactive">휴면회원</option>
+		        </select>
 		        <select name="action" id="searchItem" class="form-select w-auto">
 		            <option value="memId" id="memId">아이디</option>
 		            <option value="memNickNm" id="memNickNm">닉네임</option>
@@ -45,7 +51,7 @@
 		<div class="row row-cols-1 row-cols-md-4 g-5">
 		<c:forEach items="${memberList}" var="memberList">
 			<div class="col">
-				<div class="card text-center" style="width: 18rem;">
+				<div class="card text-center" style="width: 18rem; background: white;">
 					<div class="card-body">
 						<h5 class="card-title">${ memberList.memNickNm }</h5>
 						<p class="card-text">${ memberList.memId }</p>
