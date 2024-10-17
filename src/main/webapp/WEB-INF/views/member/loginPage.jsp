@@ -135,7 +135,7 @@ a#kakao-login-btn{
 												</div>
 											</div>
 											<div class="card-body">
-												<form role="form" class="text-start" action="/member/sendEmail"
+												<form role="form" class="text-start" action="pwSearch.do"
 													method="post" name="sendEmail">
 													<p>입력한 이메일로 임시 비밀번호가 전송됩니다.</p>
 													<div class="input-group input-group-outline my-3">
