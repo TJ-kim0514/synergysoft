@@ -8,7 +8,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>가이드블로그 상세보기ㅎㅎ</title>
+<title>가이드블로그 상세보기</title>
 
 <!-- Bootstrap 5 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -66,6 +66,31 @@
         text-align: right;
         margin-top: 20px;
     }
+    
+ 
+        /* 이미지 배치를 위한 그리드 설정 */
+        .image-grid {
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(3, 1fr); /* 세 개의 열을 생성 */
+        }
+
+        /* 첫 번째, 다섯 번째 이미지를 3열로 차지하는 스타일 */
+        .large-image {
+            grid-column: span 3;
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin : 0 auto;
+        }
+
+        /* 작은 이미지 스타일 */
+        .image-grid img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
 </style>
 
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
@@ -197,44 +222,35 @@
         ${ guide.guideContent }
     </div>
     
-     <tr>
-    <th>이미지</th>
-    <td>
-        <c:choose>
-            <c:when test="${not empty guide.rFile1 || not empty guide.rFile2 || not empty guide.rFile3 || not empty guide.rFile4 || not empty guide.rFile5}">
-                <div class="image-preview">
-                    <!-- rFile1 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile1}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile1}" alt="첨부된 이미지 1" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+  <!-- 이미지 그리드 -->
+    <div class="image-grid">
+        <!-- rFile1 이미지 출력 -->
+        <c:if test="${not empty guide.rFile1}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile1}" alt="이미지 1" class="large-image">
+        </c:if>
 
-                    <!-- rFile2 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile2}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile2}" alt="첨부된 이미지 2" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+        <!-- rFile2 이미지 출력 -->
+        <c:if test="${not empty guide.rFile2}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile2}" alt="이미지 2">
+        </c:if>
 
-                    <!-- rFile3 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile3}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile3}" alt="첨부된 이미지 3" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+        <!-- rFile3 이미지 출력 -->
+        <c:if test="${not empty guide.rFile3}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile3}" alt="이미지 3">
+        </c:if>
 
-                    <!-- rFile4 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile4}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile4}" alt="첨부된 이미지 4" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
+        <!-- rFile4 이미지 출력 -->
+        <c:if test="${not empty guide.rFile4}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile4}" alt="이미지 4">
+        </c:if>
 
-                    <!-- rFile5 이미지 출력 -->
-                    <c:if test="${not empty guide.rFile5}">
-                        <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile5}" alt="첨부된 이미지 5" style="max-width: 300px; margin-right: 10px;">
-                    </c:if>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <p>첨부된 이미지가 없습니다.</p>
-            </c:otherwise>
-        </c:choose>
-    </td>
-</tr>
+        <!-- rFile5 이미지 출력 -->
+        <c:if test="${not empty guide.rFile5}">
+            <img src="${pageContext.request.contextPath}/resources/guide_upfiles/${guide.rFile5}" alt="이미지 5" class="large-image">
+        </c:if>
+    </div>
+    <!-- 이미지 그리드 끝 -->
+
 
         
 
@@ -259,7 +275,7 @@
 	
 		
 		
-		</div>
+		
 
 <div class="container" style="display: none;" id="commentSection">
 	<table class="table">
@@ -316,6 +332,7 @@
 	</div>
 </c:if>
 </div> 
+</div>
 
 
 

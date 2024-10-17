@@ -17,6 +17,14 @@
 <style type="text/css">
 * {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
 </style>
+
+<style type="text/css">
+.card:hover {
+    transform: scale(1.05); /* 살짝 확대 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+</style>
 </head>
 <body>
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
@@ -29,6 +37,7 @@
 <br>
 <br>
 <br>
+
 
 <div style="text-align: center; padding-bottom: 20px;">
 <h4>지역소담이란 지역의 아름다움과 소소한 매력을 잘 소개해주는 사람이란 의미를 지닌 지역 투어가이드를 말합니다.</h4>
@@ -82,7 +91,8 @@
     <!-- 블로그 정보를 반복문으로 출력 -->
     <c:forEach items="${list}" var="g">
         <div class="col">
-            <div class="card h-100">
+            
+            <div class="card h-100" onclick="location.href='${ pageContext.servletContext.contextPath }/gdetail.do?guidepostId=${ g.guidepostId }'; return false;" style="cursor: pointer;">
                 <!-- rFile1이 있으면 해당 이미지를, 없으면 기본 이미지를 출력 -->
                 <c:choose>
                     <c:when test="${not empty g.rFile1}">
@@ -96,13 +106,15 @@
                 </c:choose>
                 <div class="card-body">
                     <h5 class="card-title">${g.guideTitle}</h5>
-                    <h6 class="card-text">[지역] ${g.guideLocation}</h6>
-                    <p class="card-text">조회수 ${g.readCount}</p>
+                    <br>
+                    <%-- <h6 class="card-text">지역 : ${g.guideLocation}</h6> --%>
+                    <h6 class="card-text">블로그 주인장 : ${g.guideUserId }</h6>
+                    <p class="card-text">조회수 : ${g.readCount}</p>
                    <p class="card-text"> ❤️ ${g.likeCount}</p>
                    
                     
     				<div class="text-end">
-                    <a href="${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=${g.guidepostId}" class="btn btn-dark">상세보기</a>
+                    <a href="${pageContext.servletContext.contextPath}/gdetail.do?guidepostId=${g.guidepostId}" class="btn btn-dark">${ g.guideLocation }</a>
                 	</div>
                 </div>
             </div>
@@ -110,7 +122,7 @@
     </c:forEach>
 </div>
 
-
+</div>
 
  
 
