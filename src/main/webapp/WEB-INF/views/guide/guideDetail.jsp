@@ -260,6 +260,9 @@
     <div class="btn-group">
         <button class="btn btn-secondary" onclick="gmoveUpdatePage(); return false;">수정</button>
         <button class="btn btn-outline-secondary" onclick="requestDelete(); return false;">삭제</button>
+        <c:if test="${loginUser.memType eq 'ADMIN'}">
+        <button class="btn btn-danger" onclick="requestDelete(); return false;">삭제</button>
+        </c:if>
         <button class="btn btn-secondary" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do'; return false;">목록</button>
         <button class="btn btn-outline-secondary" onclick="javascript:history.go(-1); return false;">이전 페이지로</button>
         <button class="btn btn-outline-success" onclick="commentShow(); return false;">댓글</button>
