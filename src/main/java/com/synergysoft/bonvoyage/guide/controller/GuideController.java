@@ -209,7 +209,7 @@ public class GuideController {
 	        String renameFileName1 = FileNameChange.change(fileName1, "yyyyMMddHHmmssSSS");
 	        logger.info("첨부파일명 확인 : " + renameFileName1);
 	        try {
-	            gmfiles1.transferTo(new File(savePath + "\\" + renameFileName1)); // 파일 저장
+	            gmfiles1.transferTo(new File(savePath + File.separator + renameFileName1)); // 파일 저장
 	            guide.setoFile1(fileName1);
 	            guide.setrFile1(renameFileName1);
 	        } catch (Exception e) {
@@ -225,7 +225,7 @@ public class GuideController {
 	        String renameFileName2 = FileNameChange.change(fileName2, "yyyyMMddHHmmssSSS");
 	        logger.info("첨부파일명 확인 : " + renameFileName2);
 	        try {
-	            gmfiles2.transferTo(new File(savePath + "\\" + renameFileName2)); // 파일 저장
+	            gmfiles2.transferTo(new File(savePath + File.separator + renameFileName2)); // 파일 저장
 	            guide.setoFile2(fileName2);
 	            guide.setrFile2(renameFileName2);
 	        } catch (Exception e) {
@@ -241,7 +241,7 @@ public class GuideController {
 	        String renameFileName3 = FileNameChange.change(fileName3, "yyyyMMddHHmmssSSS");
 	        logger.info("첨부파일명 확인 : " + renameFileName3);
 	        try {
-	            gmfiles3.transferTo(new File(savePath + "\\" + renameFileName3)); // 파일 저장
+	            gmfiles3.transferTo(new File(savePath + File.separator + renameFileName3)); // 파일 저장
 	            guide.setoFile3(fileName3);
 	            guide.setrFile3(renameFileName3);
 	        } catch (Exception e) {
@@ -257,7 +257,7 @@ public class GuideController {
 	        String renameFileName4 = FileNameChange.change(fileName4, "yyyyMMddHHmmssSSS");
 	        logger.info("첨부파일명 확인 : " + renameFileName4);
 	        try {
-	            gmfiles4.transferTo(new File(savePath + "\\" + renameFileName4)); // 파일 저장
+	            gmfiles4.transferTo(new File(savePath + File.separator + renameFileName4)); // 파일 저장
 	            guide.setoFile4(fileName4);
 	            guide.setrFile4(renameFileName4);
 	        } catch (Exception e) {
@@ -273,7 +273,7 @@ public class GuideController {
 	        String renameFileName5 = FileNameChange.change(fileName5, "yyyyMMddHHmmssSSS");
 	        logger.info("첨부파일명 확인 : " + renameFileName5);
 	        try {
-	            gmfiles5.transferTo(new File(savePath + "\\" + renameFileName5)); // 파일 저장
+	            gmfiles5.transferTo(new File(savePath + File.separator + renameFileName5)); // 파일 저장
 	            guide.setoFile5(fileName5);
 	            guide.setrFile5(renameFileName5);
 	        } catch (Exception e) {
@@ -394,7 +394,7 @@ public class GuideController {
 	
 	    if ((guide.getoFile1() != null && delFlag1 != null && delFlag1.equals("yes")) || !gmfiles1.isEmpty()) {
 	        if (guide.getrFile1() != null) {  // rFile1이 null이 아닌지 확인
-	            new File(savePath + "\\" + guide.getrFile1()).delete();
+	            new File(savePath + File.separator + guide.getrFile1()).delete();
 	        }
 
 	        guide.setoFile1(null);
@@ -404,7 +404,7 @@ public class GuideController {
 		if ((guide.getoFile2() != null && delFlag2 != null && delFlag2.equals("yes")) || !gmfiles2.isEmpty()) {
 			//저장 폴더에서 이전 파일 삭제
 			 if (guide.getrFile2() != null) {
-			new File(savePath + "\\" + guide.getrFile2()).delete();
+			new File(savePath + File.separator + guide.getrFile2()).delete();
 			//guide 안의 파일 정보를 삭제함
 			}
 			guide.setoFile2(null);
@@ -413,7 +413,7 @@ public class GuideController {
 		if ((guide.getoFile3() != null && delFlag3 != null && delFlag3.equals("yes")) || !gmfiles3.isEmpty()) {
 			//저장 폴더에서 이전 파일 삭제
 			 if (guide.getrFile3() != null) {
-			new File(savePath + "\\" + guide.getrFile3()).delete();
+			new File(savePath + File.separator + guide.getrFile3()).delete();
 			//guide 안의 파일 정보를 삭제함
 			}
 			guide.setoFile3(null);
@@ -422,7 +422,7 @@ public class GuideController {
 		if ((guide.getoFile4() != null && delFlag4 != null && delFlag4.equals("yes")) || !gmfiles4.isEmpty()) {
 			//저장 폴더에서 이전 파일 삭제
 			 if (guide.getrFile4() != null) {
-			new File(savePath + "\\" + guide.getrFile4()).delete();
+			new File(savePath + File.separator + guide.getrFile4()).delete();
 			//guide 안의 파일 정보를 삭제함
 			}
 			guide.setoFile4(null);
@@ -431,7 +431,7 @@ public class GuideController {
 		if ((guide.getoFile5() != null && delFlag5 != null && delFlag5.equals("yes")) || !gmfiles5.isEmpty()) {
 			//저장 폴더에서 이전 파일 삭제
 			 if (guide.getrFile1() != null) {
-			new File(savePath + "\\" + guide.getrFile5()).delete();
+			new File(savePath + File.separator + guide.getrFile5()).delete();
 			 }
 			//guide 안의 파일 정보를 삭제함
 			guide.setoFile5(null);
@@ -442,7 +442,7 @@ public class GuideController {
 		// 첨부파일 삭제
 		if(!gmfiles1.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + guide.getrFile1()).delete();
+			new File(savePath + File.separator + guide.getrFile1()).delete();
 			
 			// route 안의 파일정보 삭제
 			guide.setoFile1(null);
@@ -465,7 +465,7 @@ public class GuideController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					gmfiles1.transferTo(new File(savePath + "\\" + renameFileName));
+					gmfiles1.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -479,7 +479,7 @@ public class GuideController {
 		
 		if(!gmfiles2.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + guide.getrFile2()).delete();
+			new File(savePath + File.separator + guide.getrFile2()).delete();
 			
 			// route 안의 파일정보 삭제
 			guide.setoFile2(null);
@@ -502,7 +502,7 @@ public class GuideController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					gmfiles2.transferTo(new File(savePath + "\\" + renameFileName));
+					gmfiles2.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -516,7 +516,7 @@ public class GuideController {
 		
 		if(!gmfiles3.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + guide.getrFile3()).delete();
+			new File(savePath + File.separator + guide.getrFile3()).delete();
 			
 			// route 안의 파일정보 삭제
 			guide.setoFile3(null);
@@ -539,7 +539,7 @@ public class GuideController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					gmfiles3.transferTo(new File(savePath + "\\" + renameFileName));
+					gmfiles3.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -553,7 +553,7 @@ public class GuideController {
 		
 		if(!gmfiles4.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + guide.getrFile4()).delete();
+			new File(savePath + File.separator + guide.getrFile4()).delete();
 			
 			// route 안의 파일정보 삭제
 			guide.setoFile4(null);
@@ -576,7 +576,7 @@ public class GuideController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					gmfiles4.transferTo(new File(savePath + "\\" + renameFileName));
+					gmfiles4.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -590,7 +590,7 @@ public class GuideController {
 		
 		if(!gmfiles5.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + guide.getrFile5()).delete();
+			new File(savePath + File.separator + guide.getrFile5()).delete();
 			
 			// route 안의 파일정보 삭제
 			guide.setoFile5(null);
@@ -613,7 +613,7 @@ public class GuideController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					gmfiles5.transferTo(new File(savePath + "\\" + renameFileName));
+					gmfiles5.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
