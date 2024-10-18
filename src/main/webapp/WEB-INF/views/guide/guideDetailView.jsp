@@ -81,95 +81,128 @@
             object-fit: cover;
             border-radius: 5px;
         }
+        
+        
+        
+.commenttable { /* 클래스 선택자 앞에 . 추가 */
+    border-collapse: collapse; /* 테두리 겹침 제거 */
+    width: 100%; /* 테이블 너비 100% */
+}
+
+.commenttable td, .commenttable th { /* 클래스 선택자에 . 추가 */
+    border: none; /* 각 셀의 테두리를 없앰 */
+    padding: 8px; /* 셀 안쪽 여백 */
+}
+
+.commenttable, .commenttable th, .commenttable td { /* 클래스 선택자에 . 추가 */
+    border-left: none; /* 왼쪽 테두리 제거 */
+    border-right: none; /* 오른쪽 테두리 제거 */
+}
+   
+        
+        
+        
+        
+        
+        
 </style>
 </head>
-
+<body onload="checkCommentVisibility();">
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
 <script type="text/javascript">
 
-	function commentShow() {
-	    var commentSection = document.getElementById("commentSection");
-	    if (commentSection.style.display === "none") {
-	        commentSection.style.display = "block";
-	    } else {
-	        commentSection.style.display = "none";
-	    }
+
+	function checkCommentVisibility() {
+		var commentAdded = "${ param.commentAdded }"; // 서버에서 전달한 파라미터
+		var commentSection = document.getElementById("commentSection");
+
+		if (commentAdded === "true") {
+			commentSection.style.display = "block"; // 댓글 작성 후 자동으로 댓글 섹션을 보이게 함
+		}
 	}
-	
-    function enableEdit(rowId, contentId) {
-        // 수정 버튼을 클릭했을 때 실행되는 함수
-        var content = document.getElementById(contentId);
-        var editButton = document.getElementById("editBtn_" + rowId);
-        var deleteButton = document.getElementById("deleteBtn_" + rowId);
-        var saveButton = document.getElementById("saveBtn_" + rowId);
-        var cancelButton = document.getElementById("cancelBtn_" + rowId);
 
-        // 내용 칸을 입력 가능한 <input> 필드로 변경
-        content.innerHTML = '<input type="text" id="editContent_' + rowId + '" value="' + content.textContent + '" />';
+	function commentShow() {
+		var commentSection = document.getElementById("commentSection");
+		if (commentSection.style.display === "none") {
+			commentSection.style.display = "block";
+		} else {
+			commentSection.style.display = "none";
+		}
+	}
 
-        // 수정, 삭제 버튼을 숨기고 수정완료, 취소 버튼을 표시
-        editButton.style.display = 'none';
-        deleteButton.style.display = 'none';
-        saveButton.style.display = 'inline';
-        cancelButton.style.display = 'inline';
-    }
+	function enableEdit(rowId, contentId) {
+		// 수정 버튼을 클릭했을 때 실행되는 함수
+		var content = document.getElementById(contentId);
+		var editButton = document.getElementById("editBtn_" + rowId);
+		var deleteButton = document.getElementById("deleteBtn_" + rowId);
+		var saveButton = document.getElementById("saveBtn_" + rowId);
+		var cancelButton = document.getElementById("cancelBtn_" + rowId);
 
-    function saveEdit(rowId, commentId) {
-        // 수정완료 버튼을 클릭했을 때 실행되는 함수
-        var newContent = document.getElementById("editContent_" + rowId).value;
+		// 내용 칸을 입력 가능한 <input> 필드로 변경
+		content.innerHTML = '<input type="text" id="editContent_' + rowId + '" value="' + content.textContent + '" />';
 
-        // 여기에 AJAX 요청을 보내서 서버에 수정된 내용을 저장하도록 합니다.
-        $.ajax({
-            url: 'guideCommentEdit.do',
-            type: 'POST',
-            data: {
-                commentId: commentId,
-                content: newContent
-            },
-            success: function(response) {
-                if (response === "Success") {
-                    // 수정 성공 시 화면 업데이트
-                    alert("댓글이 수정되었습니다.");
-                    location.reload(); // 또는 화면의 특정 부분만 업데이트
-                } else {
-                    // 오류 발생 시 오류 메시지 표시
-                    alert("수정 중 오류가 발생했습니다: " + response);
-                }
-            },
-            error: function(error) {
-                alert("통신 중 오류가 발생했습니다.");
-            }
-        });
-    }
+		// 수정, 삭제 버튼을 숨기고 수정완료, 취소 버튼을 표시
+		editButton.style.display = 'none';
+		deleteButton.style.display = 'none';
+		saveButton.style.display = 'inline';
+		cancelButton.style.display = 'inline';
+	}
 
-    function cancelEdit(rowId) {
-        // 취소 버튼을 클릭했을 때 실행되는 함수
-        // 원래 내용을 다시 보여주고 버튼 상태를 원래대로 돌립니다.
-        var originalContent = document.getElementById("content_" + rowId).dataset.originalContent;
-        document.getElementById("content_" + rowId).innerHTML = originalContent;
-        toggleEditButtons(rowId, false);
-    }
+	function saveEdit(rowId, commentId) {
+		// 수정완료 버튼을 클릭했을 때 실행되는 함수
+		var newContent = document.getElementById("editContent_" + rowId).value;
 
-    function toggleEditButtons(rowId, isEditing) {
-        // 수정 및 삭제 버튼을 보여주거나 숨기는 함수
-        var editButton = document.getElementById("editBtn_" + rowId);
-        var deleteButton = document.getElementById("deleteBtn_" + rowId);
-        var saveButton = document.getElementById("saveBtn_" + rowId);
-        var cancelButton = document.getElementById("cancelBtn_" + rowId);
+		// 여기에 AJAX 요청을 보내서 서버에 수정된 내용을 저장하도록 합니다.
+		$.ajax({
+			url : 'guideCommentEdit.do',
+			type : 'POST',
+			data : {
+				commentId : commentId,
+				content : newContent
+			},
+			success : function(response) {
+				if (response === "Success") {
+					// 수정 성공 시 화면 업데이트
+					alert("댓글이 수정되었습니다.");
+					location.reload(); // 또는 화면의 특정 부분만 업데이트
+				} else {
+					// 오류 발생 시 오류 메시지 표시
+					alert("수정 중 오류가 발생했습니다: " + response);
+				}
+			},
+			error : function(error) {
+				alert("통신 중 오류가 발생했습니다.");
+			}
+		});
+	}
 
-        if (isEditing) {
-            editButton.style.display = 'none';
-            deleteButton.style.display = 'none';
-            saveButton.style.display = 'inline';
-            cancelButton.style.display = 'inline';
-        } else {
-            editButton.style.display = 'inline';
-            deleteButton.style.display = 'inline';
-            saveButton.style.display = 'none';
-            cancelButton.style.display = 'none';
-        }
-    }
-	
+	function cancelEdit(rowId) {
+		// 취소 버튼을 클릭했을 때 실행되는 함수
+		// 원래 내용을 다시 보여주고 버튼 상태를 원래대로 돌립니다.
+		var originalContent = document.getElementById("content_" + rowId).dataset.originalContent;
+		document.getElementById("content_" + rowId).innerHTML = originalContent;
+		toggleEditButtons(rowId, false);
+	}
+
+	function toggleEditButtons(rowId, isEditing) {
+		// 수정 및 삭제 버튼을 보여주거나 숨기는 함수
+		var editButton = document.getElementById("editBtn_" + rowId);
+		var deleteButton = document.getElementById("deleteBtn_" + rowId);
+		var saveButton = document.getElementById("saveBtn_" + rowId);
+		var cancelButton = document.getElementById("cancelBtn_" + rowId);
+
+		if (isEditing) {
+			editButton.style.display = 'none';
+			deleteButton.style.display = 'none';
+			saveButton.style.display = 'inline';
+			cancelButton.style.display = 'inline';
+		} else {
+			editButton.style.display = 'inline';
+			deleteButton.style.display = 'inline';
+			saveButton.style.display = 'none';
+			cancelButton.style.display = 'none';
+		}
+	}
 </script>
 
 <script type="text/javascript">
@@ -207,8 +240,8 @@
 <c:import url="/WEB-INF/views/common/menubar.jsp" />
 
 <div class="container" id="main">
-     <h3 class="text-center">${ guide.guideTitle }</h3>
-    <br><br><br><br>
+     <h2 class="text-center">${ guide.guideTitle }</h2>
+    <br><br><br>
     
     <!-- 작성자 -->
     <div>
@@ -217,16 +250,21 @@
 
     <!-- 등록날짜 -->
     <div>
-        <strong>등록날짜 : </strong> <fmt:formatDate value="${ guide.guideCreatedAt }" pattern="yyyy-MM-dd" />
+        <strong>블로그 작성일 : </strong> <fmt:formatDate value="${ guide.guideCreatedAt }" pattern="yyyy-MM-dd" />
     </div><br><br>
     <!-- 좋아요 수 -->
     <div>
-        <strong>좋아요수 : </strong> ${ guide.likeCount }
-    </div><br><br><br>
+        <strong>좋아요❤️ : </strong> ${ guide.likeCount }
+    </div>
+    <br>
+    <hr>
+   
+    <br><br><br>
+    
 
     <!-- 내용 -->
     <div>
-    <h4 class="text-left"> 내용 : ${ guide.guideContent }</h4>
+    <h5 class="text-left">  ${ guide.guideContent }</h5>
             </div><br>
 <!-- 이미지 그리드 -->
     <div class="image-grid">
@@ -264,10 +302,11 @@
     <div class="d-flex justify-content-end">
     <div class="btn-group">
     	
-    	<button class="btn btn-outline-secondary" onclick="javascript:location.href='${ guidelikecount }'; return false;">❤️좋아요</button>
-        <button class="btn btn-outline-secondary" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do';">목록</button>
-        <button class="btn btn-secondary" onclick="javascript:history.go(-1);">이전 페이지로 이동</button>
-        <button class="btn btn-secondary" onclick="commentShow(); return false;">댓글</button>
+    	<button class="btn btn-outline-secondary" onclick="javascript:location.href='${ guidelikecount }'; return false;">❤️좋아요${guide.likeCount}</button>
+        <button class="btn btn-secondary" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do';">목록</button>
+        <button class="btn btn-outline-secondary" onclick="javascript:history.go(-1);">이전 페이지로 이동</button>
+        <button class="btn btn-secondary" onclick="commentShow(); return false;">댓글보기</button>
+   
        <%--  <button class="btn btn-success" onclick="javascript:location.href='${ guideReport }'; return false;">신고</button> --%>
       <c:if test="${loginUser.memType eq 'ADMIN'}">
         <button class="btn btn-danger" onclick="requestDelete(); return false;">삭제</button>
@@ -285,32 +324,32 @@
 		
 
 <div class="container" style="display: none;" id="commentSection">
-	<table class="table">
+	<table class="commenttable">
     <tr>
-		<th style="text-align: center;" width="100">작성자</th>
-        <th style="text-align: center;" width="900">내 용</th>
-        <th style="text-align: center;" width="100">작성일자</th>
+		<th style="text-align: center;" width="100">소담이</th>
+        <th style="text-align: center;" width="800">댓 글 내 용</th>
+        <th style="text-align: center;" width="200">댓글작성날짜</th>
         <th></th>
     </tr>
        <c:forEach items="${ requestScope.clist1 }" var="g" varStatus="status">
         <tr>
             <td align="center">${ g.userId }</td>
-            <td align="left" id="content_${ status.index }" data-original-content="${ g.content }">${ g.content }</td>
+            <td align="center" id="content_${ status.index }" data-original-content="${ g.content }">${ g.content }</td>
             <td align="center">${ g.createdAt }</td>
             <c:if test="${ g.userId eq loginUser.memId or loginUser.memType eq 'ADMIN' }">
 	            <td align="center">
-				<button class="btn btn-success" id="editBtn_${ status.index }" onclick="enableEdit('${ status.index }', 'content_${ status.index }'); return false;">수정</button>
+				<button class="btn btn-outline-secondary" id="editBtn_${ status.index }" onclick="enableEdit('${ status.index }', 'content_${ status.index }'); return false;">수정</button>
 				<c:url var="gcommentdelete" value="gcommentdelete.do">
 	                 <c:param name="commentId" value="${ g.commentId }" />
 	                 <c:param name="postId" value="${ guide.guidepostId }" />
 	            </c:url>
 	            
 	            
-				<button class="btn btn-success" id="deleteBtn_${ status.index }" onclick="javascript:location.href='${ gcommentdelete }'; return false;">삭제</button>
+				<button class="btn btn-outline-secondary" id="deleteBtn_${ status.index }" onclick="javascript:location.href='${ gcommentdelete }'; return false;">댓글 삭제</button>
 				<!-- 수정완료 버튼 -->
-                <button class="btn btn-success" id="saveBtn_${ status.index }" style="display: none;" onclick="saveEdit('${ status.index }', '${ g.commentId }'); return false;">수정완료</button>
+                <button class="btn btn-outline-secondary" id="saveBtn_${ status.index }" style="display: none;" onclick="saveEdit('${ status.index }', '${ g.commentId }'); return false;">수정완료</button>
 	                <!-- 취소 버튼 -->
-                <button class="btn btn-success" id="cancelBtn_${ status.index }" style="display: none;" onclick="cancelEdit('${ status.index }'); return false;">취소</button>
+                <button class="btn btn-outline-secondary" id="cancelBtn_${ status.index }" style="display: none;" onclick="cancelEdit('${ status.index }'); return false;">취소</button>
 	            </td>
             </c:if>
         </tr>
