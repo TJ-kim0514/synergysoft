@@ -28,16 +28,18 @@
 	<c:import url="/WEB-INF/views/common/menubar.jsp" />
 	<div class="container">
 		<h1 class="text-center my-4">신고목록</h1>
-		
-		<%-- 항목별 검색기능 --%>
-		<form method="get" action="reportSearch.do" class="d-flex mb-2" id="ss"  style="float:left">
-			<select name="action" id="search" class="form-select w-auto">
-				<option value="reportingReason" id="reportingReason">제목</option>
-				<option value="detail" id="detail">내용</option>
-			</select>
-			 <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
-        <button type="submit" class="btn btn-success">검색</button>
-		</form>
+			
+			<c:if test="${ sessionScope.loginUser.memType eq 'ADMIN' }">
+				<%-- 항목별 검색기능 --%>
+				<form method="get" action="reportSearch.do" class="d-flex mb-2" id="ss"  style="float:left">
+					<select name="action" id="search" class="form-select w-auto">
+						<option value="reportingReason" id="reportingReason">제목</option>
+						<option value="detail" id="detail">내용</option>
+					</select>
+					 <input type="search" name="keyword" class="form mx-2" placeholder="검색어를 입력해주세요" size="80">
+		        <button type="submit" class="btn btn-success">검색</button>
+				</form>
+			</c:if>
 			<br>
 			<br>
 		<%-- 조회된 신고글 목록 출력 --%>
