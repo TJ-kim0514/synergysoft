@@ -93,7 +93,7 @@ var webSocket = null;
 var $inputMessage = $('#inputMessage');
 
 function connection(){
-    webSocket = new WebSocket('ws://localhost:8080'+
+    webSocket = new WebSocket('ws://ktj0514.synology.me:8080'+
     '<%=request.getContextPath()%>/chat');
     // chat 는 자바측의 @ServerEndPoint("/chat") 로 등록 설정된 클래스를 의미함
 
