@@ -70,8 +70,10 @@
 }
 
 /* 검색창 스타일 */
-#searchInput {
-    width: 65%;
+#searchInputStart,
+#searchInputEnd,
+#searchInputWay {
+    width: 80%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -81,47 +83,47 @@
 }
 
 /* 드롭다운 리스트 스타일 */
-#suggestions {
+.suggestions {
+    position: absolute;
+    top: 100%; /* 검색창 바로 아래에 드롭다운을 배치 */
+    left: 0;
+    width: 80%; /* 검색창과 동일한 너비로 설정 */
     border: 1px solid #ccc;
     border-radius: 4px;
     max-height: 200px;
     overflow-y: auto;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 65%; /* 검색창과 동일한 너비로 설정 */
     z-index: 1000; /* 드롭다운이 다른 요소 위에 표시되도록 설정 */
-    display: none;
-    position: absolute;
-    top: 100%; /* 검색창 바로 아래에 위치하도록 설정 */
-    left: 0;
+    display: none; /* 기본적으로 숨김 상태 */
 }
 
 /* 드롭다운 리스트 항목 스타일 */
-#suggestions li {
+.suggestions li {
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #eee;
     transition: background-color 0.2s ease-in-out;
 }
 
-#suggestions li:last-child {
+.suggestions li:last-child {
     border-bottom: none;
 }
 
-#suggestions li:hover {
+.suggestions li:hover {
     background-color: #f2f2f2;
 }
 
 /* 드롭다운 리스트의 스크롤바 스타일 */
-#suggestions::-webkit-scrollbar {
+.suggestions::-webkit-scrollbar {
     width: 6px;
 }
 
-#suggestions::-webkit-scrollbar-thumb {
+.suggestions::-webkit-scrollbar-thumb {
     background-color: #ccc;
     border-radius: 3px;
 }
-#suggestions.show {
+.suggestions.show {
 	display: block !important;
 }
     
@@ -129,7 +131,9 @@
     
     <style type="text/css">
     /* 공통 input 스타일 */
-input[type="text"] {
+#startPoint input,
+#endPoint input,
+[id^="wayPoint"] input {
     width: 30%; /* input의 너비를 부모 요소에 맞추기 */
     padding: 10px;
     font-size: 16px;
@@ -140,6 +144,7 @@ input[type="text"] {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     background-color: #f9f9f9;
+    text-align: center;
 }
 
 /* input focus 시 효과 */
@@ -173,31 +178,82 @@ label {
 </head>
 <body>
 <br>
-<div class="container" style="position: relative;">
+<!-- <div class="container" style="position: relative;">
 	<div>
-    <input type="text" id="searchInput" placeholder="장소나 주소를 입력하세요" onkeyup="handleKeyPress(event)" autocomplete="off" />
-    <input type="hidden" id="searchAddress">
+    <input type="text" id="searchInputStart" placeholder="장소나 주소를 입력하시고 엔터를 눌러 검색하세요." onkeyup="handleKeyPress(event)" autocomplete="off" />
+    <input type="hidden" id="searchStartAddress">
+    <ul id="suggestionsStart" class="suggestions"></ul>
     <button class="btn btn-success" onclick="setStart(); return false;">출발지설정</button>
+    </div>
+    <div>
+    <input type="text" id="searchInputEnd" placeholder="장소나 주소를 입력하시고 엔터를 눌러 검색하세요." onkeyup="handleKeyPress(event)" autocomplete="off" />
+    <input type="hidden" id="searchEndAddress">
+    <ul id="suggestionsEnd" class="suggestions"></ul>
     <button class="btn btn-success" onclick="setEnd(); return false;">도착지설정</button>
+    </div>
+    <div>
+    <input type="text" id="searchInputWay" placeholder="장소나 주소를 입력하시고 엔터를 눌러 검색하세요." onkeyup="handleKeyPress(event)" autocomplete="off" />
+    <input type="hidden" id="searchWayAddress">
+    <ul id="suggestionsWay" class="suggestions"></ul>
     <button class="btn btn-success" onclick="setWaypoint(); return false;">경유지설정</button>
+    </div>
     <button class="btn btn-success" onclick="getCarDirection(); return false;">경로탐색</button>
-    <ul id="suggestions"></ul>
+</div> -->
+
+
+<div class="container">
+    <div class="container" style="position: relative;">
+        <input type="text" id="searchInputStart" placeholder="출발지로 설정하고자 하는 장소나 주소를 검색하세요." 
+            onkeyup="handleKeyPress(event, 'searchInputStart', 'suggestionsStart')" autocomplete="off" class="searchInput" />
+        <input type="hidden" id="searchAddressStart">
+        <button class="btn btn-success" onclick="handleSearch('searchInputStart', 'suggestionsStart'); return false;">검색</button>
+        <button class="btn btn-primary" onclick="setStart(); return false;">출발지 설정</button>
+    <div>
+        <ul id="suggestionsStart" class="suggestions"></ul>
+    </div>
+    </div>
+
+    <div class="container" style="position: relative;">
+        <input type="text" id="searchInputEnd" placeholder="도착지로 설정하고자 하는 장소나 주소를 검색하세요." 
+            onkeyup="handleKeyPress(event, 'searchInputEnd', 'suggestionsEnd')" autocomplete="off" class="searchInput" />
+        <input type="hidden" id="searchAddressEnd">
+        <button class="btn btn-success" onclick="handleSearch('searchInputEnd', 'suggestionsEnd'); return false;">검색</button>
+        <button class="btn btn-primary" onclick="setEnd(); return false;">도착지 설정</button>
+    <div>    
+        <ul id="suggestionsEnd" class="suggestions"></ul>
+    </div>   
+    </div>
+ 
+    <div class="container" style="position: relative;">
+        <input type="text" id="searchInputWay" placeholder="경유지로 설정하고자 하는 장소나 주소를 검색하세요." 
+            onkeyup="handleKeyPress(event, 'searchInputWay', 'suggestionsWay')" autocomplete="off" class="searchInput" />
+        <input type="hidden" id="searchAddressWay">
+        <button class="btn btn-success" onclick="handleSearch('searchInputWay', 'suggestionsWay'); return false;">검색</button>
+        <button class="btn btn-primary" onclick="setWaypoint(); return false;">경유지 설정</button>
+    <div>
+        <ul id="suggestionsWay" class="suggestions"></ul>
+    </div>  
+    </div>
+     <div class="container text-center">
+  		<div id="start"></div>
+  		<div id="wp"></div>
+  		<div id="end"></div>
+  		<div id="totalduration" style="display: none;">
+  		<label for="duration" style="font-weight: bold; align: center;">소요시간 : </label>
+  		<input type="text" readonly id="duration" style="border: 0;">
+  	  </div>
+ </div>
+  	<div class="text-center">
+    <button class="btn btn-success" onclick="getCarDirection(); return false;">경로탐색</button>
     </div>
 </div>
+<br>
 <div id="map" class="container text-center" style="width: 100%; height: 700px; position: relative;"></div>
-        <div class="container">
-	        <div id="start"></div>
-	        <div id="wp"></div>
-	        <div id="end"></div>
-	        <div id="totalduration" style="display: none;">
-	        	<label for="duration" style="font-weight: bold;">소요시간 : </label>
-	        	<input type="text" readonly id="duration" style="border: 0;">
-	        </div>
-        </div>
+
    <pre id="result"></pre>
    
    
-   <script type="text/javascript">
+<script type="text/javascript">
             var map;
             var startPointMarker = null;
             var endPointMarker = null;
@@ -243,78 +299,95 @@ label {
             getCurrentLocation(function(lat, lon) {
                 initializeMap(lat, lon);
             });
+</script>
 
-    // 카카오 장소 검색 객체 생성
-    var ps = new kakao.maps.services.Places();
+<script type="text/javascript">
+//카카오 장소 검색 객체 생성
+var ps = new kakao.maps.services.Places();
 
-    // 엔터키 감지 함수
-    function handleKeyPress(event) {
-    	console.log('Key Press Detected!'); // 이벤트가 발생했는지 확인
-        if (event.keyCode === 13) { // 엔터키 코드 (13번)
-            searchPlaces();  // 엔터키를 눌렀을 때 장소 검색 함수 호출
-        }
+// 엔터키 감지 함수 (각 검색창마다 적용)
+function handleKeyPress(event, inputId, suggestionsId) {
+    if (event.keyCode === 13) { // 엔터키 코드 (13번)
+        searchPlaces(inputId, suggestionsId);  // 해당 검색창에 대해 장소 검색 함수 호출
+    }
+}
+
+// 검색 버튼 클릭 시 검색 실행
+function handleSearch(inputId, suggestionsId) {
+    searchPlaces(inputId, suggestionsId);
+}
+
+// 장소 검색 함수
+function searchPlaces(inputId, suggestionsId) {
+    var keyword = document.getElementById(inputId).value;
+
+    // 검색어가 공백일 경우 리턴
+    if (!keyword.trim()) {
+        return;
     }
 
-    // 장소 검색 함수
-    function searchPlaces() {
-    	console.log('Searching for places...'); // 검색 함수 호출 확인
-        var keyword = document.getElementById('searchInput').value;
-
-        // 검색어가 공백일 경우 리턴
-        if (!keyword.trim()) {
-            return;  // 세미콜론 추가
-        }
-
-        // 카카오 API로 장소 검색 요청
-        ps.keywordSearch(keyword, function(data, status) {
-            if (status === kakao.maps.services.Status.OK) {
-            	console.log('Search result:', data); // 검색 결과 확인
-            	displaySuggestions(data);
-            }
-        });
-    }
-
-    // 검색 결과를 드롭다운 형식으로 표시
-    function displaySuggestions(places) {
-    	console.log('Displaying suggestions...'); // 드롭다운 표시 확인
-        var suggestions = document.getElementById('suggestions');
-        suggestions.innerHTML = ''; // 기존 검색 결과 삭제
-
-        places.forEach(function(place) {
-            var listItem = document.createElement('li');
-            listItem.textContent = place.place_name;
-            listItem.style.cursor = 'pointer';
-
-            // 리스트 아이템 클릭 시 이벤트
-            listItem.onclick = function() {
-                document.getElementById('searchInput').value = place.place_name; // 선택된 장소를 검색창에 입력
-                document.getElementById('searchAddress').value = place.address_name;
-                closeSuggestions(); // 드롭다운 숨기기
-            };
-
-            suggestions.appendChild(listItem); // 세미콜론 추가
-        });
-        suggestions.classList.add('show'); // 드롭다운 표시
-        console.log('Suggestions should be visible now.');
-        console.log(suggestions.classList); // 클래스 리스트 출력
-    }
-
-    function closeSuggestions() {
-        var suggestions = document.getElementById('suggestions');
-        suggestions.classList.remove('show'); // 드롭다운 숨기기
-    }
-
-    // 검색창 외부 클릭 시 드롭다운 숨기기
-    document.addEventListener('click', function(event) {
-        var searchInput = document.getElementById('searchInput');
-        var suggestions = document.getElementById('suggestions');
-
-        if (!searchInput.contains(event.target) && !suggestions.contains(event.target)) {
-            closeSuggestions(); // 클릭이 검색창이나 드롭다운 밖에서 발생한 경우 드롭다운 숨기기
+    // 카카오 API로 장소 검색 요청
+    ps.keywordSearch(keyword, function(data, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            displaySuggestions(data, inputId, suggestionsId);  // 검색 결과를 드롭다운으로 표시
         }
     });
-    
+}
 
+// 검색 결과를 드롭다운 형식으로 표시
+function displaySuggestions(places, inputId, suggestionsId) {
+    var suggestions = document.getElementById(suggestionsId);
+    suggestions.innerHTML = ''; // 기존 검색 결과 삭제
+
+    places.forEach(function(place) {
+        var listItem = document.createElement('li');
+        listItem.textContent = place.place_name;
+        listItem.style.cursor = 'pointer';
+
+        // 리스트 아이템 클릭 시 이벤트
+        listItem.onclick = function() {
+            document.getElementById(inputId).value = place.place_name; // 선택된 장소를 검색창에 입력
+            var addressInputId = inputId.replace('Input', 'Address');
+            console.log(addressInputId);
+            console.log(place.address_name);
+            document.getElementById(addressInputId).value = place.address_name;
+            console.log(document.getElementById(addressInputId).value);
+            closeSuggestions(suggestionsId); // 드롭다운 숨기기
+            
+        };
+        suggestions.appendChild(listItem);
+    });
+    suggestions.classList.add('show'); // 드롭다운 표시
+}
+
+// 드롭다운 숨기기
+function closeSuggestions(suggestionsId) {
+    var suggestions = document.getElementById(suggestionsId);
+    console.log(suggestions);
+    suggestions.classList.remove('show');
+}
+
+// 검색창 외부 클릭 시 드롭다운 숨기기
+ document.addEventListener('click', function(event) {
+    var activeDropdowns = ['searchInputStart', 'searchInputEnd', 'searchInputWay'].map(function(inputId) {
+        return {
+            input: document.getElementById(inputId),
+            suggestions: document.getElementById(inputId.replace('searchInput', 'suggestions'))
+        };
+    });
+
+    activeDropdowns.forEach(function(dropdown) {
+        if (!dropdown.input.contains(event.target) && !dropdown.suggestions.contains(event.target)) {
+            closeSuggestions(dropdown.suggestions.id);
+        }
+    });
+});
+
+</script>
+
+
+
+<script type="text/javascript">
  // 출발지 설정 함수
     function setStart() {
         // 이미 출발지가 설정되어 있을 경우 경고
@@ -324,7 +397,7 @@ label {
         }
 
         // 출발지 주소로 좌표 변환
-        var address = document.getElementById('searchAddress').value;
+        var address = document.getElementById('searchAddressStart').value;
 
         var geocoder = new kakao.maps.services.Geocoder();
 
@@ -350,7 +423,7 @@ label {
                 startPointName.type = 'text';
                 startPointName.id = 'startPointName';
                 startPointName.readOnly = true;
-                startPointName.value = document.getElementById('searchInput').value;
+                startPointName.value = document.getElementById('searchInputStart').value;
                 startPoint.appendChild(startPointName);
 
                 // 출발지 주소 input 생성
@@ -358,7 +431,7 @@ label {
                 startPointAddress.type = 'text';
                 startPointAddress.id = 'startPointAddress';
                 startPointAddress.readOnly = true;
-                startPointAddress.value = document.getElementById('searchAddress').value;
+                startPointAddress.value = document.getElementById('searchAddressStart').value;
                 startPoint.appendChild(startPointAddress);
 
                 // 삭제 버튼 생성
@@ -428,8 +501,8 @@ label {
                 console.log(pointObj.startPoint.lng + "    " + pointObj.startPoint.lat);
 
                 // 검색창 초기화
-                document.getElementById('searchInput').value = ''; // 검색창 초기화
-                document.getElementById('searchAddress').value = ''; // 주소 초기화
+                document.getElementById('searchInputStart').value = ''; // 검색창 초기화
+                document.getElementById('searchAddressStart').value = ''; // 주소 초기화
             } else {
                 alert('정확한 주소를 입력해주세요.');
             }
@@ -450,7 +523,7 @@ function setEnd() {
 
     // 출발지 주소와 도착지 주소가 같은지 확인
     const startPointAddressValue = document.getElementById('startPointAddress') ? document.getElementById('startPointAddress').value : null;
-    const endPointAddressValue = document.getElementById('searchAddress').value;
+    const endPointAddressValue = document.getElementById('searchAddressEnd').value;
 
     if (startPointAddressValue && startPointAddressValue === endPointAddressValue) {
         alert('출발지와 도착지가 같습니다.');
@@ -481,7 +554,7 @@ function setEnd() {
             endPointName.type = 'text';
             endPointName.id = 'endPointName';
             endPointName.readOnly = true;
-            endPointName.value = document.getElementById('searchInput').value;
+            endPointName.value = document.getElementById('searchInputEnd').value;
             endPoint.appendChild(endPointName);
 
             // 도착지 주소 input 생성
@@ -489,7 +562,7 @@ function setEnd() {
             endPointAddress.type = 'text';
             endPointAddress.id = 'endPointAddress';
             endPointAddress.readOnly = true;
-            endPointAddress.value = document.getElementById('searchAddress').value;
+            endPointAddress.value = document.getElementById('searchAddressEnd').value;
             endPoint.appendChild(endPointAddress);
 
             // 삭제 버튼 생성
@@ -554,8 +627,8 @@ function setEnd() {
             document.getElementById('end').appendChild(endPoint);
 
             // 검색창 초기화
-            document.getElementById('searchInput').value = ''; // 검색창 초기화
-            document.getElementById('searchAddress').value = ''; // 주소 초기화
+            document.getElementById('searchInputEnd').value = ''; // 검색창 초기화
+            document.getElementById('searchAddressEnd').value = ''; // 주소 초기화
 /*             
             // 인포윈도우를 생성
             var endName = document.getElementById('endPointName').value;
@@ -586,7 +659,7 @@ var waypointIndex = 0;
 function setWaypoint() {
     waypointIndex++;
 
-    var address = document.getElementById('searchAddress').value;
+    var address = document.getElementById('searchAddressWay').value;
 
     var geocoder = new kakao.maps.services.Geocoder();
 
@@ -611,7 +684,7 @@ function setWaypoint() {
             wayPointName.type = 'text';
             wayPointName.id = `wayPointName${waypointIndex}`;
             wayPointName.readOnly = true;
-            wayPointName.value = document.getElementById('searchInput').value;
+            wayPointName.value = document.getElementById('searchInputWay').value;
             wayPoint.appendChild(wayPointName);
 
             // 경유지 주소 input 생성
@@ -619,7 +692,7 @@ function setWaypoint() {
             wayPointAddress.type = 'text';
             wayPointAddress.id = `wayPointAddress${waypointIndex}`;
             wayPointAddress.readOnly = true;
-            wayPointAddress.value = document.getElementById('searchAddress').value;
+            wayPointAddress.value = document.getElementById('searchAddressWay').value;
             wayPoint.appendChild(wayPointAddress);
 
             document.getElementById('wp').appendChild(wayPoint);
@@ -692,8 +765,8 @@ function setWaypoint() {
             wayPoint.appendChild(deleteWaypoint);
 
             // 검색창 초기화
-            document.getElementById('searchInput').value = ''; // 검색창 초기화
-            document.getElementById('searchAddress').value = ''; // 주소 초기화
+            document.getElementById('searchInputWay').value = ''; // 검색창 초기화
+            document.getElementById('searchAddressWay').value = ''; // 주소 초기화
         } else {
             alert('정확한 주소를 입력해주세요.');
         }

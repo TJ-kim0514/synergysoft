@@ -21,6 +21,11 @@
 	.routeInput {
 		width: 300px;
 	}
+	textarea {
+		background-color: white;
+		resize: none !important;
+		border: 0;
+	}
 </style>
 
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
@@ -142,13 +147,13 @@
 	<h2 align="center">${ route.title }</h2>
 		<div>
 		 	<div>
-		 		<button class="btn btn-success" onclick="javascript:location.href='${ routelikecount }'; return false;">추천</button>
-		 		<button class="btn btn-success" onclick="javascript:location.href='${ routeReport }'; return false;">신고</button>
+		 		
 		 	</div>
 		 	<div class="text-end">
-				<h5><span class="badge text-bg-success" style="font-size: 14pt;">교통수단 : ${ route.transport }</span></h5>
-				<span class="badge text-bg-success" >조회수 : ${ route.readCount }</span>
-				<span class="badge text-bg-success">추천수 : ${ route.likeCount }</span>
+				<span>조회수 : ${ route.readCount }</span>
+				<span></span>
+				<br>
+				<h5><span>교통수단 : ${ route.transport }</span></h5>
 			</div>
 		</div>
 		 
@@ -166,8 +171,7 @@
 			 	</tr>
 			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[0].placeName }</td>
 			 	</tr>
-			 	<tr><th colspan="2" class="text-center py-2">사진</th>
-			 	</tr>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="6" cols="37"  disabled>${ place[0].placeContent }</textarea></td></tr>
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
@@ -180,8 +184,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[0].placeContent }</textarea></td>
-			 	</tr>		 	
+			 			 	
 			 </table>
 			 </c:if>
 			 </div>
@@ -197,8 +200,7 @@
 			 	</tr>
 			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[1].placeName }</td>
 			 	</tr>
-			 	<tr><th colspan="2" class="text-center py-2">사진</th>
-			 	</tr>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="6" cols="37"  disabled>${ place[1].placeContent }</textarea></td></tr>
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
@@ -211,8 +213,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[1].placeContent }</textarea></td>
-			 	</tr>		 	
+			 			 	
 			 </table>
 			 </c:if>
 			 </div>
@@ -228,8 +229,7 @@
 			 	</tr>
 			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[2].placeName }</td>
 			 	</tr>
-			 	<tr><th colspan="2" class="text-center py-2">사진</th>
-			 	</tr>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="6" cols="37"  disabled>${ place[2].placeContent }</textarea></td></tr>
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
@@ -242,8 +242,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[2].placeContent }</textarea></td>
-			 	</tr>		 	
+			 			 	
 			 </table>
 			 </c:if>
 			 </div>
@@ -259,8 +258,7 @@
 			 	</tr>
 			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[3].placeName }</td>
 			 	</tr>
-			 	<tr><th colspan="2" class="text-center py-2">사진</th>
-			 	</tr>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="6" cols="37"  disabled>${ place[3].placeContent }</textarea></td></tr>
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
@@ -273,8 +271,7 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[3].placeContent }</textarea></td>
-			 	</tr>		 	
+			 			 	
 			 </table>
 			 </c:if>
 			 </div>
@@ -290,8 +287,7 @@
 			 	</tr>
 			 	<tr><th class="py-2 text-center">이름</th><td class="text-center">${ place[4].placeName }</td>
 			 	</tr>
-			 	<tr><th colspan="2" class="text-center py-2">사진</th>
-			 	</tr>
+			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="6" cols="37"  disabled>${ place[4].placeContent }</textarea></td></tr>
 			 	<tr>
 			 	<td  class="py-2" colspan="2">
 			 	<div style="width: 400px; height: 400px;">
@@ -304,17 +300,16 @@
 			 	</div>
 			 	</td>
 			 	</tr>
-			 	<tr><th class="py-2 text-center">소개</th><td><textarea rows="3" cols="37" >${ place[4].placeContent }</textarea></td>
-			 	</tr>		 	
+			 			 	
 			 </table>
 			 </c:if>
 			 </div>
 		 </div>
-				 		 		 
+		 <hr>
 		 <fieldset>
-		 <legend>상세내용</legend>
+		 <legend></legend>
 		 <div>
-		 	<textarea readonly rows="20" cols="142" name="content" style="font-size: 13pt;">${ route.content }</textarea>
+		 	<textarea disabled rows="20" cols="142" name="content" style="font-size: 13pt; border: 1px solid black;">${ route.content }</textarea>
 		 </div>
 		 </fieldset>
 		 <br>
@@ -327,7 +322,9 @@
 			<button class="btn btn-success" onclick="javascript:location.href='${ pageContext.servletContext.contextPath }/moveUpdateRoute.do?no=${ route.routeBoardId }'; return false;">수정하기</button> &nbsp;
 			<button class="btn btn-success" onclick="javascript:location.href='${ delroute }'; return false;">삭제하기</button> &nbsp;
 		</c:if>
-		<button class="btn btn-success" onclick="commentShow(); return false;">댓글&nbsp;(${ route.commentCount })</button>
+		<button class="btn btn-outline-success" onclick="javascript:location.href='${ routelikecount }'; return false;">❤️ ${ route.likeCount }</button> &nbsp;
+		<button class="btn btn-success" onclick="commentShow(); return false;">댓글&nbsp;(${ route.commentCount })</button> &nbsp;
+		<button class="btn bg-danger" onclick="javascript:location.href='${ routeReport }'; return false;" style="color: white;">신고</button>
 		</table>
 		</div>
 
@@ -370,7 +367,7 @@
 		<table class="table">
 		<tr>
 		<td width="1100">
-		<textarea name="content" rows="3" cols="140"></textarea>
+		<textarea name="content" rows="3" cols="140" style="border: 1px solid black;"></textarea>
 		<!-- <input type="text" name="content" style="width: 1200px;"> -->
 		</td>
 		<td class="align-middle text-center">

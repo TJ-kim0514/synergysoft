@@ -7,11 +7,9 @@
 <meta charset="UTF-8">
 <title>Bon voyage</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<style type="text/css">
-* {font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;}
-</style>
-<script type="text/javascript" src="${pageContext.servletContext.contextPath }/resources/js/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5cc86f31dc51c7974b7eaa99b903eea0&libraries=services,drawing,clusterer"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/js/bmap.js"></script>
 
 <style type="text/css">
  	#routePlace {
@@ -24,44 +22,50 @@
 		width: 300px;
 	}
 </style>
+<style type="text/css">
+        /* 드롭다운 리스트 스타일 */
+        .suggestions {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            z-index: 2;
+            display: none;
+            position: fixed;
+        }
+        
+         .suggestions.show {
+            display: block; /* 검색 결과가 있을 때만 드롭다운을 표시 */
+        }
 
-<!-- <script type="text/javascript">
-window.onload = function() {
-    // 파일 입력 필드와 이미지 미리보기 요소들을 매핑
-    var files = [
-        {input: "routePlacePhoto1", image: "photo1"},
-        {input: "routePlacePhoto2", image: "photo2"},
-        {input: "routePlacePhoto3", image: "photo3"},
-        {input: "routePlacePhoto4", image: "photo4"},
-        {input: "routePlacePhoto5", image: "photo5"}
-    ];
+        .suggestions li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s ease-in-out;
+        }
 
-    files.forEach(function(file) {
-        var photofile = document.getElementById(file.input);
-        var myphoto = document.getElementById(file.image);
+        .suggestions li:last-child {
+            border-bottom: none;
+        }
 
-        // 기본 이미지 설정
-        const defaultImageSrc = '${ pageContext.servletContext.contextPath }/resources/images/noPhoto.jpg';
-        myphoto.src = defaultImageSrc;
+        .suggestions li:hover {
+            background-color: #f2f2f2;
+        }
 
-        // 파일이 변경될 때 미리보기 이미지 업데이트
-        photofile.addEventListener('change', function(event) {
-            const fileData = event.target.files[0];
-            if (fileData) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    myphoto.src = e.target.result;
-                };
-                reader.readAsDataURL(fileData);
-            } else {
-                // 파일이 없을 경우 기본 이미지로 복구
-                myphoto.src = defaultImageSrc;
-            }
-        });
-    });
-};
-</script> -->
+        /* 드롭다운 리스트의 스크롤바 스타일 */
+        .suggestions::-webkit-scrollbar {
+            width: 6px;
+        }
 
+        .suggestions::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 3px;
+        }
+</style>
 <script type="text/javascript">
 window.onload = function() {
     // 파일 입력 필드와 이미지 미리보기 요소들을 매핑
@@ -147,7 +151,8 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress1" name="routePlaceAddress[]" class="routeInput" value="${ place[0].address }">
+			 			<input type="text" id="routePlaceAddress1" name="routePlaceAddress[]" class="routeInput" value="${ place[0].address }" onkeyup="handleKeyPress(event)" autocomplete="off"  placeholder="장소나 주소를 검색하세요." onkeydown="if(event.keyCode==13) return false">
+			 			<ul id="suggestions1" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -188,7 +193,8 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress2" name="routePlaceAddress[]" class="routeInput" value="${ place[1].address }">
+			 			<input type="text" id="routePlaceAddress2" name="routePlaceAddress[]" class="routeInput" value="${ place[1].address }" onkeyup="handleKeyPress(event)" autocomplete="off"  placeholder="장소나 주소를 검색하세요." onkeydown="if(event.keyCode==13) return false">
+			 			<ul id="suggestions2" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -229,7 +235,8 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress3" name="routePlaceAddress[]" class="routeInput" value="${ place[2].address }">
+			 			<input type="text" id="routePlaceAddress3" name="routePlaceAddress[]" class="routeInput" value="${ place[2].address }" onkeyup="handleKeyPress(event)" autocomplete="off"  placeholder="장소나 주소를 검색하세요." onkeydown="if(event.keyCode==13) return false">
+			 			<ul id="suggestions3" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -270,7 +277,8 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress4" name="routePlaceAddress[]" class="routeInput" value="${ place[3].address }">
+			 			<input type="text" id="routePlaceAddress4" name="routePlaceAddress[]" class="routeInput" value="${ place[3].address }" onkeyup="handleKeyPress(event)" autocomplete="off"  placeholder="장소나 주소를 검색하세요." onkeydown="if(event.keyCode==13) return false">
+			 			<ul id="suggestions4" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>
@@ -311,7 +319,8 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th width="100">주소</th>
 			 		<td width="200">
-			 			<input type="text" id="routePlaceAddress5" name="routePlaceAddress[]" class="routeInput" value="${ place[4].address }">
+			 			<input type="text" id="routePlaceAddress5" name="routePlaceAddress[]" class="routeInput" value="${ place[4].address }" onkeyup="handleKeyPress(event)" autocomplete="off"  placeholder="장소나 주소를 검색하세요." onkeydown="if(event.keyCode==13) return false">
+			 			<ul id="suggestions5" class="suggestions"></ul>
 			 		</td>
 			 	</tr>
 			 	<tr><th class="py-2">이름</th>

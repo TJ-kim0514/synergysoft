@@ -174,7 +174,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					mfile1.transferTo(new File(savePath + "\\" + renameFileName1));
+					mfile1.transferTo(new File(savePath + File.separator + renameFileName1));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일 저장 실패");
@@ -203,7 +203,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					mfile2.transferTo(new File(savePath + "\\" + renameFileName2));
+					mfile2.transferTo(new File(savePath + File.separator + renameFileName2));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일 저장 실패");
@@ -232,7 +232,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					mfile3.transferTo(new File(savePath + "\\" + renameFileName3));
+					mfile3.transferTo(new File(savePath + File.separator + renameFileName3));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일 저장 실패");
@@ -261,7 +261,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					mfile4.transferTo(new File(savePath + "\\" + renameFileName4));
+					mfile4.transferTo(new File(savePath + File.separator + renameFileName4));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일 저장 실패");
@@ -290,7 +290,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					mfile5.transferTo(new File(savePath + "\\" + renameFileName5));
+					mfile5.transferTo(new File(savePath + File.separator + renameFileName5));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일 저장 실패");
@@ -386,7 +386,7 @@ public class RouteController {
 		// 첨부파일 삭제
 		if(!ofile1.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + route.getRfile1()).delete();
+			new File(savePath + File.separator + route.getRfile1()).delete();
 			
 			// route 안의 파일정보 삭제
 			route.setOfile1(null);
@@ -409,7 +409,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					ofile1.transferTo(new File(savePath + "\\" + renameFileName));
+					ofile1.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -423,7 +423,7 @@ public class RouteController {
 
 		if(!ofile2.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + route.getRfile2()).delete();
+			new File(savePath + File.separator + route.getRfile2()).delete();
 			
 			// route 안의 파일정보 삭제
 			route.setOfile2(null);
@@ -446,7 +446,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					ofile2.transferTo(new File(savePath + "\\" + renameFileName));
+					ofile2.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -461,7 +461,7 @@ public class RouteController {
 		
 		if(!ofile3.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + route.getRfile3()).delete();
+			new File(savePath + File.separator + route.getRfile3()).delete();
 			
 			// route 안의 파일정보 삭제
 			route.setOfile3(null);
@@ -484,7 +484,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					ofile3.transferTo(new File(savePath + "\\" + renameFileName));
+					ofile3.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -499,7 +499,7 @@ public class RouteController {
 		
 		if(!ofile4.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + route.getRfile4()).delete();
+			new File(savePath + File.separator + route.getRfile4()).delete();
 			
 			// route 안의 파일정보 삭제
 			route.setOfile4(null);
@@ -522,7 +522,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					ofile4.transferTo(new File(savePath + "\\" + renameFileName));
+					ofile4.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");
@@ -537,7 +537,7 @@ public class RouteController {
 		
 		if(!ofile5.isEmpty()) {
 			// 저장폴더에서 이전파일 삭제
-			new File(savePath + "\\" + route.getRfile5()).delete();
+			new File(savePath + File.separator + route.getRfile5()).delete();
 			
 			// route 안의 파일정보 삭제
 			route.setOfile5(null);
@@ -560,7 +560,7 @@ public class RouteController {
 				
 				try {
 					// 저장폴더에 바뀐파일명으로 저장
-					ofile5.transferTo(new File(savePath + "\\" + renameFileName));
+					ofile5.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "첨부파일저장 실패");

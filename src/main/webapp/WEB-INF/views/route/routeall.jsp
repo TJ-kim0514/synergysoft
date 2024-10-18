@@ -22,7 +22,9 @@
 </nav>
 <br>
 <div class="container">
-<h1 align="center">경로 추천 게시판</h1>
+<h2 align="center">여행, 이렇게 떠나보세요</h2>
+<br>
+<h4 align="center">나만의 특별한 여행경로를 추천합니다</h4>
 <br>
 
 
@@ -66,7 +68,7 @@
 					<p class="card-text"><strong>[교통수단]</strong> ${ r.transport }</p>
 					<p class="card-text"><strong>[작성자]</strong> ${ r.userId }</p>
 					<p class="card-text"><strong>[조회수]</strong> ${ r.readCount }</p>
-					<p class="card-text"><strong>[추천수]</strong> ${ r.likeCount }</p>
+					<p class="card-text">❤️ ${ r.likeCount }</p>
 				</div>
 			</div>
 		</div>

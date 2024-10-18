@@ -22,6 +22,9 @@
 	.routeInputAddress {
 		width: 300px;
 	}
+	textarea {
+		resize: none !important;
+	}
 </style>
 <style type="text/css">
         /* 드롭다운 리스트 스타일 */
@@ -168,7 +171,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th class="py-2">장소설명</th>
 			 		<td>
-			 			<textarea rows="3" cols="37" id="routePlaceContent1" name="routePlaceContent[]"></textarea>
+			 			<textarea rows="6" cols="37" id="routePlaceContent1" name="routePlaceContent[]"></textarea>
 			 		</td>
 			 	</tr>		 	
 			 </table>
@@ -205,7 +208,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th class="py-2">장소설명</th>
 			 		<td>
-			 			<textarea rows="3" cols="37" id="routePlaceContent2" name="routePlaceContent[]"></textarea>
+			 			<textarea rows="6" cols="37" id="routePlaceContent2" name="routePlaceContent[]"></textarea>
 			 		</td>
 			 	</tr>		 	
 			 </table>
@@ -242,7 +245,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th class="py-2">장소설명</th>
 			 		<td>
-			 			<textarea rows="3" cols="37" id="routePlaceContent3" name="routePlaceContent[]"></textarea>
+			 			<textarea rows="6" cols="37" id="routePlaceContent3" name="routePlaceContent[]"></textarea>
 			 		</td>
 			 	</tr>		 	
 			 </table>
@@ -279,7 +282,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th class="py-2">장소설명</th>
 			 		<td>
-			 			<textarea rows="3" cols="37" id="routePlaceContent4" name="routePlaceContent[]"></textarea>
+			 			<textarea rows="6" cols="37" id="routePlaceContent4" name="routePlaceContent[]"></textarea>
 			 		</td>
 			 	</tr>		 	
 			 </table>
@@ -316,7 +319,7 @@ window.onload = function() {
 			 	</tr>
 			 	<tr><th class="py-2">장소설명</th>
 			 		<td>
-			 			<textarea rows="3" cols="37" id="routePlaceContent5" name="routePlaceContent[]"></textarea>
+			 			<textarea rows="6" cols="37" id="routePlaceContent5" name="routePlaceContent[]"></textarea>
 			 		</td>
 			 	</tr>		 	
 			 </table>
@@ -326,7 +329,7 @@ window.onload = function() {
 		 <fieldset>
 		 <legend>상세내용</legend>
 		 <div>
-		 	<textarea rows="20" cols="160" name="content" style="font-size: 13pt;"></textarea>
+		 	<textarea rows="20" cols="142" name="content" style="font-size: 13pt;"></textarea>
 		 </div>
 		 </fieldset>
 		 <br>
