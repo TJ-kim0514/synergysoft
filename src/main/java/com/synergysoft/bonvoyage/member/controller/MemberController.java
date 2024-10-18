@@ -1026,13 +1026,15 @@ public class MemberController {
 	// 회원 탈퇴 기능 | 2024. 09. 30 작정 및 테스트 성공
 	// jmoh03 (오정민)
 	@RequestMapping(value = "myinfo/left.do")
-	public String memberLeftMethod(@RequestParam("memId") String memId, Model model) {
+	public String memberLeftMethod(@RequestParam("memId") String memId, Model model, HttpSession session) {
 
 		if (memberService.updateLeft(memId) > 0) {
 
 			logger.info("회원탈퇴 요청 성공 : " + memId);
-
-			return "redirect:../logout.do";
+			model.addAttribute("msg", "회원 탈퇴 완료되었습니다. 안녕히가십시오.");
+			model.addAttribute("url", "../main.do");
+			session.invalidate();
+			return "common/alert";
 		} else {
 			model.addAttribute("message", "회원탈퇴에 실패하였습니다.");
 			logger.info("회원탈퇴 요청 실패 : " + memId);

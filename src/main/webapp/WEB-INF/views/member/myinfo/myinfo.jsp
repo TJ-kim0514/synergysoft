@@ -100,7 +100,8 @@
 								<c:param name="memId" value="${ requestScope.member.memId }" />
 							</c:url>
 							<button type="button" class="btn btn-outline-success" onclick="location.href='myAllComment.do?memId=${loginUser.memId}'">내가 쓴 댓글</button> &nbsp;
-							<a class="btn btn-primary" href="${ mdel }">탈퇴하기</a> &nbsp;
+							<a class="btn btn-primary" id="mdel" href="${mdel}">탈퇴하기</a> &nbsp;
+							
 							<a class="btn btn-primary" href="main.do">Home</a>
 						</th>
 					</tr>

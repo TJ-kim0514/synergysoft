@@ -40,7 +40,7 @@
     function loginWithKakao() {
     	
         Kakao.Auth.authorize({ 
-        redirectUri: 'http://localhost:8080/bonvoyage/kakaoLogin.do' 
+        redirectUri: 'http://ktj0514.synology.me:8080/kakaoLogin.do' 
         }); // 등록한 리다이렉트uri 입력
     }
 </script>
@@ -107,8 +107,8 @@ a#kakao-login-btn{
 			<br>
 			<div class="container">
 				<form action="login.do" method="post">
-					<div class="input-form-box"><span>아이디 </span><input type="text" name="memId" id="memid" class="form-control" required></div>
-						<div class="input-form-box"><span>비밀번호 </span><input type="password" name="memPw" id="memPw" class="form-control" required></div>
+					<div class="input-form-box"><span>이메일 </span><input type="text" name="memId" id="memid" class="form-control" placeholder="Example@gmail.com" required></div>
+						<div class="input-form-box"><span>비밀번호 </span><input type="password" name="memPw" id="memPw" class="form-control" placeholder="비밀번호 입력" required></div>
 						<input type="submit" class="btn btn-primary btn-xs"  style="width:100%" value="로그인">
 					<br>
 				</form>
