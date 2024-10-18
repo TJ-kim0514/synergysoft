@@ -615,23 +615,23 @@ public class RouteController {
 		if(routeService.deleteRoute(routeBoardId) > 0 ) {
 			if (renameFileName1 != null && renameFileName1.length() > 0) {
 				
-				new File(savePath + "\\" + renameFileName1).delete();
+				new File(savePath + File.separator + renameFileName1).delete();
 			}
 			
 			if (renameFileName2 != null && renameFileName2.length() > 0) {
-				new File(savePath + "\\" + renameFileName2).delete();
+				new File(savePath + File.separator + renameFileName2).delete();
 			}
 			
 			if (renameFileName3 != null && renameFileName3.length() > 0) {
-				new File(savePath + "\\" + renameFileName3).delete();
+				new File(savePath + File.separator + renameFileName3).delete();
 			}
 			
 			if (renameFileName4 != null && renameFileName4.length() > 0) {
-				new File(savePath + "\\" + renameFileName4).delete();
+				new File(savePath + File.separator + renameFileName4).delete();
 			}
 			
 			if (renameFileName5 != null && renameFileName5.length() > 0) {
-				new File(savePath + "\\" + renameFileName5).delete();
+				new File(savePath + File.separator + renameFileName5).delete();
 			}
 			
 			return "redirect:routeall.do?page=1";
@@ -713,7 +713,7 @@ public class RouteController {
 	    }
 	}
 	
-	// 추천수 많은 인기 게시글 top-3 요청 처리용
+	// 추천수 많은 인기 게시글 top-3 요청 처리용 : rtop3.do
 	@RequestMapping(value = "rtop3.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String boardTop3Method(
