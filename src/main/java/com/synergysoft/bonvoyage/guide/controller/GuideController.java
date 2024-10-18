@@ -58,7 +58,7 @@ public class GuideController {
 		
 		//전송 보낼 데이터를 담은 객체를 mv에 저장
 		mv.addObject(guide);
-		mv.setViewName("member/report/reportWriteView");
+		mv.setViewName("report/reportWriteView");
 		
 		return mv;
 		

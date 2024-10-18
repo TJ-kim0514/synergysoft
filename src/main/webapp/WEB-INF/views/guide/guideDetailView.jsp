@@ -233,6 +233,11 @@
 	<c:param name="userId" value="${ loginUser.memId }" />
 </c:url>
 
+<c:url var="guideReport" value="guideReport.do">
+    <c:param name="guidepostId" value="${ guide.guidepostId }" />
+    <c:param name="userId" value="${ guide.guideUserId }" />
+    <c:param name="title" value="${ guide.guideTitle }" />
+</c:url>
 
 
 <body>
@@ -308,9 +313,16 @@
         <button class="btn btn-secondary" onclick="commentShow(); return false;">댓글보기</button>
    
        <%--  <button class="btn btn-success" onclick="javascript:location.href='${ guideReport }'; return false;">신고</button> --%>
-      <c:if test="${loginUser.memType eq 'ADMIN'}">
+        <c:if test="${loginUser.memType eq 'ADMIN'}">
         <button class="btn btn-danger" onclick="requestDelete(); return false;">삭제</button>
+        </c:if>
+      <c:if test="${loginUser.memType eq 'ADMIN' or loginUser.memType eq 'USER' }">
+    <button class="btn bg-danger" onclick="javascript:location.href='${ guideReport }'; return false;" style="color: white;">신고</button>
+    
+        
     </c:if>
+    
+    
     </div>
     </div>
 </div>

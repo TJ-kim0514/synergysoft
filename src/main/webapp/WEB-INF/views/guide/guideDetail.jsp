@@ -180,6 +180,11 @@
     }
 	
 </script>
+<c:url var="guideReport" value="guideReport.do">
+    <c:param name="guidepostId" value="${ guide.guidepostId }" />
+    <c:param name="userId" value="${ guide.guideUserId }" />
+    <c:param name="title" value="${ guide.guideTitle }" />
+</c:url>
 
 <script type="text/javascript">
     // 수정 페이지로 이동 버튼 클릭시 작동하는 함수
@@ -266,6 +271,7 @@
         <button class="btn btn-secondary" onclick="javascript:location.href='${ pageContext.servletContext.contextPath}/sagBlog.do'; return false;">목록</button>
         <button class="btn btn-outline-secondary" onclick="javascript:history.go(-1); return false;">이전 페이지로</button>
         <button class="btn btn-outline-success" onclick="commentShow(); return false;">댓글</button>
+        <button class="btn bg-danger" onclick="javascript:location.href='${ guideReport }'; return false;" style="color: white;">신고</button>
     </div>
     </div>
 </div>
