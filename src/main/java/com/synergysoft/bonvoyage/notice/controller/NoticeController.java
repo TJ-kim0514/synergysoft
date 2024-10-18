@@ -129,7 +129,7 @@ public class NoticeController {
 				logger.info("변경될 첨부파일명 확인 : " + renameFileName);
 				
 				try {
-					ifile1.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile1.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message",fileName +" 첨부파일 저장 실패 ");
@@ -152,7 +152,7 @@ public class NoticeController {
 				logger.info("변경될 첨부파일명 확인 : " + renameFileName);
 				
 				try {
-					ifile2.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile2.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message",fileName +" 첨부파일 저장 실패 ");
@@ -175,7 +175,7 @@ public class NoticeController {
 				logger.info("변경될 첨부파일명 확인 : " + renameFileName);
 				
 				try {
-					ifile3.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile3.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message",fileName +" 첨부파일 저장 실패 ");
@@ -239,7 +239,7 @@ public class NoticeController {
 		//공지사항 첨부파일 저장 폴더 경로 지정
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
 		// 저장 폴더에서 읽을 파일에 대한 file 객체 생성
-		File downFile = new File(savePath + "\\" + renameFileName);
+		File downFile = new File(savePath + File.separator + renameFileName);
 		// 파일 다운시 브라우저로 내보낼 원래 파일에 대한 File객체 생성함
 		File originFile = new File(originalFileName);
 		
@@ -307,7 +307,7 @@ public class NoticeController {
 				&& (delete1.equals("yes") && ifile1.isEmpty())) || !ifile1.isEmpty()
 				) {    
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + notice.getrFile1()).delete();
+			new File(savePath + File.separator + notice.getrFile1()).delete();
 			
 			//notice 안의 파일정보도 삭제함
 			notice.setoFile1(null);
@@ -331,7 +331,7 @@ public class NoticeController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile1.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile1.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
@@ -350,7 +350,7 @@ public class NoticeController {
 				&& (delete2.equals("yes") && ifile2.isEmpty())) || !ifile2.isEmpty()
 				) {    
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + notice.getrFile2()).delete();
+			new File(savePath + File.separator + notice.getrFile2()).delete();
 			
 			//notice 안의 파일정보도 삭제함
 			notice.setoFile2(null);
@@ -374,7 +374,7 @@ public class NoticeController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile2.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile2.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
@@ -393,7 +393,7 @@ public class NoticeController {
 				&& (delete3.equals("yes") && ifile3.isEmpty())) || !ifile3.isEmpty()
 			) { 
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + notice.getrFile3()).delete();
+			new File(savePath + File.separator + notice.getrFile3()).delete();
 			
 			//notice 안의 파일정보도 삭제함
 			notice.setoFile3(null);
@@ -417,7 +417,7 @@ public class NoticeController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile3.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile3.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
