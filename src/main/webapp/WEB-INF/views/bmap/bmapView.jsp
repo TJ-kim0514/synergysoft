@@ -16,7 +16,8 @@
 <nav>
 	<c:import url="/WEB-INF/views/common/menubar.jsp"/>
 </nav>
-
+<br>
+<h2 align="center">출발지, 도착지, 그리고 경유지를 선택하여 나만의 경로를 만들어보세요!</h2>
 
 <c:import url="/WEB-INF/views/bmap/bmapRoute.html" charEncoding="utf-8"></c:import>
 
