@@ -52,4 +52,8 @@ public class HomeController {
 		return "bmap/bmapView";
 	}
 	
+	@RequestMapping("created.do")
+	public String created() {
+		return "common/created";
+	}
 }
