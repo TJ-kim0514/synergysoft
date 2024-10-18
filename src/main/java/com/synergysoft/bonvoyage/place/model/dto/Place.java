@@ -7,8 +7,8 @@ public class Place implements java.io.Serializable {
 	private String placeId; 		// PLACE_ID	VARCHAR2(255 BYTE)
 	private String placeName; // PLACE_NAME	VARCHAR2(255 BYTE)
 	private String address;		// ADDRESS	VARCHAR2(255 BYTE)
-	private int latitude;		// LATITUDE	NUMBER
-	private int longitude;		// LONGITUDE	NUMBER
+	private double latitude;		// LATITUDE	NUMBER
+	private double longitude;		// LONGITUDE	NUMBER
 	private String placeContent;
 	private String placeRouteBoardId;
 	
@@ -52,7 +52,7 @@ public class Place implements java.io.Serializable {
 		this.address = address;
 	}
 
-	public int getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
@@ -60,7 +60,7 @@ public class Place implements java.io.Serializable {
 		this.latitude = latitude;
 	}
 
-	public int getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
