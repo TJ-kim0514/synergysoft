@@ -229,7 +229,7 @@ public class QnaController {
 						
 						try {
 							// 위에 선언한 경로에 리네임 파일명으로 파일저장
-							insertFile[i].transferTo( new File(savePath+ "\\" + renameFileName));
+							insertFile[i].transferTo( new File(savePath+ File.separator + renameFileName));
 						} catch (Exception e) {
 							e.printStackTrace();
 							model.addAttribute("message", "첨부파일 저장 실패!");
@@ -304,7 +304,7 @@ public class QnaController {
 		//공지사항 첨부파일 저장 폴더 경로 지정
 		String savePath = request.getSession().getServletContext().getRealPath("resources/qna_upfiles");
 		// 저장 폴더에서 읽을 파일에 대한 file 객체 생성
-		File downFile = new File(savePath + "\\" + renameFileName);
+		File downFile = new File(savePath + File.separator + renameFileName);
 		// 파일 다운시 브라우저로 내보낼 원래 파일에 대한 File객체 생성함
 		File originFile = new File(originalFileName);
 		
@@ -409,7 +409,7 @@ public class QnaController {
 				&& (delete1.equals("yes") && ifile1.isEmpty())) || !ifile1.isEmpty()
 				) {    
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + qna.getrFile1()).delete();
+			new File(savePath + File.separator + qna.getrFile1()).delete();
 			
 			//qna 안의 파일정보도 삭제함
 			qna.setoFile1(null);
@@ -433,7 +433,7 @@ public class QnaController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile1.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile1.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
@@ -452,7 +452,7 @@ public class QnaController {
 				&& (delete2.equals("yes") && ifile2.isEmpty())) || !ifile2.isEmpty()
 				) {    
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + qna.getrFile2()).delete();
+			new File(savePath + File.separator + qna.getrFile2()).delete();
 			
 			//qna 안의 파일정보도 삭제함
 			qna.setoFile2(null);
@@ -476,7 +476,7 @@ public class QnaController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile2.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile2.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
@@ -495,7 +495,7 @@ public class QnaController {
 				&& (delete3.equals("yes") && ifile3.isEmpty())) || !ifile3.isEmpty()
 			) { 
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + qna.getrFile3()).delete();
+			new File(savePath + File.separator + qna.getrFile3()).delete();
 			
 			//qna 안의 파일정보도 삭제함
 			qna.setoFile3(null);
@@ -519,7 +519,7 @@ public class QnaController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile3.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile3.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
@@ -538,7 +538,7 @@ public class QnaController {
 				&& (delete4.equals("yes") && ifile4.isEmpty())) || !ifile4.isEmpty()
 			) { 
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + qna.getrFile4()).delete();
+			new File(savePath + File.separator + qna.getrFile4()).delete();
 			
 			//qna 안의 파일정보도 삭제함
 			qna.setoFile4(null);
@@ -562,7 +562,7 @@ public class QnaController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile4.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile4.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
@@ -581,7 +581,7 @@ public class QnaController {
 				&& (delete5.equals("yes") && ifile5.isEmpty())) || !ifile5.isEmpty()
 			) { 
 			//저장폴더에서 이전 파일은 삭제함
-			new File(savePath + "\\" + qna.getrFile5()).delete();
+			new File(savePath + File.separator + qna.getrFile5()).delete();
 			
 			//qna 안의 파일정보도 삭제함
 			qna.setoFile5(null);
@@ -605,7 +605,7 @@ public class QnaController {
 				
 				try {
 					// 저장 폴더에 파일명 바꾸어 저장하기
-					ifile5.transferTo(new File(savePath + "\\" + renameFileName));
+					ifile5.transferTo(new File(savePath + File.separator + renameFileName));
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message","첨부파일 저장 실패!!");
