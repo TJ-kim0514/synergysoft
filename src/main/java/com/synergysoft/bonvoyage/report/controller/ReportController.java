@@ -122,6 +122,9 @@ public class ReportController {
 
 		} else if (loginUser != null && loginUser.getMemType().equals("USER")) {
 			listCount = reportService.selectReportUserListCount(loginUser.getMemId());
+		} else {
+			mv.addObject("message", "방금 가입한 계정입니다. 다시 로그인 하셔서 이용 부탁드리겠습니다.");
+			mv.setViewName("common/error");
 		}
 
 		// 페이징 계산
