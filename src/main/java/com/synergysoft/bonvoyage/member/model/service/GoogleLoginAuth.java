@@ -22,7 +22,7 @@ public class GoogleLoginAuth {
 
 	private final static String CLIENT_ID = "1026897669776-hk79tbpi0nihevh9li9vipn2ltgltaeb.apps.googleusercontent.com";
 	private final static String CLIENT_SECRET = "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";
-	private final static String REDIRECT_URI = "http://localhost:8080/bonvoyage/googleLogin.do";
+	private final static String REDIRECT_URI = "http://ktj0514.synology.me:8080/bonvoyage/googleLogin.do";
 	private final static String GOOGLE_SCOPE = "email openid profile";
 	private final static String PROFILE_API_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
 	private static final String SESSION_STATE = "googleSessionState";

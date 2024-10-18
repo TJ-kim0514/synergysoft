@@ -56,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=bcd1f6d5790735ccc553978585165423"); // 앱 KEY VALUE
-			sb.append("&redirect_uri=http://localhost:8080/bonvoyage/kakaoLogin.do"); // 앱 CALLBACK 경로
+			sb.append("&redirect_uri=http://ktj0514.synology.me:8080/bonvoyage/kakaoLogin.do"); // 앱 CALLBACK 경로
 			sb.append("&code=" + code);
 			bw.write(sb.toString());
 			bw.flush();
