@@ -19,7 +19,7 @@
     String clientSecret = "oQGA50g1qL";//애플리케이션 클라이언트 시크릿값";
     String code = request.getParameter("code");
     String state = request.getParameter("state");
-    String redirectURI = URLEncoder.encode("http://ktj0514.synology.me:8080/naverLogin.do", "UTF-8");
+    String redirectURI = URLEncoder.encode("http://ktj0514.synology.me:8080/bonvoyage/naverLogin.do", "UTF-8");
     String apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code"
         + "&client_id=" + clientId
         + "&client_secret=" + clientSecret

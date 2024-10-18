@@ -40,7 +40,7 @@
     function loginWithKakao() {
     	
         Kakao.Auth.authorize({ 
-        redirectUri: 'http://ktj0514.synology.me:8080/kakaoLogin.do' 
+        redirectUri: 'http://ktj0514.synology.me:8080/bonvoyage/kakaoLogin.do' 
         }); // 등록한 리다이렉트uri 입력
     }
 </script>

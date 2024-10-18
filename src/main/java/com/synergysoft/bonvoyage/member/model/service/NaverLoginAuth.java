@@ -26,7 +26,7 @@ public class NaverLoginAuth {
 	//state: 애플리케이션이 생성한 상태 토큰
 		private final static String CLIENT_ID = "GcBRifOkv0F3VVJTZbQd";
 		private final static String CLIENT_SECRET = "oQGA50g1qL";
-		private final static String REDIRECT_URI = "http://ktj0514.synology.me:8080/naverLogin.do";
+		private final static String REDIRECT_URI = "http://ktj0514.synology.me:8080/bonvoyage/naverLogin.do";
 		private final static String SESSION_STATE = "oauth_state";
 		/* 프로필 조회 API URL */
 		private final static String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";
